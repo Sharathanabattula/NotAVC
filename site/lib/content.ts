@@ -1,12 +1,11 @@
 /*
   All site copy lives here. Voice rules from DESIGN-SYSTEM.md apply:
   raw, first person, one number per claim, no banned words.
-  TODO(sharath): swap SOCIAL hrefs for your real handles before launch.
 */
 
 export const SOCIAL = {
-  linkedin: "https://www.linkedin.com/",
-  instagram: "https://www.instagram.com/",
+  linkedin: "https://www.linkedin.com/in/sharathanabattula",
+  instagram: "https://www.instagram.com/notavc.co",
   email: "mailto:sharathanabattula@gmail.com",
 };
 

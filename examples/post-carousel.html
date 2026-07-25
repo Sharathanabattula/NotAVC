@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NotAVC Post + Carousel Templates</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Source+Sans+3:wght@300;400;500;600;700&family=Source+Code+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #f5f5f5; padding: 2rem; display: flex; gap: 2rem; flex-wrap: wrap; justify-content: center; }
+
+/* ─── INSTAGRAM POST (1:1) ─── */
+.ig-post {
+  width: 360px;
+  aspect-ratio: 1 / 1;
+  background: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  padding: 28px;
+  border-radius: 16px;
+  border: 0.5px solid #eee;
+}
+
+.ig-brand {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 10px;
+  color: #0A7558;
+  letter-spacing: 1px;
+  margin: 0 0 auto;
+}
+
+.ig-stat {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 52px;
+  color: #0B0B0B;
+  letter-spacing: -2px;
+  line-height: 1;
+}
+
+.ig-stat-label {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 14px;
+  color: #888;
+  margin: 8px 0 0;
+  line-height: 1.4;
+}
+
+.ig-tags {
+  margin: auto 0 0 0;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.ig-tag {
+  display: inline-block;
+  font-family: 'Source Code Pro', monospace;
+  font-size: 10px;
+  color: #0A7558;
+  background: rgba(10, 117, 88, 0.08);
+  padding: 3px 10px;
+  border-radius: 4px;
+}
+
+/* ─── CAROUSEL SLIDE (4:5) ─── */
+.carousel-slide {
+  width: 320px;
+  aspect-ratio: 4 / 5;
+  background: #FAFAFA;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  border-radius: 16px;
+  border: 0.5px solid #eee;
+  position: relative;
+}
+
+.c-number {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  font-family: 'Source Code Pro', monospace;
+  font-size: 10px;
+  color: #bbb;
+  letter-spacing: 1px;
+}
+
+.c-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 17px;
+  color: #0B0B0B;
+  letter-spacing: -0.3px;
+  line-height: 1.25;
+  margin: 0 0 14px;
+}
+
+.c-body {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
+  flex: 1;
+}
+
+.c-data {
+  font-family: 'Source Code Pro', monospace;
+  font-weight: 500;
+  font-size: 13px;
+  color: #0A7558;
+}
+
+.c-brand-bar {
+  margin: auto 0 0 0;
+  padding: 10px 0 0;
+  border-top: 0.5px solid #E5E5E5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.c-brand-name {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 9px;
+  color: #0A7558;
+  letter-spacing: 0.5px;
+}
+
+.c-dots {
+  display: flex;
+  gap: 5px;
+}
+
+.c-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ddd;
+}
+
+.c-dot.active {
+  background: #0A7558;
+}
+
+/* ─── LINKEDIN QUOTE CARD (1.91:1) ─── */
+.li-card {
+  width: 480px;
+  aspect-ratio: 1.91 / 1;
+  background: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 28px;
+  border-radius: 16px;
+  border: 0.5px solid #eee;
+}
+
+.li-brand {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 10px;
+  color: #0A7558;
+  letter-spacing: 2px;
+  margin: 0 0 10px;
+}
+
+.li-quote {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 17px;
+  color: #0B0B0B;
+  line-height: 1.4;
+  letter-spacing: -0.2px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.li-footer {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 12px;
+  color: #999;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.li-handle {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 10px;
+}
+</style>
+</head>
+<body>
+
+<!-- INSTAGRAM POST -->
+<div class="ig-post">
+  <div class="ig-brand">NOTAVC — COMPANY TEARDOWN</div>
+  <div style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
+    <div class="ig-stat">$5.2B</div>
+    <div class="ig-stat-label">Zepto's latest valuation. But here's the number nobody's talking about.</div>
+  </div>
+  <div class="ig-tags">
+    <span class="ig-tag">#NotAVC</span>
+    <span class="ig-tag">#StartupBreakdown</span>
+    <span class="ig-tag">#IndianStartups</span>
+  </div>
+</div>
+
+<!-- CAROUSEL SLIDE 1 -->
+<div class="carousel-slide">
+  <div class="c-number">01 / 07</div>
+  <div class="c-title">7 VC terms every MBA student should know before they graduate</div>
+  <div class="c-body">
+    Most MBA programs teach you discounted cash flow, weighted average cost of capital, and portfolio theory.
+    <br><br>
+    None of them teach you the language VCs actually speak.
+    <br><br>
+    This carousel fixes that.
+  </div>
+  <div class="c-brand-bar">
+    <div class="c-brand-name">NotAVC</div>
+    <div class="c-dots">
+      <div class="c-dot active"></div>
+      <div class="c-dot"></div>
+      <div class="c-dot"></div>
+      <div class="c-dot"></div>
+      <div class="c-dot"></div>
+      <div class="c-dot"></div>
+      <div class="c-dot"></div>
+    </div>
+  </div>
+</div>
+
+<!-- CAROUSEL SLIDE 2 (Data slide) -->
+<div class="carousel-slide">
+  <div class="c-number">03 / 07</div>
+  <div class="c-title">Cap table</div>
+  <div class="c-body">
+    A spreadsheet showing who owns what percentage of the company — founders, investors, employee option pool.
+    <br><br>
+    Think of it like the seating chart at a wedding, except the seats are equity and the venue is a company worth <span class="c-data">₹500Cr</span>.
+    <br><br>
+    Why it matters: every funding round dilutes existing shareholders. If you don't track it, you wake up one day owning <span class="c-data">8%</span> of the company you built.
+  </div>
+  <div class="c-brand-bar">
+    <div class="c-brand-name">NotAVC</div>
+    <div class="c-dots">
+      <div class="c-dot"></div>
+      <div class="c-dot"></div>
+      <div class="c-dot active"></div>
+      <div class="c-dot"></div>
+      <div class="c-dot"></div>
+      <div class="c-dot"></div>
+      <div class="c-dot"></div>
+    </div>
+  </div>
+</div>
+
+<!-- LINKEDIN QUOTE CARD -->
+<div class="li-card">
+  <div class="li-brand">NOTAVC</div>
+  <div class="li-quote">"VCs don't invest in ideas. They invest in unfair advantages. I learned this the hard way in my Bower classroom last Thursday."</div>
+  <div class="li-footer">
+    <span>Sharath Chandra Anabattula</span>
+    <span class="li-handle">@notavc</span>
+  </div>
+</div>
+
+</body>
+</html>

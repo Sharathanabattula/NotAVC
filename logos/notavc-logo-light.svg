@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 120" width="400" height="120">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800&amp;family=Source+Code+Pro:wght@500&amp;display=swap');
+  </style>
+  <text x="200" y="58" text-anchor="middle" font-family="Montserrat, sans-serif" font-weight="800" font-size="48" letter-spacing="-1.5">
+    <tspan fill="#0B0B0B" opacity="0.35">Not</tspan><tspan fill="#0B0B0B">AVC</tspan>
+  </text>
+  <text x="200" y="82" text-anchor="middle" font-family="Source Code Pro, monospace" font-weight="500" font-size="9" letter-spacing="2" fill="#0B0B0B" opacity="0.45">VENTURE INTELLIGENCE FOR EVERYONE</text>
+</svg>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NotAVC — Carousel Templates (Grow with Alex Style)</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f5f5;padding:2rem;font-family:'Outfit',sans-serif}
+h2{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;color:#0A7558;text-align:center;margin:0 0 1.5rem}
+.carousel-row{display:flex;gap:16px;overflow-x:auto;padding:0 0 1.5rem;-webkit-overflow-scrolling:touch}
+.slide{min-width:320px;max-width:320px;aspect-ratio:4/5;border-radius:16px;overflow:hidden;flex-shrink:0;border:0.5px solid #eee;display:flex;flex-direction:column;position:relative}
+.slide-num{position:absolute;top:14px;right:14px;font-family:'Space Mono',monospace;font-size:9px;color:#bbb;letter-spacing:1px}
+.brand-bar{margin:auto 0 0 0;padding:10px 20px;border-top:0.5px solid #E5E5E5;display:flex;align-items:center;justify-content:space-between}
+.brand-name{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:9px;color:#0A7558;letter-spacing:0.5px}
+.dots{display:flex;gap:4px}
+.dot{width:5px;height:5px;border-radius:50%;background:#ddd}
+.dot.active{background:#0A7558}
+.ref-label{text-align:center;font-size:11px;color:#888;margin:0 0 2rem}
+
+/* ─── STYLE A: CLEAN WHITE (Grow with Alex) ─── */
+.s-white{background:#FFFFFF}
+.s-white .s-content{flex:1;padding:24px 22px 12px;display:flex;flex-direction:column}
+.s-white .s-title{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:18px;color:#0B0B0B;letter-spacing:-0.3px;line-height:1.2;margin:0 0 14px}
+.s-white .s-body{font-family:'Outfit',sans-serif;font-size:14px;color:#555;line-height:1.6;flex:1}
+.s-white .s-body strong{color:#0B0B0B}
+.s-white .s-body .data{font-family:'Space Mono',monospace;color:#0A7558;font-weight:500}
+.s-white .s-tag{display:inline-block;font-family:'Space Mono',monospace;font-size:9px;color:#0A7558;background:rgba(10,117,88,0.08);padding:3px 8px;border-radius:4px;margin:12px 4px 0 0}
+
+/* ─── STYLE B: DARK SLIDE (for stat/impact slides) ─── */
+.s-dark{background:#0B0B0B}
+.s-dark .s-content{flex:1;padding:24px 22px 12px;display:flex;flex-direction:column;justify-content:center;text-align:center}
+.s-dark .s-stat{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:52px;color:#4ADE9F;letter-spacing:-2px;line-height:1}
+.s-dark .s-stat-sub{font-family:'Outfit',sans-serif;font-size:13px;color:rgba(255,255,255,0.45);margin:8px 0 0;line-height:1.4}
+.s-dark .s-kicker{font-family:'Space Mono',monospace;font-size:10px;color:#4ADE9F;letter-spacing:2px;margin:0 0 16px}
+.s-dark .brand-bar{border-top-color:rgba(255,255,255,0.06)}
+.s-dark .brand-name{color:#4ADE9F}
+.s-dark .dot{background:rgba(255,255,255,0.15)}.s-dark .dot.active{background:#4ADE9F}
+.s-dark .slide-num{color:rgba(255,255,255,0.2)}
+
+/* ─── STYLE C: CANVAS (slightly off-white) ─── */
+.s-canvas{background:#FAFAFA}
+.s-canvas .s-content{flex:1;padding:24px 22px 12px;display:flex;flex-direction:column}
+.s-canvas .s-title{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:16px;color:#0B0B0B;letter-spacing:-0.2px;line-height:1.25;margin:0 0 12px}
+.s-canvas .s-body{font-family:'Outfit',sans-serif;font-size:13px;color:#666;line-height:1.6;flex:1}
+.s-canvas .s-body .data{font-family:'Space Mono',monospace;color:#0A7558;font-weight:500}
+.s-canvas .s-callout{background:rgba(10,117,88,0.06);border-left:2px solid #0A7558;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0 0}
+.s-canvas .s-callout-text{font-family:'Outfit',sans-serif;font-size:12px;color:#0A7558;line-height:1.5;font-weight:500}
+
+/* ─── STYLE D: CTA SLIDE ─── */
+.s-cta{background:linear-gradient(135deg,#0A7558,#065a43)}
+.s-cta .s-content{flex:1;padding:24px 22px 12px;display:flex;flex-direction:column;justify-content:center;text-align:center}
+.s-cta .s-cta-text{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:18px;color:#fff;line-height:1.25;letter-spacing:-0.3px;margin:0 0 12px}
+.s-cta .s-cta-sub{font-family:'Outfit',sans-serif;font-size:13px;color:rgba(255,255,255,0.7);line-height:1.5;margin:0 0 20px}
+.s-cta .s-cta-btn{display:inline-block;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:13px;color:#0A7558;background:#fff;padding:10px 28px;border-radius:8px;align-self:center}
+.s-cta .brand-bar{border-top-color:rgba(255,255,255,0.1)}
+.s-cta .brand-name{color:#fff}
+.s-cta .dot{background:rgba(255,255,255,0.2)}.s-cta .dot.active{background:#fff}
+.s-cta .slide-num{color:rgba(255,255,255,0.3)}
+</style>
+</head>
+<body>
+
+<h2>CAROUSEL SET 1 — VC CONCEPT EXPLAINER</h2>
+<div class="ref-label">Reference: Grow with Alex · Educational carousel, 7 slides, swipe-optimized</div>
+
+<div class="carousel-row">
+
+<!-- SLIDE 1: HOOK -->
+<div class="slide s-dark">
+  <div class="slide-num">01 / 07</div>
+  <div class="s-content">
+    <div class="s-kicker">NOTAVC — VC CONCEPTS</div>
+    <div style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:22px;color:#fff;line-height:1.2;letter-spacing:-0.3px">7 VC terms every MBA student should know before graduation</div>
+    <div class="s-stat-sub" style="margin:16px 0 0">Swipe to learn what your professors won't teach you →</div>
+  </div>
+  <div class="brand-bar"><div class="brand-name">NotAVC</div><div class="dots"><div class="dot active"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+</div>
+
+<!-- SLIDE 2: TERM -->
+<div class="slide s-white">
+  <div class="slide-num">02 / 07</div>
+  <div class="s-content">
+    <div class="s-title">1. Term sheet</div>
+    <div class="s-body">
+      A <strong>non-binding agreement</strong> that outlines the key terms of an investment — valuation, equity stake, board seats, liquidation preferences.
+      <br><br>
+      Think of it like a <strong>rental agreement for your company</strong>. Except the landlord might get to kick you out if things go wrong.
+      <br><br>
+      <span class="data">80% of term sheet terms</span> are negotiable. Most first-time founders don't know this.
+    </div>
+  </div>
+  <div class="brand-bar"><div class="brand-name">NotAVC</div><div class="dots"><div class="dot"></div><div class="dot active"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+</div>
+
+<!-- SLIDE 3: TERM WITH DATA -->
+<div class="slide s-canvas">
+  <div class="slide-num">03 / 07</div>
+  <div class="s-content">
+    <div class="s-title">2. Cap table</div>
+    <div class="s-body">
+      A spreadsheet showing <strong>who owns what percentage</strong> of the company — founders, investors, ESOP pool.
+      <br><br>
+      Every funding round <strong>dilutes</strong> existing shareholders. If you don't track it, you wake up owning <span class="data">8%</span> of the company you built.
+    </div>
+    <div class="s-callout">
+      <div class="s-callout-text">Pro tip: Always model your cap table 3 rounds ahead. What looks like 20% today could be 6% after Series C.</div>
+    </div>
+  </div>
+  <div class="brand-bar"><div class="brand-name">NotAVC</div><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot active"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+</div>
+
+<!-- SLIDE 4: STAT SLIDE -->
+<div class="slide s-dark">
+  <div class="slide-num">04 / 07</div>
+  <div class="s-content">
+    <div class="s-kicker">DID YOU KNOW?</div>
+    <div class="s-stat">70%</div>
+    <div class="s-stat-sub">of VC-backed startups return zero to investors. That's why VCs need 10x winners to survive.</div>
+  </div>
+  <div class="brand-bar"><div class="brand-name">NotAVC</div><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot active"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+</div>
+
+<!-- SLIDE 5: TERM -->
+<div class="slide s-white">
+  <div class="slide-num">05 / 07</div>
+  <div class="s-content">
+    <div class="s-title">4. Liquidation preference</div>
+    <div class="s-body">
+      Determines <strong>who gets paid first</strong> when a company is sold or liquidated.
+      <br><br>
+      A <span class="data">1x liquidation preference</span> means the investor gets their money back before anyone else. A <span class="data">2x</span> means they get double.
+      <br><br>
+      This is why a <strong>$100M exit</strong> can leave founders with nothing if the preferences stack up.
+    </div>
+  </div>
+  <div class="brand-bar"><div class="brand-name">NotAVC</div><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot active"></div><div class="dot"></div><div class="dot"></div></div></div>
+</div>
+
+<!-- SLIDE 6: TERM -->
+<div class="slide s-canvas">
+  <div class="slide-num">06 / 07</div>
+  <div class="s-content">
+    <div class="s-title">5. Runway</div>
+    <div class="s-body">
+      How many months a startup can survive at its current <strong>burn rate</strong> before running out of cash.
+      <br><br>
+      <span class="data">Runway = Cash in bank ÷ Monthly burn</span>
+      <br><br>
+      Most VCs want to see <strong>18-24 months</strong> of runway after investing. Anything less means you'll be fundraising again before you've proven anything.
+    </div>
+    <div class="s-callout">
+      <div class="s-callout-text">Indian startups in 2024 had a median runway of just 14 months. That's why "default alive" is the new mantra.</div>
+    </div>
+  </div>
+  <div class="brand-bar"><div class="brand-name">NotAVC</div><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot active"></div><div class="dot"></div></div></div>
+</div>
+
+<!-- SLIDE 7: CTA -->
+<div class="slide s-cta">
+  <div class="slide-num">07 / 07</div>
+  <div class="s-content">
+    <div class="s-cta-text">Want the full VC terms cheat sheet?</div>
+    <div class="s-cta-sub">Follow @notavc for daily VC concepts, company teardowns, and the raw learning journey of a student figuring out venture capital.</div>
+    <div class="s-cta-btn">Follow @notavc</div>
+  </div>
+  <div class="brand-bar"><div class="brand-name">NotAVC</div><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot active"></div></div></div>
+</div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NotAVC — Faceless Reel Templates (Ahmed + Shankar Style)</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f5f5;padding:2rem;display:flex;gap:2rem;flex-wrap:wrap;justify-content:center;font-family:'Outfit',sans-serif}
+.label{text-align:center;font-family:'Space Mono',monospace;font-size:10px;color:#888;letter-spacing:1px;margin:8px 0 0;max-width:360px}
+.ref{text-align:center;font-size:11px;color:#0A7558;margin:2px 0 16px;max-width:360px}
+
+/* ─── FACELESS REEL FRAME ─── */
+.reel{width:360px;aspect-ratio:9/16;border-radius:16px;overflow:hidden;position:relative;display:flex;flex-direction:column}
+
+/* ─── STYLE 1: SHANKAR STORYTELLING ─── */
+.shankar{background:linear-gradient(180deg,#0B0B0B 0%,#1a1a2e 100%)}
+.shankar .top-bar{position:absolute;top:16px;left:16px;right:16px;display:flex;justify-content:space-between;align-items:center;z-index:2}
+.shankar .pill{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:9px;color:#fff;background:rgba(255,255,255,0.08);padding:4px 10px;border-radius:20px;letter-spacing:0.5px}
+.shankar .ep{font-family:'Space Mono',monospace;font-size:8px;color:rgba(255,255,255,0.3);letter-spacing:1px}
+.shankar .story-zone{flex:1;display:flex;flex-direction:column;justify-content:center;padding:28px;text-align:center}
+.shankar .story-hook{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:22px;color:#fff;line-height:1.2;letter-spacing:-0.5px;margin:0 0 16px}
+.shankar .story-hook em{font-style:normal;color:#4ADE9F}
+.shankar .story-sub{font-family:'Outfit',sans-serif;font-size:13px;color:rgba(255,255,255,0.5);line-height:1.5;margin:0 0 20px}
+.shankar .story-stat{font-family:'Space Mono',monospace;font-weight:600;font-size:48px;color:#4ADE9F;letter-spacing:-2px;margin:0 0 6px}
+.shankar .story-stat-label{font-family:'Outfit',sans-serif;font-size:11px;color:rgba(255,255,255,0.35);letter-spacing:1px}
+.shankar .bottom-bar{padding:16px 28px;display:flex;align-items:center;gap:8px}
+.shankar .swipe{font-family:'Space Mono',monospace;font-size:9px;color:rgba(255,255,255,0.25);letter-spacing:1px}
+.shankar .progress{flex:1;height:2px;background:rgba(255,255,255,0.08);border-radius:1px;overflow:hidden}
+.shankar .progress-fill{height:100%;width:35%;background:#4ADE9F;border-radius:1px}
+
+/* ─── STYLE 2: AHMED FACELESS — TEXT + DATA OVERLAY ─── */
+.ahmed{background:#0B0B0B}
+.ahmed .top-bar{position:absolute;top:16px;left:16px;right:16px;display:flex;justify-content:space-between;align-items:center;z-index:2}
+.ahmed .pill{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:9px;color:#0B0B0B;background:#4ADE9F;padding:4px 10px;border-radius:20px;letter-spacing:0.5px}
+.ahmed .ep{font-family:'Space Mono',monospace;font-size:8px;color:rgba(255,255,255,0.3);letter-spacing:1px}
+.ahmed .content{flex:1;display:flex;flex-direction:column;justify-content:center;padding:28px}
+.ahmed .kicker{font-family:'Space Mono',monospace;font-size:10px;color:#4ADE9F;letter-spacing:2px;margin:0 0 12px}
+.ahmed .main-text{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:26px;color:#fff;line-height:1.15;letter-spacing:-0.5px;margin:0 0 20px}
+.ahmed .main-text .hl{background:rgba(74,222,159,0.15);color:#4ADE9F;padding:0 4px;border-radius:2px}
+.ahmed .data-card{background:rgba(255,255,255,0.04);border:0.5px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px;margin:0 0 12px}
+.ahmed .data-row{display:flex;justify-content:space-between;align-items:baseline;margin:0 0 8px}
+.ahmed .data-row:last-child{margin:0}
+.ahmed .data-label{font-family:'Outfit',sans-serif;font-size:12px;color:rgba(255,255,255,0.4)}
+.ahmed .data-val{font-family:'Space Mono',monospace;font-weight:600;font-size:14px;color:#fff}
+.ahmed .data-val.green{color:#4ADE9F}
+.ahmed .data-val.red{color:#E8593C}
+.ahmed .caption-bar{padding:16px 28px;border-top:0.5px solid rgba(255,255,255,0.05)}
+.ahmed .caption{font-family:'Outfit',sans-serif;font-size:13px;color:rgba(255,255,255,0.7);line-height:1.5;text-align:center}
+.ahmed .caption strong{color:#fff;font-weight:600}
+
+/* ─── STYLE 3: MREFLOW NEWS STYLE ─── */
+.news{background:#0B0B0B}
+.news .breaking-bar{background:#E8593C;padding:6px 16px;display:flex;align-items:center;gap:8px}
+.news .breaking-dot{width:6px;height:6px;border-radius:50%;background:#fff;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.news .breaking-text{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:10px;color:#fff;letter-spacing:1px}
+.news .breaking-time{font-family:'Space Mono',monospace;font-size:9px;color:rgba(255,255,255,0.7);margin-left:auto}
+.news .news-content{flex:1;display:flex;flex-direction:column;padding:24px}
+.news .news-category{font-family:'Space Mono',monospace;font-size:10px;color:#4ADE9F;letter-spacing:2px;margin:0 0 12px;padding:4px 10px;background:rgba(74,222,159,0.08);border-radius:4px;align-self:flex-start}
+.news .news-headline{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:20px;color:#fff;line-height:1.2;letter-spacing:-0.3px;margin:0 0 16px}
+.news .news-body{font-family:'Outfit',sans-serif;font-size:14px;color:rgba(255,255,255,0.6);line-height:1.6;flex:1}
+.news .news-body strong{color:#fff}
+.news .ticker{background:rgba(255,255,255,0.03);border-top:0.5px solid rgba(255,255,255,0.06);padding:10px 16px;display:flex;gap:24px;overflow:hidden}
+.news .ticker-item{font-family:'Space Mono',monospace;font-size:10px;color:rgba(255,255,255,0.4);white-space:nowrap}
+.news .ticker-item .up{color:#4ADE9F}
+.news .ticker-item .down{color:#E8593C}
+.news .news-footer{padding:12px 24px;display:flex;justify-content:space-between;align-items:center}
+.news .news-brand{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:11px;letter-spacing:-0.3px}
+.news .news-brand .nt{color:rgba(255,255,255,0.3)}
+.news .news-brand .av{color:#fff}
+.news .news-source{font-family:'Space Mono',monospace;font-size:8px;color:rgba(255,255,255,0.25);letter-spacing:0.5px}
+
+/* ─── STYLE 4: GROWTHX THUMBNAIL ─── */
+.thumb{width:480px;aspect-ratio:16/9;border-radius:12px;overflow:hidden;position:relative;background:#0B0B0B}
+.thumb .thumb-accent{position:absolute;top:0;right:0;width:45%;height:100%;background:linear-gradient(135deg,#0A7558 0%,#065a43 100%)}
+.thumb .thumb-content{position:absolute;top:0;left:0;right:0;bottom:0;padding:24px 28px;display:flex;flex-direction:column;justify-content:center;z-index:2}
+.thumb .thumb-kicker{font-family:'Space Mono',monospace;font-size:10px;color:#4ADE9F;letter-spacing:2px;margin:0 0 10px}
+.thumb .thumb-title{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:22px;color:#fff;line-height:1.15;letter-spacing:-0.5px;max-width:55%}
+.thumb .thumb-title .hl{color:#4ADE9F}
+.thumb .thumb-brand{position:absolute;bottom:16px;left:28px;display:flex;align-items:center;gap:8px}
+.thumb .thumb-mono{width:28px;height:28px;border-radius:6px;background:#0A7558;display:flex;align-items:center;justify-content:center;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:14px;color:#fff}
+.thumb .thumb-name{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:11px;color:rgba(255,255,255,0.6);letter-spacing:-0.2px}
+.thumb .thumb-stat{position:absolute;bottom:20px;right:28px;text-align:right}
+.thumb .thumb-stat-num{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:32px;color:#fff;letter-spacing:-1px;line-height:1}
+.thumb .thumb-stat-label{font-family:'Space Mono',monospace;font-size:9px;color:rgba(255,255,255,0.5);letter-spacing:0.5px;margin:4px 0 0}
+</style>
+</head>
+<body>
+
+<!-- SHANKAR UNRAVELLED STYLE: Storytelling Reel -->
+<div>
+<div class="reel shankar">
+  <div class="top-bar"><div class="pill">NotAVC</div><div class="ep">EP.003</div></div>
+  <div class="story-zone">
+    <div class="story-hook">This Bangalore boy sold <em>samosas</em> to pay rent. Today his company is worth</div>
+    <div class="story-stat">₹4,200Cr</div>
+    <div class="story-stat-label">ZERODHA · BOOTSTRAPPED · ZERO VC MONEY</div>
+    <div class="story-sub">Nithin Kamath never took a single rupee from VCs. Here's why that decision made him richer than most of them.</div>
+  </div>
+  <div class="bottom-bar">
+    <div class="swipe">SWIPE UP</div>
+    <div class="progress"><div class="progress-fill"></div></div>
+  </div>
+</div>
+<div class="label">FACELESS REEL — STORYTELLING FORMAT</div>
+<div class="ref">Reference: Shankar Unravelled · 30s narrative, text-on-screen</div>
+</div>
+
+<!-- AHMED'S BUSINESS STYLE: Data + Text Overlay -->
+<div>
+<div class="reel ahmed">
+  <div class="top-bar"><div class="pill">NotAVC</div><div class="ep">EP.008</div></div>
+  <div class="content">
+    <div class="kicker">VC CONCEPT</div>
+    <div class="main-text">Why VCs want a <span class="hl">10x return</span> on every deal — not 2x</div>
+    <div class="data-card">
+      <div class="data-row"><div class="data-label">Fund size</div><div class="data-val">$100M</div></div>
+      <div class="data-row"><div class="data-label">Investments</div><div class="data-val">20 startups</div></div>
+      <div class="data-row"><div class="data-label">Expected failures</div><div class="data-val red">14 of 20</div></div>
+      <div class="data-row"><div class="data-label">Need from winners</div><div class="data-val green">10-50x each</div></div>
+    </div>
+  </div>
+  <div class="caption-bar">
+    <div class="caption"><strong>The math:</strong> 70% of startups fail. The survivors need to return the entire fund — and then some.</div>
+  </div>
+</div>
+<div class="label">FACELESS REEL — DATA OVERLAY FORMAT</div>
+<div class="ref">Reference: Ahmed's Business · Text + data cards, no face</div>
+</div>
+
+<!-- MREFLOW NEWS STYLE -->
+<div>
+<div class="reel news">
+  <div class="breaking-bar">
+    <div class="breaking-dot"></div>
+    <div class="breaking-text">FUNDING ALERT</div>
+    <div class="breaking-time">2 HRS AGO</div>
+  </div>
+  <div class="news-content">
+    <div class="news-category">SERIES D</div>
+    <div class="news-headline">Zepto raises $350M at $5.2B valuation — becomes India's fastest unicorn to Series D</div>
+    <div class="news-body">
+      <strong>Lead investors:</strong> StepStone Group, existing backers Glade Brook, Nexus VP doubled down.
+      <br><br>
+      <strong>The catch:</strong> Burn rate is still ₹200Cr/quarter. At this pace, runway is 18 months. The race to profitability is on.
+    </div>
+  </div>
+  <div class="ticker">
+    <div class="ticker-item">NIFTY <span class="up">+1.2%</span></div>
+    <div class="ticker-item">SENSEX <span class="up">+0.8%</span></div>
+    <div class="ticker-item">ZOMATO <span class="down">-3.1%</span></div>
+    <div class="ticker-item">PAYTM <span class="up">+2.4%</span></div>
+  </div>
+  <div class="news-footer">
+    <div class="news-brand"><span class="nt">Not</span><span class="av">AVC</span></div>
+    <div class="news-source">SOURCE: INC42 · ENTRACKR</div>
+  </div>
+</div>
+<div class="label">FACELESS REEL — NEWS FORMAT</div>
+<div class="ref">Reference: MrEflow · Breaking news style, ticker, data-led</div>
+</div>
+
+<!-- GROWTHX THUMBNAIL STYLE -->
+<div>
+<div class="thumb">
+  <div class="thumb-accent"></div>
+  <div class="thumb-content">
+    <div class="thumb-kicker">COMPANY TEARDOWN</div>
+    <div class="thumb-title">Why <span class="hl">Zepto</span> will either IPO or die in 18 months</div>
+    <div class="thumb-brand">
+      <div class="thumb-mono">N</div>
+      <div class="thumb-name">NotAVC</div>
+    </div>
+    <div class="thumb-stat">
+      <div class="thumb-stat-num">$5.2B</div>
+      <div class="thumb-stat-label">VALUATION</div>
+    </div>
+  </div>
+</div>
+<div class="label" style="max-width:480px">YOUTUBE THUMBNAIL — BOLD FORMAT</div>
+<div class="ref" style="max-width:480px">Reference: GrowthX · High-contrast, split-color, bold text</div>
+</div>
+
+</body>
+</html>

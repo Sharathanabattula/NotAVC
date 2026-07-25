@@ -1,0 +1,173 @@
+/* NotAVC Design System — CSS Tokens v2.0 */
+/* Brand: NotAVC — Venture Intelligence for Everyone */
+/* Creator: Sharath Chandra Anabattula */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Source+Sans+3:wght@300;400;500;600;700&family=Source+Code+Pro:wght@400;500;600&display=swap');
+
+:root {
+  /* ─── PRIMARY PALETTE ─── */
+  --notavc-ink: #0B0B0B;
+  --notavc-paper: #FFFFFF;
+  --notavc-signal: #0A7558;
+  --notavc-mint: #4ADE9F;
+  --notavc-canvas: #F5F5F5;
+  --notavc-muted: #888888;
+
+  /* ─── EXTENDED PALETTE (data viz only) ─── */
+  --notavc-coral: #E8593C;
+  --notavc-amber: #F2A623;
+  --notavc-info: #3B8BD4;
+  --notavc-deep: #1A1A2E;
+
+  /* ─── SIGNAL GREEN TINTS ─── */
+  --notavc-signal-10: rgba(10, 117, 88, 0.08);
+  --notavc-signal-20: rgba(10, 117, 88, 0.12);
+  --notavc-signal-30: rgba(10, 117, 88, 0.18);
+
+  /* ─── TYPOGRAPHY ─── */
+  --notavc-font-display: 'Montserrat', sans-serif;
+  --notavc-font-body: 'Source Sans 3', sans-serif;
+  --notavc-font-data: 'Source Code Pro', monospace;
+
+  /* ─── TYPE SCALE ─── */
+  --notavc-text-display: 800 32px/1.15 var(--notavc-font-display);
+  --notavc-text-heading: 700 20px/1.3 var(--notavc-font-display);
+  --notavc-text-subheading: 600 16px/1.4 var(--notavc-font-display);
+  --notavc-text-body: 400 16px/1.6 var(--notavc-font-body);
+  --notavc-text-data: 500 14px/1.4 var(--notavc-font-data);
+  --notavc-text-caption: 400 13px/1.5 var(--notavc-font-body);
+  --notavc-text-micro: 500 11px/1.3 var(--notavc-font-data);
+
+  /* ─── LETTER SPACING ─── */
+  --notavc-ls-display: -0.5px;
+  --notavc-ls-heading: -0.3px;
+  --notavc-ls-subheading: -0.2px;
+  --notavc-ls-micro: 2px;
+  --notavc-ls-brand: 1px;
+
+  /* ─── SPACING ─── */
+  --notavc-space-xs: 4px;
+  --notavc-space-sm: 8px;
+  --notavc-space-md: 16px;
+  --notavc-space-lg: 24px;
+  --notavc-space-xl: 32px;
+  --notavc-space-2xl: 48px;
+
+  /* ─── RADII ─── */
+  --notavc-radius-sm: 4px;
+  --notavc-radius-md: 8px;
+  --notavc-radius-lg: 12px;
+  --notavc-radius-xl: 16px;
+  --notavc-radius-pill: 9999px;
+
+  /* ─── BORDERS ─── */
+  --notavc-border-light: 0.5px solid rgba(0, 0, 0, 0.08);
+  --notavc-border-default: 0.5px solid rgba(0, 0, 0, 0.12);
+  --notavc-border-strong: 1px solid rgba(0, 0, 0, 0.18);
+
+  /* ─── SHADOWS ─── */
+  --notavc-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --notavc-shadow-md: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --notavc-shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.08);
+
+  /* ─── TRANSITIONS ─── */
+  --notavc-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --notavc-duration: 150ms;
+
+  /* ─── SOCIAL TEMPLATE DIMENSIONS ─── */
+  --notavc-reel: 9 / 16;    /* 1080×1920 */
+  --notavc-post: 1 / 1;     /* 1080×1080 */
+  --notavc-carousel: 4 / 5; /* 1080×1350 */
+  --notavc-linkedin: 1.91 / 1; /* 1200×628 */
+  --notavc-youtube: 16 / 9; /* 1280×720 */
+  --notavc-story: 9 / 16;   /* 1080×1920 */
+}
+
+/* ─── DARK MODE OVERRIDES ─── */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --notavc-border-light: 0.5px solid rgba(255, 255, 255, 0.06);
+    --notavc-border-default: 0.5px solid rgba(255, 255, 255, 0.1);
+    --notavc-border-strong: 1px solid rgba(255, 255, 255, 0.15);
+    --notavc-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+    --notavc-shadow-md: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --notavc-shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.4);
+  }
+}
+
+/* ─── UTILITY CLASSES ─── */
+
+/* Brand label: NOTAVC in micro uppercase */
+.notavc-brand-label {
+  font: var(--notavc-text-micro);
+  letter-spacing: var(--notavc-ls-micro);
+  color: var(--notavc-signal);
+  text-transform: uppercase;
+}
+
+/* Episode number badge */
+.notavc-episode {
+  font: var(--notavc-text-data);
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--notavc-muted);
+}
+
+/* Data metric display */
+.notavc-metric {
+  font: var(--notavc-text-data);
+  color: var(--notavc-signal);
+}
+
+/* Signal tag/pill */
+.notavc-tag {
+  display: inline-block;
+  font: var(--notavc-text-data);
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: var(--notavc-radius-sm);
+  background: var(--notavc-signal-10);
+  color: var(--notavc-signal);
+}
+
+/* Brand pill (for dark backgrounds) */
+.notavc-pill {
+  display: inline-block;
+  font-family: var(--notavc-font-display);
+  font-weight: 700;
+  font-size: 9px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 3px 8px;
+  border-radius: var(--notavc-radius-pill);
+  backdrop-filter: blur(6px);
+  letter-spacing: 0.5px;
+}
+
+/* Hook text highlight (for Reel covers) */
+.notavc-highlight {
+  color: var(--notavc-mint);
+}
+
+/* Card component */
+.notavc-card {
+  background: var(--notavc-paper);
+  border-radius: var(--notavc-radius-lg);
+  border: var(--notavc-border-default);
+  padding: 1rem 1.25rem;
+}
+
+/* Logo wordmark */
+.notavc-logo {
+  font-family: var(--notavc-font-display);
+  font-weight: 800;
+  letter-spacing: -0.8px;
+}
+
+.notavc-logo .not {
+  opacity: 0.35;
+}
+
+.notavc-logo .avc {
+  opacity: 1;
+}

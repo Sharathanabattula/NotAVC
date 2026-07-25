@@ -1,0 +1,199 @@
+@import "tailwindcss";
+
+/*
+  NotAVC — Web Tokens v3
+  Three palettes, one crimson anchor (#710014).
+  Palette switching is paint-only: variables swap on <html data-palette>,
+  elements crossfade via transition-colors. No layout work on scroll.
+*/
+
+:root {
+  /* Constants — every palette shares these */
+  --crimson: #710014;
+  --coral: #e8593c;
+  --amber: #f2a623;
+  --info: #5ea3e0;
+
+  /* Palette: Off-White & Rust (default — hero, close) */
+  --bg: #f5efe6;
+  --bg-soft: #ece3d3;
+  --ink: #201812;
+  --muted: #7e7264;
+  --accent: #710014;
+  --accent-2: #a6522f;
+  --line: rgba(32, 24, 18, 0.16);
+  --glass: rgba(255, 255, 255, 0.45);
+  --glass-line: rgba(32, 24, 18, 0.09);
+}
+
+html[data-palette="nature"] {
+  --bg: #e6e4d5;
+  --bg-soft: #dbd8c3;
+  --ink: #1f241b;
+  --muted: #68705e;
+  --accent: #710014;
+  --accent-2: #3f5a3e;
+  --line: rgba(31, 36, 27, 0.18);
+  --glass: rgba(255, 255, 255, 0.4);
+  --glass-line: rgba(31, 36, 27, 0.09);
+}
+
+html[data-palette="luxe"] {
+  --bg: #140d10;
+  --bg-soft: #1e1418;
+  --ink: #f1e9dd;
+  --muted: #9c8d84;
+  --accent: #d8495f;
+  --accent-2: #c9a470;
+  --line: rgba(241, 233, 221, 0.16);
+  --glass: rgba(255, 255, 255, 0.05);
+  --glass-line: rgba(255, 255, 255, 0.12);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-soft: var(--bg-soft);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
+  --color-line: var(--line);
+  --color-crimson: var(--crimson);
+  --color-coral: var(--coral);
+  --color-amber: var(--amber);
+  --color-info: var(--info);
+
+  --font-display: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+  --font-data: var(--font-space), ui-monospace, monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-weight: 400;
+  transition:
+    background-color 700ms cubic-bezier(0.4, 0, 0.2, 1),
+    color 700ms cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--crimson);
+  color: #f5efe6;
+}
+
+/* Film grain — static overlay, composited once, zero scroll cost */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+}
+
+/* Palette-aware crossfade helper — apply to anything using token colors */
+.pal {
+  transition:
+    color 700ms cubic-bezier(0.4, 0, 0.2, 1),
+    background-color 700ms cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 700ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Editorial type voices */
+.voice-display {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 0.92;
+}
+
+.voice-heading {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.voice-kicker {
+  font-family: var(--font-data);
+  font-size: 0.6875rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.voice-data {
+  font-family: var(--font-data);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Hollow display type — the "Not" that recedes */
+.hollow {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--ink);
+  transition: -webkit-text-stroke-color 700ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Glassmorphic card — reserved for the Teardown Desk (perf budget: max 6 per page) */
+.glass-card {
+  background: var(--glass);
+  border: 1px solid var(--glass-line);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+}
+
+/* Ticker — transform-only marquee */
+@keyframes ticker {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.ticker-track {
+  display: flex;
+  width: max-content;
+  animation: ticker 46s linear infinite;
+  will-change: transform;
+}
+
+/* Quality floor: keyboard focus is always visible */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Press feedback for decision points */
+.press {
+  transition: transform 150ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.press:active {
+  transform: scale(0.97);
+}
+
+/* Motion stops where decisions start */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .ticker-track {
+    animation: none;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

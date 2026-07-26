@@ -42,6 +42,33 @@ export const MANIFESTO = {
   ],
 };
 
+export const BOOT_LINES = [
+  "NOTAVC // VENTURE INTELLIGENCE TERMINAL",
+  "> mounting archive ................ OK",
+  "> desks online [06] ............... OK",
+  "> teardowns indexed [04] .......... OK",
+  "> analyst .......... SHARATH C. ANABATTULA",
+  "> credential ....... BOWER SCHOOL — VC/PE",
+  "> status ........... NOT A VC",
+];
+
+export const FOUNDER = {
+  kicker: "The analyst",
+  heading: "I'm Sharath. I'm not a VC — I'm the guy doing the homework in public.",
+  paragraphs: [
+    "MBA student at SR University, specialising in Finance & Derivatives, and part of the Bower School of Entrepreneurship's VC/PE programme — deal simulations, term-sheet negotiations, and Indian case studies like the Zomato and Paytm IPOs.",
+    "I fell for two things at once: finance and startups. Finance because the numbers never flatter anyone for long. Startups because they're the only place where a spreadsheet and a stubborn idea can fight it out in public.",
+    "So I stopped waiting for a fund to hire me before I was allowed to think like an investor. Every teardown here is me doing the work early, out loud, with the mistakes left in.",
+  ],
+  credentials: [
+    { k: "PROGRAMME", v: "Bower School — LEAD VC/PE" },
+    { k: "DEGREE", v: "MBA · Finance & Derivatives" },
+    { k: "INSTITUTION", v: "SR University" },
+    { k: "BASED", v: "India · Building in public" },
+  ],
+  pull: "Nobody gave me a fund. So I gave myself the syllabus.",
+};
+
 export type Teardown = {
   ep: string;
   company: string;

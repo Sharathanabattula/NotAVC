@@ -18,6 +18,9 @@ import Decode from "./Decode";
   horizon · N/A watermark · headline. All four foreground layers ride one
   scroll timeline at different rates, so depth comes from rate difference
   rather than from four separate animations.
+
+  `isolate` on the section is load-bearing: without its own stacking
+  context the -z layers paint beneath body's background and vanish.
 */
 
 const RISE = {
@@ -44,7 +47,7 @@ export default function Hero() {
       <section
         ref={ref}
         id="top"
-        className="relative flex min-h-svh flex-col justify-end overflow-clip px-5 pb-16 pt-32 sm:px-8"
+        className="relative isolate flex min-h-svh flex-col justify-end overflow-clip px-5 pb-16 pt-32 sm:px-8"
       >
         {/* Layer 1 — the field */}
         <m.div style={{ opacity: fieldOpacity }} className="absolute inset-0 -z-30">

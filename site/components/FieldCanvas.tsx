@@ -15,7 +15,7 @@ import { useEffect, useRef } from "react";
 */
 
 const SPACING = 38;
-const DOT = 1.4;
+const DOT = 1;
 const POINTER_RADIUS = 190;
 
 export default function FieldCanvas() {
@@ -68,16 +68,16 @@ export default function FieldCanvas() {
           const dist = Math.sqrt(dx * dx + dy * dy);
           const near = dist < POINTER_RADIUS ? 1 - dist / POINTER_RADIUS : 0;
 
-          // wave sits in [-1,1]; lift it to [0,1] then bias dark
-          const energy = Math.max(0, wave) * 0.55 + near * 0.9;
-          if (energy < 0.04) continue;
+          // wave sits in [-1,1]; lift to [0,1] over a floor so the lattice
+          // never fully disappears between crests
+          const energy = Math.min(1, 0.22 + Math.max(0, wave) * 0.78 + near);
 
-          const radius = DOT + energy * 1.9;
+          const radius = DOT + energy * 2.2;
           // Crimson only where the crest and the pointer actually peak
-          const hot = energy > 0.55;
+          const hot = energy > 0.66;
           ctx.fillStyle = hot
-            ? `rgba(226, 62, 82, ${Math.min(energy, 1) * 0.85})`
-            : `rgba(236, 231, 225, ${energy * 0.34})`;
+            ? `rgba(226, 62, 82, ${energy * 0.95})`
+            : `rgba(236, 231, 225, ${energy * 0.8})`;
 
           ctx.beginPath();
           ctx.arc(x, y - wave * 5, radius, 0, Math.PI * 2);

@@ -10,7 +10,7 @@ export default function Closer() {
   return (
     <footer className="mx-auto max-w-7xl px-5 pb-10 pt-28 sm:px-8 sm:pt-40">
       <Reveal>
-        <p className="voice-kicker zone mb-6 text-crimson">{CLOSER.kicker}</p>
+        <p className="voice-kicker zone mb-6 text-accent">{CLOSER.kicker}</p>
         <h2 className="voice-display zone text-[clamp(3.5rem,11vw,9rem)] text-ink">
           {CLOSER.heading}
         </h2>
@@ -24,7 +24,7 @@ export default function Closer() {
           href={SOCIAL.linkedin}
           target="_blank"
           rel="noopener noreferrer"
-          className="press voice-data zone rounded-full bg-crimson px-7 py-3.5 text-sm text-[#e8e6e1] transition-opacity hover:opacity-85"
+          className="press voice-data zone bg-accent px-7 py-3.5 text-sm font-semibold text-bg transition-opacity hover:opacity-85"
         >
           TEARDOWNS → LINKEDIN
         </a>
@@ -32,13 +32,13 @@ export default function Closer() {
           href={SOCIAL.instagram}
           target="_blank"
           rel="noopener noreferrer"
-          className="press voice-data zone rounded-full border border-rule px-7 py-3.5 text-sm text-ink transition-colors hover:border-crimson hover:text-crimson"
+          className="press voice-data zone rounded-full border border-rule px-7 py-3.5 text-sm text-ink transition-colors hover:border-accent hover:text-accent"
         >
           REELS → INSTAGRAM
         </a>
         <a
           href={SOCIAL.email}
-          className="press voice-data zone rounded-full border border-rule px-7 py-3.5 text-sm text-ink transition-colors hover:border-crimson hover:text-crimson"
+          className="press voice-data zone rounded-full border border-rule px-7 py-3.5 text-sm text-ink transition-colors hover:border-accent hover:text-accent"
         >
           PITCH ME A TEARDOWN
         </a>

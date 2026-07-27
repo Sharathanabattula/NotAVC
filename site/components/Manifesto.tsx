@@ -18,7 +18,7 @@ export default function Manifesto() {
         <div className="grid gap-14 lg:grid-cols-11">
           <div className="lg:col-span-4">
             <Reveal>
-              <p className="voice-kicker zone mb-6 text-crimson">
+              <p className="voice-kicker zone mb-6 text-accent">
                 {MANIFESTO.kicker}
               </p>
               <h2 className="voice-heading zone text-4xl text-ink sm:text-5xl">
@@ -39,7 +39,7 @@ export default function Manifesto() {
 
           <div className="lg:col-span-2 lg:col-start-10">
             <Reveal delay={0.1}>
-              <div className="zone border-l-2 border-crimson pl-5">
+              <div className="zone border-l-2 border-accent pl-5">
                 <p className="voice-heading zone text-xl leading-snug text-muted">
                   {MANIFESTO.pullQuote}
                 </p>
@@ -52,7 +52,7 @@ export default function Manifesto() {
       <Reveal className="mt-20" delay={0.05}>
         <dl className="zone grid grid-cols-2 gap-px overflow-hidden border border-rule bg-rule lg:grid-cols-4">
           {MANIFESTO.stats.map((stat) => (
-            <div key={stat.label} className="zone bg-paper p-7">
+            <div key={stat.label} className="zone bg-bg p-7">
               <dt className="voice-kicker zone order-2 mt-3 block text-muted">
                 {stat.label}
               </dt>

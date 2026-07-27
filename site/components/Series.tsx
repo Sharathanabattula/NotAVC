@@ -7,11 +7,11 @@ export default function Series() {
       <div className="grid gap-16 lg:grid-cols-12">
         <div className="lg:col-span-7">
           <Reveal>
-            <p className="voice-kicker zone mb-6 text-crimson">The six desks</p>
+            <p className="voice-kicker zone mb-6 text-accent">The six desks</p>
             <h2 className="voice-display zone mb-14 text-5xl text-ink sm:text-6xl">
               One archive,
               <br />
-              six obsessions<span className="zone text-crimson">.</span>
+              six obsessions<span className="zone text-accent">.</span>
             </h2>
           </Reveal>
 
@@ -19,7 +19,7 @@ export default function Series() {
             {PILLARS.map((pillar, i) => (
               <Reveal key={pillar.index} delay={i * 0.04}>
                 <div className="zone group grid grid-cols-[3rem_1fr] gap-4 border-b border-rule py-7 sm:grid-cols-[4rem_1fr_auto]">
-                  <span className="voice-data zone text-sm text-crimson">
+                  <span className="voice-data zone text-sm text-accent">
                     {pillar.index}
                   </span>
                   <div>
@@ -41,8 +41,8 @@ export default function Series() {
 
         <aside className="lg:col-span-4 lg:col-start-9 lg:sticky lg:top-28 lg:self-start">
           <Reveal delay={0.1}>
-            <div className="zone border border-rule bg-paper-2 p-8 sm:p-10">
-              <p className="voice-kicker zone mb-8 text-crimson">
+            <div className="zone border border-rule bg-surface p-8 sm:p-10">
+              <p className="voice-kicker zone mb-8 text-accent">
                 Field notes — latest
               </p>
               {FIELD_NOTES.map((entry) => (

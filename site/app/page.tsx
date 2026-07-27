@@ -11,8 +11,8 @@ import BootSequence from "@/components/BootSequence";
 import HudFrame from "@/components/HudFrame";
 
 /*
-  Palette arc: Off-White & Rust → Nature Editorial → Luxe Dark → Rust.
-  Zones are observed by PaletteObserver; the crossfade is pure CSS.
+  Zone arc: void (masthead) → deck (thesis) → plate (teardown desk) → deck.
+  Elevation only, never a light flip. PaletteObserver owns the switch.
 */
 export default function Home() {
   return (
@@ -22,11 +22,11 @@ export default function Home() {
       <HudFrame />
       <Nav />
       <main>
-        <div data-zone="paper">
+        <div data-zone="void">
           <Hero />
           <Ticker />
         </div>
-        <div data-zone="paper">
+        <div data-zone="deck">
           <section id="thesis">
             <Manifesto />
           </section>
@@ -37,12 +37,12 @@ export default function Home() {
             <Series />
           </section>
         </div>
-        <div data-zone="desk">
+        <div data-zone="plate">
           <section id="teardowns">
             <Teardowns />
           </section>
         </div>
-        <div data-zone="paper">
+        <div data-zone="deck">
           <section id="signal">
             <Closer />
           </section>

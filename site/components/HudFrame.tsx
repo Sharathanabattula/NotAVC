@@ -3,7 +3,7 @@
   Static, pointer-events-none, painted once. Zero scroll cost.
 */
 export default function HudFrame() {
-  const arm = "pointer-events-none fixed z-40 border-crimson/45 zone hidden sm:block";
+  const arm = "pointer-events-none fixed z-40 border-accent/45 zone hidden sm:block";
   return (
     <div aria-hidden>
       <span className={`${arm} left-3 top-3 h-5 w-5 border-l border-t`} />

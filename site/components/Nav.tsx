@@ -20,13 +20,13 @@ export default function Nav() {
             <a
               key={link.href}
               href={link.href}
-              className="zone transition-colors hover:text-crimson"
+              className="zone transition-colors hover:text-accent"
             >
               {link.label}
             </a>
           ))}
         </nav>
-        <span className="voice-kicker zone text-crimson">EST. 2026</span>
+        <span className="voice-kicker zone text-accent">EST. 2026</span>
       </div>
     </header>
   );

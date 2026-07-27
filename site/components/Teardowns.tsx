@@ -32,7 +32,7 @@ function TeardownCard({ teardown, delay }: { teardown: Teardown; delay: number }
       viewport={{ once: true, margin: "0px 0px -15% 0px" }}
       onViewportEnter={() => setStruck(true)}
       transition={{ duration: 0.8, delay, ease: [0.22, 1, 0.36, 1] }}
-      className={`zone group flex h-full flex-col border border-rule bg-paper-2 p-8 sm:p-10 ${
+      className={`zone group flex h-full flex-col border border-rule bg-surface p-8 sm:p-10 ${
         struck ? "strike-in" : ""
       }`}
     >
@@ -50,18 +50,18 @@ function TeardownCard({ teardown, delay }: { teardown: Teardown; delay: number }
       <h3 className="voice-heading zone text-3xl text-ink">{teardown.company}</h3>
       <p className="zone mt-2 font-light text-muted">{teardown.hook}</p>
 
-      <p className="voice-data zone mt-10 text-5xl font-bold tracking-tight text-crimson sm:text-6xl">
+      <p className="voice-data zone mt-10 text-5xl font-bold tracking-tight text-accent sm:text-6xl">
         {teardown.number}
       </p>
       <p className="voice-kicker zone mt-3 text-muted">{teardown.numberLabel}</p>
 
       {/* Correction layer */}
-      <div className="zone mt-9 border-l-2 border-crimson pl-5">
+      <div className="zone mt-9 border-l-2 border-accent pl-5">
         <p className="voice-kicker zone mb-2 text-muted">The take everyone had</p>
         <p className="zone text-lg font-light leading-snug">
           <span className="wrong-take">{teardown.wrongTake}</span>
         </p>
-        <p className="corrected voice-data zone mt-4 text-[13px] leading-relaxed text-crimson">
+        <p className="corrected voice-data zone mt-4 text-[13px] leading-relaxed text-accent">
           {teardown.corrected}
         </p>
       </div>
@@ -109,13 +109,13 @@ export default function Teardowns() {
           />
           <div className="mb-6 flex flex-wrap items-end justify-between gap-6">
             <div>
-              <p className="voice-kicker zone mb-6 text-crimson">
+              <p className="voice-kicker zone mb-6 text-accent">
                 The teardown desk
               </p>
               <h2 className="voice-display zone text-6xl text-ink sm:text-7xl">
                 Companies,
                 <br />
-                autopsied<span className="zone text-crimson">.</span>
+                autopsied<span className="zone text-accent">.</span>
               </h2>
             </div>
             <p className="voice-data zone max-w-xs text-xs leading-loose text-muted">
@@ -128,7 +128,7 @@ export default function Teardowns() {
           <m.div
             aria-hidden
             style={{ scaleX: ruleScale }}
-            className="mb-16 h-px origin-left bg-crimson"
+            className="mb-16 h-px origin-left bg-accent shadow-[0_0_18px_var(--glow)]"
           />
 
           <div className="grid gap-6 lg:grid-cols-2">
@@ -144,7 +144,7 @@ export default function Teardowns() {
 
           <p className="voice-data zone mt-16 text-center text-xs tracking-[0.2em] text-muted">
             FULL TEARDOWNS DROP ON THE FEED —{" "}
-            <a href="#signal" className="zone text-crimson underline-offset-4 hover:underline">
+            <a href="#signal" className="zone text-accent underline-offset-4 hover:underline">
               FOLLOW THE SIGNAL ↓
             </a>
           </p>

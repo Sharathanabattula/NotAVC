@@ -50,14 +50,14 @@ export default function Founder() {
                     priority={false}
                   />
                   {/* HUD corner ticks */}
-                  <span className="pointer-events-none absolute left-0 top-0 h-7 w-7 border-l-2 border-t-2 border-[#e8e6e1]/80" />
-                  <span className="pointer-events-none absolute bottom-0 right-0 h-7 w-7 border-b-2 border-r-2 border-[#e8e6e1]/80" />
+                  <span className="pointer-events-none absolute left-0 top-0 h-7 w-7 border-l-2 border-t-2 border-accent/90" />
+                  <span className="pointer-events-none absolute bottom-0 right-0 h-7 w-7 border-b-2 border-r-2 border-accent/90" />
                   </div>
                 </m.div>
               </div>
 
               <p className="voice-kicker zone mt-5 text-muted">
-                SHARATH CHANDRA ANABATTULA — <span className="text-crimson">EP.000</span>
+                SHARATH CHANDRA ANABATTULA — <span className="text-accent">EP.000</span>
               </p>
             </div>
 
@@ -69,7 +69,7 @@ export default function Founder() {
                 viewport={{ once: true, margin: "0px 0px -12% 0px" }}
                 transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
               >
-                <p className="voice-kicker zone mb-6 text-crimson">{FOUNDER.kicker}</p>
+                <p className="voice-kicker zone mb-6 text-accent">{FOUNDER.kicker}</p>
                 <h2 className="voice-heading zone text-3xl text-ink sm:text-4xl">
                   {FOUNDER.heading}
                 </h2>
@@ -83,13 +83,13 @@ export default function Founder() {
                   </p>
                 ))}
 
-                <p className="voice-heading zone mt-10 border-l-2 border-crimson pl-5 text-xl leading-snug text-muted">
+                <p className="voice-heading zone mt-10 border-l-2 border-accent pl-5 text-xl leading-snug text-muted">
                   {FOUNDER.pull}
                 </p>
 
                 <dl className="zone mt-10 grid grid-cols-1 gap-px overflow-hidden border border-rule bg-rule sm:grid-cols-2">
                   {FOUNDER.credentials.map((c) => (
-                    <div key={c.k} className="zone bg-paper px-5 py-4">
+                    <div key={c.k} className="zone bg-bg px-5 py-4">
                       <dt className="voice-kicker zone text-muted">{c.k}</dt>
                       <dd className="zone mt-1.5 text-sm text-ink">{c.v}</dd>
                     </div>

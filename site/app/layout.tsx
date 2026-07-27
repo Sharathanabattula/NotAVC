@@ -37,7 +37,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      data-zone="paper"
+      data-zone="void"
       className={`${fraunces.variable} ${instrument.variable} ${plexMono.variable} antialiased`}
     >
       <body className="grain min-h-screen">{children}</body>

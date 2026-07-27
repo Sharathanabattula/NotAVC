@@ -6,7 +6,7 @@ function Row() {
       {TICKER_TERMS.map((term) => (
         <span key={term} className="voice-data flex items-center text-xs tracking-[0.18em]">
           <span className="zone px-6 text-muted">{term}</span>
-          <span className="zone text-crimson">·</span>
+          <span className="zone text-accent">·</span>
         </span>
       ))}
     </span>

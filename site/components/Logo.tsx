@@ -5,7 +5,7 @@ export function Wordmark({ className = "" }: { className?: string }) {
     >
       <span className="opacity-40">Not</span>
       <span>AVC</span>
-      <span className="zone text-crimson">.</span>
+      <span className="zone text-accent">.</span>
     </span>
   );
 }

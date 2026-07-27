@@ -9,7 +9,8 @@ import { useEffect } from "react";
 */
 export default function PaletteObserver() {
   useEffect(() => {
-    const zones = document.querySelectorAll<HTMLElement>("[data-zone]");
+    // Scoped to main so the <html data-zone> root is never observed
+    const zones = document.querySelectorAll<HTMLElement>("main [data-zone]");
     if (!zones.length) return;
 
     const io = new IntersectionObserver(

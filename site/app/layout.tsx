@@ -1,21 +1,22 @@
 import type { Metadata, Viewport } from "next";
-import { Plus_Jakarta_Sans, Outfit, Space_Mono } from "next/font/google";
+import { Fraunces, Instrument_Sans, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 
-const jakarta = Plus_Jakarta_Sans({
+const fraunces = Fraunces({
   subsets: ["latin"],
-  variable: "--font-jakarta",
+  axes: ["SOFT", "WONK", "opsz"],
+  variable: "--font-display",
 });
 
-const outfit = Outfit({
+const instrument = Instrument_Sans({
   subsets: ["latin"],
-  variable: "--font-outfit",
+  variable: "--font-body",
 });
 
-const spaceMono = Space_Mono({
+const plexMono = IBM_Plex_Mono({
   subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-space",
+  weight: ["400", "500", "600"],
+  variable: "--font-data",
 });
 
 export const metadata: Metadata = {
@@ -36,8 +37,8 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      data-palette="rust"
-      className={`${jakarta.variable} ${outfit.variable} ${spaceMono.variable} antialiased`}
+      data-zone="paper"
+      className={`${fraunces.variable} ${instrument.variable} ${plexMono.variable} antialiased`}
     >
       <body className="grain min-h-screen">{children}</body>
     </html>

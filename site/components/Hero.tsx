@@ -39,7 +39,7 @@ export default function Hero() {
         className="relative flex min-h-svh flex-col justify-end overflow-clip px-5 pb-14 pt-28 sm:px-8"
       >
         {/* Split-tone backdrop: warm band on the right third */}
-        <div className="pal absolute inset-y-0 right-0 -z-10 w-1/3 bg-bg-soft" />
+        <div className="zone absolute inset-y-0 right-0 -z-10 w-1/3 bg-paper-2" />
 
         {/* Watermark — slower than scroll, opposite direction */}
         <m.span
@@ -55,7 +55,7 @@ export default function Hero() {
             {...enter}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             style={{ opacity: kickerOpacity }}
-            className="voice-kicker pal mb-8 text-accent"
+            className="voice-kicker zone mb-8 text-crimson"
           >
             EP.000 — The permanent record of an MBA student
             <span className="text-muted"> · SR University · Finance & Derivatives</span>
@@ -65,11 +65,11 @@ export default function Hero() {
             <m.h1
               {...enter}
               transition={{ duration: 0.9, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-              className="voice-display pal text-[clamp(4.5rem,15vw,13rem)] text-ink"
+              className="voice-display zone text-[clamp(4.5rem,15vw,13rem)] text-ink"
             >
-              <span className="hollow block">NOT</span>
+              <span className="block text-muted">NOT</span>
               <span className="block">
-                A VC<span className="pal text-accent">.</span>
+                A VC<span className="zone text-crimson">.</span>
               </span>
             </m.h1>
 
@@ -83,15 +83,15 @@ export default function Hero() {
               transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
               className="flex flex-col justify-between gap-8 sm:flex-row sm:items-end"
             >
-              <p className="pal max-w-md text-lg font-light leading-relaxed text-ink">
+              <p className="zone max-w-md text-lg font-light leading-relaxed text-ink">
                 Just a student who refuses to learn venture capital quietly.
                 Teardowns, term sheets, and the one number everyone else skips —
                 documented in public, mistakes included.
               </p>
-              <div className="voice-data pal shrink-0 text-right text-xs leading-loose text-muted">
+              <div className="voice-data zone shrink-0 text-right text-xs leading-loose text-muted">
                 <p>VENTURE INTELLIGENCE FOR EVERYONE</p>
                 <p>
-                  SCROLL FOR THE THESIS <span className="text-accent">↓</span>
+                  SCROLL FOR THE THESIS <span className="text-crimson">↓</span>
                 </p>
               </div>
             </m.div>

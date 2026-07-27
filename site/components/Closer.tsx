@@ -10,11 +10,11 @@ export default function Closer() {
   return (
     <footer className="mx-auto max-w-7xl px-5 pb-10 pt-28 sm:px-8 sm:pt-40">
       <Reveal>
-        <p className="voice-kicker pal mb-6 text-accent">{CLOSER.kicker}</p>
-        <h2 className="voice-display pal text-[clamp(3.5rem,11vw,9rem)] text-ink">
+        <p className="voice-kicker zone mb-6 text-crimson">{CLOSER.kicker}</p>
+        <h2 className="voice-display zone text-[clamp(3.5rem,11vw,9rem)] text-ink">
           {CLOSER.heading}
         </h2>
-        <p className="pal mt-8 max-w-lg text-lg font-light leading-relaxed text-ink/90">
+        <p className="zone mt-8 max-w-lg text-lg font-light leading-relaxed text-ink/90">
           {CLOSER.sub}
         </p>
       </Reveal>
@@ -24,7 +24,7 @@ export default function Closer() {
           href={SOCIAL.linkedin}
           target="_blank"
           rel="noopener noreferrer"
-          className="press voice-data pal rounded-full bg-crimson px-7 py-3.5 text-sm text-[#F5EFE6] transition-opacity hover:opacity-85"
+          className="press voice-data zone rounded-full bg-crimson px-7 py-3.5 text-sm text-[#e8e6e1] transition-opacity hover:opacity-85"
         >
           TEARDOWNS → LINKEDIN
         </a>
@@ -32,29 +32,29 @@ export default function Closer() {
           href={SOCIAL.instagram}
           target="_blank"
           rel="noopener noreferrer"
-          className="press voice-data pal rounded-full border border-line px-7 py-3.5 text-sm text-ink transition-colors hover:border-accent hover:text-accent"
+          className="press voice-data zone rounded-full border border-rule px-7 py-3.5 text-sm text-ink transition-colors hover:border-crimson hover:text-crimson"
         >
           REELS → INSTAGRAM
         </a>
         <a
           href={SOCIAL.email}
-          className="press voice-data pal rounded-full border border-line px-7 py-3.5 text-sm text-ink transition-colors hover:border-accent hover:text-accent"
+          className="press voice-data zone rounded-full border border-rule px-7 py-3.5 text-sm text-ink transition-colors hover:border-crimson hover:text-crimson"
         >
           PITCH ME A TEARDOWN
         </a>
       </div>
 
-      <div className="pal mt-24 flex flex-col gap-6 border-t border-line pt-8 sm:flex-row sm:items-center sm:justify-between">
+      <div className="zone mt-24 flex flex-col gap-6 border-t border-rule pt-8 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-4">
           <Monogram size={30} />
           <div>
             <Wordmark className="text-lg" />
-            <p className="voice-kicker pal mt-1 text-[9px] text-muted">
+            <p className="voice-kicker zone mt-1 text-[9px] text-muted">
               Venture intelligence for everyone
             </p>
           </div>
         </div>
-        <p className="voice-data pal text-[10px] tracking-[0.18em] text-muted">
+        <p className="voice-data zone text-[10px] tracking-[0.18em] text-muted">
           {CLOSER.legal}
         </p>
       </div>

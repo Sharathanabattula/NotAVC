@@ -34,6 +34,12 @@ export const MANIFESTO = {
   ],
   pullQuote:
     "Venture intelligence shouldn't need a Sand Hill Road address. Or a Bandra one.",
+  /* Margin annotations — the notes in the left gutter */
+  margin: [
+    { label: "Filed", note: "EP.000 — thesis" },
+    { label: "Status", note: "Open, revised in public" },
+    { label: "Rule", note: "One number per claim" },
+  ],
   stats: [
     { value: "₹0", label: "Assets under management" },
     { value: "06", label: "Desks, always open" },
@@ -78,6 +84,10 @@ export type Teardown = {
   number: string;
   numberLabel: string;
   take: string;
+  /* The correction layer — the consensus read, struck through in crimson */
+  wrongTake: string;
+  /* What the numbers actually said, written in the margin */
+  corrected: string;
   metrics: { k: string; v: string }[];
 };
 
@@ -92,6 +102,9 @@ export const TEARDOWNS: Teardown[] = [
     numberLabel: "Peak valuation to investor write-downs, 2022–2024",
     take:
       "Growth bought with borrowed money isn't growth — it's a countdown. The one number that mattered was cash conversion, and nobody on the cap table asked for it early enough.",
+    wrongTake: "India's edtech giant is scaling faster than anyone can copy.",
+    corrected:
+      "It was scaling acquisitions, not learning outcomes. Revenue recognition did the rest.",
     metrics: [
       { k: "RAISED", v: "$5B+" },
       { k: "AUDITOR EXIT", v: "2023" },
@@ -108,6 +121,9 @@ export const TEARDOWNS: Teardown[] = [
     numberLabel: "From ₹2,150 listing price within twelve months",
     take:
       "The prospectus said 'super app.' The income statement said 'payments company with thin take rates.' Public markets read the second document. Private markets had priced the first.",
+    wrongTake: "A super app deserves a super-app multiple.",
+    corrected:
+      "Take rate under 1% is a payments rail, not a platform. Rails price like rails.",
     metrics: [
       { k: "IPO SIZE", v: "₹18,300Cr" },
       { k: "LIST YEAR", v: "2021" },
@@ -124,6 +140,9 @@ export const TEARDOWNS: Teardown[] = [
     numberLabel: "Capital raised versus operating lifespan",
     take:
       "The most funded pre-launch startup in history never ran a cheap test of its core belief — that people wanted premium 10-minute video they couldn't screenshot. A ₹50L pilot would have answered it.",
+    wrongTake: "Hollywood pedigree plus $1.75B de-risks the launch.",
+    corrected:
+      "Pedigree funded the build, never the test. Untested belief costs the same at any raise size.",
     metrics: [
       { k: "FOUNDERS", v: "A-LIST" },
       { k: "LAUNCH", v: "APR 2020" },
@@ -140,6 +159,9 @@ export const TEARDOWNS: Teardown[] = [
     numberLabel: "The delivery promise the entire model hangs on",
     take:
       "Quick commerce is a bet that dark-store density beats decades of neighbourhood trust. The number I'm watching isn't GMV — it's contribution margin per order after rider costs. That decides everything.",
+    wrongTake: "GMV growth proves quick commerce works.",
+    corrected:
+      "GMV is a volume claim, not a margin one. Watch contribution per order after rider cost.",
     metrics: [
       { k: "FOUNDED", v: "2021" },
       { k: "VALUATION", v: "$5B" },

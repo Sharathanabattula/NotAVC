@@ -3,34 +3,34 @@ import { Reveal } from "./Reveal";
 
 export default function Series() {
   return (
-    <div className="mx-auto max-w-7xl px-5 py-28 sm:px-8 sm:py-40">
+    <div className="mx-auto max-w-7xl px-5 py-24 sm:px-8 sm:py-32">
       <div className="grid gap-16 lg:grid-cols-12">
         <div className="lg:col-span-7">
           <Reveal>
-            <p className="voice-kicker pal mb-6 text-accent">The six desks</p>
-            <h2 className="voice-display pal mb-14 text-5xl text-ink sm:text-6xl">
+            <p className="voice-kicker zone mb-6 text-crimson">The six desks</p>
+            <h2 className="voice-display zone mb-14 text-5xl text-ink sm:text-6xl">
               One archive,
               <br />
-              six obsessions<span className="pal text-accent">.</span>
+              six obsessions<span className="zone text-crimson">.</span>
             </h2>
           </Reveal>
 
-          <div className="pal border-t border-line">
+          <div className="zone border-t border-rule">
             {PILLARS.map((pillar, i) => (
               <Reveal key={pillar.index} delay={i * 0.04}>
-                <div className="pal group grid grid-cols-[3rem_1fr] gap-4 border-b border-line py-7 sm:grid-cols-[4rem_1fr_auto]">
-                  <span className="voice-data pal text-sm text-accent">
+                <div className="zone group grid grid-cols-[3rem_1fr] gap-4 border-b border-rule py-7 sm:grid-cols-[4rem_1fr_auto]">
+                  <span className="voice-data zone text-sm text-crimson">
                     {pillar.index}
                   </span>
                   <div>
-                    <h3 className="voice-heading pal text-2xl text-ink">
+                    <h3 className="voice-heading zone text-2xl text-ink">
                       {pillar.name}
                     </h3>
-                    <p className="pal mt-2 max-w-xl font-light leading-relaxed text-muted">
+                    <p className="zone mt-2 max-w-xl font-light leading-relaxed text-muted">
                       {pillar.desc}
                     </p>
                   </div>
-                  <span className="voice-data pal col-start-2 text-[10px] tracking-[0.2em] text-accent-2 sm:col-start-3 sm:self-center">
+                  <span className="voice-data zone col-start-2 text-[10px] tracking-[0.2em] text-muted sm:col-start-3 sm:self-center">
                     {pillar.format}
                   </span>
                 </div>
@@ -39,21 +39,21 @@ export default function Series() {
           </div>
         </div>
 
-        <aside className="lg:col-span-4 lg:col-start-9">
+        <aside className="lg:col-span-4 lg:col-start-9 lg:sticky lg:top-28 lg:self-start">
           <Reveal delay={0.1}>
-            <div className="pal rounded-2xl bg-bg-soft p-8 sm:p-10">
-              <p className="voice-kicker pal mb-8 text-accent">
+            <div className="zone border border-rule bg-paper-2 p-8 sm:p-10">
+              <p className="voice-kicker zone mb-8 text-crimson">
                 Field notes — latest
               </p>
               {FIELD_NOTES.map((entry) => (
                 <div
                   key={entry.date}
-                  className="pal mb-8 border-l border-line pl-5 last:mb-0"
+                  className="zone mb-8 border-l border-rule pl-5 last:mb-0"
                 >
-                  <p className="voice-data pal mb-2 text-[10px] tracking-[0.2em] text-muted">
+                  <p className="voice-data zone mb-2 text-[10px] tracking-[0.2em] text-muted">
                     {entry.date}
                   </p>
-                  <p className="voice-heading pal text-lg leading-snug text-ink">
+                  <p className="voice-heading zone text-lg leading-snug text-ink">
                     {entry.note}
                   </p>
                 </div>

@@ -22,11 +22,11 @@ export default function Home() {
       <HudFrame />
       <Nav />
       <main>
-        <div data-palette-zone="rust">
+        <div data-zone="paper">
           <Hero />
           <Ticker />
         </div>
-        <div data-palette-zone="nature">
+        <div data-zone="paper">
           <section id="thesis">
             <Manifesto />
           </section>
@@ -37,12 +37,12 @@ export default function Home() {
             <Series />
           </section>
         </div>
-        <div data-palette-zone="luxe">
+        <div data-zone="desk">
           <section id="teardowns">
             <Teardowns />
           </section>
         </div>
-        <div data-palette-zone="rust">
+        <div data-zone="paper">
           <section id="signal">
             <Closer />
           </section>

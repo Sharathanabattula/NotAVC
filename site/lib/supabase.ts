@@ -21,10 +21,10 @@ const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
   deployment through and the failure surfaces later as a confusing auth
   error from PostgREST instead of a missing-config error here.
 */
-const unset = (v?: string) => !v || v.startsWith("PASTE_");
+const isSet = (v?: string): v is string => !!v && !v.startsWith("PASTE_");
 
 export function db() {
-  if (unset(url) || unset(serviceKey)) {
+  if (!isSet(url) || !isSet(serviceKey)) {
     throw new Error(
       "SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY are unset or still placeholders — see GO-LIVE.md step 1",
     );

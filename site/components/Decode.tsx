@@ -32,14 +32,29 @@ export default function Decode({
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     let timer: number | undefined;
-    let frame = 0;
     let raf = 0;
     let started = false;
 
     const run = () => {
       const total = text.length;
-      const tick = () => {
-        const resolved = Math.floor(frame);
+      const duration = total * speed;
+      let startedAt: number | null = null;
+
+      /*
+        Driven by elapsed time, not frame count. Advancing one step per
+        frame ties the effect to the refresh rate, so on a slow device the
+        decode ran roughly three times longer than intended and could still
+        be scrambling well after the reader had started reading.
+      */
+      const tick = (now: number) => {
+        startedAt ??= now;
+        const resolved = Math.floor(((now - startedAt) / duration) * total);
+
+        if (resolved >= total) {
+          setOut(text);
+          return;
+        }
+
         setOut(
           text
             .split("")
@@ -49,12 +64,7 @@ export default function Decode({
             })
             .join(""),
         );
-        frame += 1000 / 60 / speed;
-        if (frame < total) {
-          raf = requestAnimationFrame(tick);
-        } else {
-          setOut(text);
-        }
+        raf = requestAnimationFrame(tick);
       };
       raf = requestAnimationFrame(tick);
     };

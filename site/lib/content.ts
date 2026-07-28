@@ -224,6 +224,13 @@ export const FIELD_NOTES = [
   },
 ];
 
+export const NEWSLETTER = {
+  kicker: "The wire — weekly",
+  heading: "One startup, torn down, every Sunday",
+  sub: "Not a link roundup. One company, one number that decides its fate, and the take I had to correct. Written the same week the news breaks, not recycled from a thread.",
+  cadence: "Sundays, 08:00 IST",
+};
+
 export const CLOSER = {
   kicker: "The inbox is open",
   heading: "Still not a VC.",

@@ -16,10 +16,17 @@ if (typeof window !== "undefined") {
 const url = process.env.SUPABASE_URL;
 const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
+/*
+  A placeholder is truthy, so `!serviceKey` alone lets an unconfigured
+  deployment through and the failure surfaces later as a confusing auth
+  error from PostgREST instead of a missing-config error here.
+*/
+const unset = (v?: string) => !v || v.startsWith("PASTE_");
+
 export function db() {
-  if (!url || !serviceKey) {
+  if (unset(url) || unset(serviceKey)) {
     throw new Error(
-      "Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY — see automation/SETUP-KEYS.md",
+      "SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY are unset or still placeholders — see GO-LIVE.md step 1",
     );
   }
   return createClient(url, serviceKey, {

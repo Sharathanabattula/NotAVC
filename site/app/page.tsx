@@ -5,6 +5,7 @@ import Manifesto from "@/components/Manifesto";
 import Founder from "@/components/Founder";
 import Series from "@/components/Series";
 import Teardowns from "@/components/Teardowns";
+import Newsletter from "@/components/Newsletter";
 import Closer from "@/components/Closer";
 import PaletteObserver from "@/components/PaletteObserver";
 import BootSequence from "@/components/BootSequence";
@@ -43,6 +44,9 @@ export default function Home() {
           </section>
         </div>
         <div data-zone="deck">
+          <section id="wire">
+            <Newsletter />
+          </section>
           <section id="signal">
             <Closer />
           </section>

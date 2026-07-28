@@ -25,17 +25,39 @@ const TONE: Record<Teardown["verdictTone"], string> = {
 function TeardownCard({ teardown, delay }: { teardown: Teardown; delay: number }) {
   const [struck, setStruck] = useState(false);
 
+  /*
+    Pointer glow writes two CSS custom properties straight onto the node.
+    Custom properties on an element that only feed a background gradient
+    skip layout and style recalc for everything else — cheaper than state.
+  */
+  const trackPointer = (e: React.PointerEvent<HTMLElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    e.currentTarget.style.setProperty("--mx", `${e.clientX - rect.left}px`);
+    e.currentTarget.style.setProperty("--my", `${e.clientY - rect.top}px`);
+  };
+
   return (
     <m.article
       initial={{ opacity: 0, y: 56 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "0px 0px -15% 0px" }}
       onViewportEnter={() => setStruck(true)}
+      onPointerMove={trackPointer}
       transition={{ duration: 0.8, delay, ease: [0.22, 1, 0.36, 1] }}
-      className={`zone group flex h-full flex-col border border-rule bg-surface p-8 sm:p-10 ${
+      className={`panel panel-lit ticked zone group relative isolate flex h-full flex-col overflow-hidden p-8 sm:p-10 ${
         struck ? "strike-in" : ""
       }`}
     >
+      {/* Cursor spotlight */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-10 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+        style={{
+          background:
+            "radial-gradient(340px circle at var(--mx, 50%) var(--my, 50%), rgba(226,62,82,0.13), transparent 70%)",
+        }}
+      />
+
       <div className="mb-8 flex items-center justify-between">
         <span className="voice-data zone text-xs tracking-[0.2em] text-muted">
           {teardown.ep}

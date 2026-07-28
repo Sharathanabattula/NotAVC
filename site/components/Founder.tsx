@@ -40,18 +40,46 @@ export default function Founder() {
                   className="absolute inset-0 -translate-x-4 -translate-y-4 bg-crimson"
                 />
                 <m.div style={{ y: portraitY }} className="relative">
-                  <div className="relative aspect-[4/5] overflow-hidden">
-                  <Image
-                    src="/img/sharath.jpg"
-                    alt="Sharath Chandra Anabattula"
-                    fill
-                    sizes="(max-width: 1024px) 90vw, 40vw"
-                    className="object-cover object-[center_18%] grayscale-[30%] contrast-[1.05]"
-                    priority={false}
-                  />
-                  {/* HUD corner ticks */}
-                  <span className="pointer-events-none absolute left-0 top-0 h-7 w-7 border-l-2 border-t-2 border-accent/90" />
-                  <span className="pointer-events-none absolute bottom-0 right-0 h-7 w-7 border-b-2 border-r-2 border-accent/90" />
+                  <div className="relative aspect-[4/5] overflow-hidden bg-bg">
+                    {/*
+                      Duotone by stacking, not by filter chains: the image is
+                      desaturated and darkened, then a crimson multiply layer
+                      and a bottom-up fade tie it into the page. A single
+                      `filter` string would cost one extra raster pass per
+                      property; this is two composited layers.
+                    */}
+                    <Image
+                      src="/img/sharath.jpg"
+                      alt="Sharath Chandra Anabattula"
+                      fill
+                      sizes="(max-width: 1024px) 90vw, 40vw"
+                      className="object-cover object-[center_18%] grayscale contrast-[1.1] brightness-[1.08]"
+                      priority={false}
+                    />
+                    <span
+                      aria-hidden
+                      className="pointer-events-none absolute inset-0 mix-blend-multiply"
+                      style={{
+                        background:
+                          "linear-gradient(150deg, rgba(113,0,20,0.42), rgba(8,7,10,0.5))",
+                      }}
+                    />
+                    <span
+                      aria-hidden
+                      className="pointer-events-none absolute inset-0 bg-gradient-to-t from-bg via-transparent to-transparent"
+                    />
+                    {/* Scanlines — sensor readout, not decoration */}
+                    <span
+                      aria-hidden
+                      className="pointer-events-none absolute inset-0 opacity-[0.09]"
+                      style={{
+                        backgroundImage:
+                          "repeating-linear-gradient(to bottom, rgba(236,231,225,0.5) 0 1px, transparent 1px 4px)",
+                      }}
+                    />
+                    {/* HUD corner ticks */}
+                    <span className="pointer-events-none absolute left-0 top-0 h-7 w-7 border-l-2 border-t-2 border-accent/90" />
+                    <span className="pointer-events-none absolute bottom-0 right-0 h-7 w-7 border-b-2 border-r-2 border-accent/90" />
                   </div>
                 </m.div>
               </div>

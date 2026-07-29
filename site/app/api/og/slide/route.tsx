@@ -120,19 +120,26 @@ function Frame({
         <div style={{ display: "flex", fontSize: 20, letterSpacing: 4, color: FAINT }}>
           NOT A VC
         </div>
-        <div style={{ display: "flex", gap: 10 }}>
-          {Array.from({ length: total }).map((_, i) => (
-            <div
-              key={i}
-              style={{
-                display: "flex",
-                width: i === index ? 34 : 10,
-                height: 4,
-                background: i === index ? ACCENT : RULE,
-              }}
-            />
-          ))}
-        </div>
+        {/* Pips only make sense when there is something to swipe to */}
+        {total > 1 ? (
+          <div style={{ display: "flex", gap: 10 }}>
+            {Array.from({ length: total }).map((_, i) => (
+              <div
+                key={i}
+                style={{
+                  display: "flex",
+                  width: i === index ? 34 : 10,
+                  height: 4,
+                  background: i === index ? ACCENT : RULE,
+                }}
+              />
+            ))}
+          </div>
+        ) : (
+          <div style={{ display: "flex", fontSize: 20, letterSpacing: 4, color: ACCENT }}>
+            @NOTAVC.CO
+          </div>
+        )}
       </div>
     </div>
   );
@@ -269,6 +276,61 @@ function Body({ slide }: { slide: Slide }) {
         </div>
       );
 
+    case "quote":
+      return (
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <div style={{ display: "flex", fontSize: 100, color: ACCENT, fontFamily: "Fraunces", lineHeight: 0.7, marginBottom: 20 }}>
+            “
+          </div>
+          <div style={{ display: "flex", fontFamily: "Fraunces", fontSize: 68, lineHeight: 1.2, color: INK, letterSpacing: -2 }}>
+            {slide.quote}
+          </div>
+          <div style={{ display: "flex", width: 160, height: 4, background: ACCENT, margin: "48px 0 28px" }} />
+          <div style={{ display: "flex", fontSize: 26, letterSpacing: 4, color: MUTED }}>
+            {(slide.attribution ?? "NOTAVC").toUpperCase()}
+          </div>
+        </div>
+      );
+
+    case "teardown":
+      return (
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <div style={{ display: "flex", alignItems: "center", marginBottom: 28 }}>
+            <div style={{ display: "flex", border: `2px solid ${ACCENT}`, color: ACCENT, fontSize: 22, letterSpacing: 4, padding: "10px 20px" }}>
+              {slide.verdict}
+            </div>
+          </div>
+          <div style={{ display: "flex", fontFamily: "Fraunces", fontSize: 104, color: INK, letterSpacing: -3, lineHeight: 1 }}>
+            {slide.company}
+          </div>
+          <div style={{ display: "flex", fontSize: 76, fontWeight: 600, color: ACCENT, marginTop: 48, letterSpacing: -2 }}>
+            {slide.number}
+          </div>
+          <div style={{ display: "flex", fontSize: 24, letterSpacing: 3, color: MUTED, marginTop: 18 }}>
+            {slide.numberLabel.toUpperCase()}
+          </div>
+          <div style={{ display: "flex", marginTop: 52, paddingLeft: 28, borderLeft: `4px solid ${ACCENT}`, fontSize: 38, lineHeight: 1.35, color: INK }}>
+            {slide.take}
+          </div>
+        </div>
+      );
+
+    case "hook":
+      return (
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <div style={{ display: "flex", fontSize: 26, letterSpacing: 6, color: ACCENT, marginBottom: 40 }}>
+            {slide.overline.toUpperCase()}
+          </div>
+          <div style={{ display: "flex", fontFamily: "Fraunces", fontSize: 110, lineHeight: 1.05, color: INK, letterSpacing: -3 }}>
+            {slide.hook}
+          </div>
+          <div style={{ display: "flex", width: 180, height: 4, background: ACCENT, margin: "56px 0" }} />
+          <div style={{ display: "flex", fontSize: 32, letterSpacing: 3, color: MUTED }}>
+            {slide.kicker}
+          </div>
+        </div>
+      );
+
     case "cta":
       return (
         <div style={{ display: "flex", flexDirection: "column" }}>
@@ -291,12 +353,20 @@ export async function GET(request: Request) {
   const url = new URL(request.url);
   const slug = url.searchParams.get("deck") ?? "";
   const index = Number(url.searchParams.get("i") ?? 0);
-  const size = (url.searchParams.get("size") ?? "portrait") as keyof typeof SIZES;
 
   const deck = deckBySlug(slug);
   if (!deck) {
     return new Response(`Unknown deck: ${slug}`, { status: 404 });
   }
+
+  // Size follows the deck's format unless explicitly overridden
+  const requested = url.searchParams.get("size") as keyof typeof SIZES | null;
+  const size: keyof typeof SIZES =
+    requested && requested in SIZES
+      ? requested
+      : deck.format === "story"
+        ? "story"
+        : "portrait";
   const slide = deck.slides[index];
   if (!slide) {
     return new Response(`Slide ${index} out of range (deck has ${deck.slides.length})`, {

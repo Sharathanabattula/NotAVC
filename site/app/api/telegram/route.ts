@@ -1,9 +1,11 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { db } from "@/lib/supabase";
 import { answerCallback, notify } from "@/lib/telegram";
 import { processIdea } from "@/lib/intake";
 
 export const dynamic = "force-dynamic";
+// Drafting takes ~20s and runs in `after`, past the default 10s ceiling
+export const maxDuration = 60;
 
 /*
   Telegram webhook — where approval actually happens.
@@ -88,7 +90,16 @@ export async function POST(request: Request) {
         ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
         : new URL(request.url).origin);
 
-    void processIdea(text, allowedChat, siteUrl);
+    /*
+      `after` rather than a floating promise. A serverless function is
+      frozen the moment it responds, so `void processIdea(...)` ran fine
+      locally and silently never executed in production — the drafting
+      simply vanished, with Telegram seeing a clean 200.
+    */
+    after(async () => {
+      await processIdea(text, allowedChat, siteUrl);
+    });
+
     return NextResponse.json({ ok: true });
   }
 

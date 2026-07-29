@@ -42,7 +42,7 @@ export const MANIFESTO = {
   ],
   stats: [
     { value: "₹0", label: "Assets under management" },
-    { value: "06", label: "Desks, always open" },
+    { value: "04", label: "Desks, always open" },
     { value: "EP.∞", label: "Numbered, never expiring" },
     { value: "100%", label: "Work shown, errors included" },
   ],
@@ -51,7 +51,7 @@ export const MANIFESTO = {
 export const BOOT_LINES = [
   "NOTAVC // VENTURE INTELLIGENCE TERMINAL",
   "> mounting archive ................ OK",
-  "> desks online [06] ............... OK",
+  "> desks online [04] ............... OK",
   "> teardowns indexed [04] .......... OK",
   "> analyst .......... SHARATH C. ANABATTULA",
   "> credential ....... BOWER SCHOOL — VC/PE",
@@ -170,42 +170,35 @@ export const TEARDOWNS: Teardown[] = [
   },
 ];
 
+/*
+  Four desks, cut from six. Six read as a menu rather than a position, and
+  three of them were crowded by podcasts or risky for a student to publish.
+  What survives is what the correction layer has teeth on.
+*/
 export const PILLARS = [
   {
     index: "01",
-    name: "Concepts, explained",
-    desc: "Cap tables, liquidation preferences, MOIC vs IRR — one concept at a time, always with an Indian-context analogy.",
-    format: "CAROUSEL + POST",
+    name: "Company teardowns",
+    desc: "Pick a company, pull the numbers, find the moat. Every teardown has ONE number that tells the real story.",
+    format: "CAROUSEL · TUE",
   },
   {
     index: "02",
-    name: "Company teardowns",
-    desc: "Pick a company, pull the numbers, find the moat. Every teardown has ONE number that tells the real story.",
-    format: "REEL + CAROUSEL",
+    name: "Concepts, explained",
+    desc: "Burn multiple, liquidation preferences, MOIC vs IRR — one concept at a time, always with an Indian company attached. Never a definition without a consequence.",
+    format: "SINGLE POST · THU",
   },
   {
     index: "03",
-    name: "Founder stories",
-    desc: "The specific decisions that built or broke companies. Not biographies — inflection points.",
-    format: "REEL",
+    name: "The uncomfortable",
+    desc: "The ₹800Cr \"raise\" that was converted debt. The unicorn that stopped growing but never stopped hiring. What the press release left out.",
+    format: "CAROUSEL",
   },
   {
     index: "04",
-    name: "Market analysis",
-    desc: "Funding patterns, sector maps, macro shifts. India-first, data-led, surprising stat up front.",
-    format: "THREAD + CAROUSEL",
-  },
-  {
-    index: "05",
-    name: "Learning journal",
-    desc: "What I learned, what surprised me, what I got wrong. The rawest desk — and the most read.",
-    format: "LINKEDIN POST",
-  },
-  {
-    index: "06",
-    name: "Ideas + valuations",
-    desc: "Spotting gaps, running back-of-envelope valuations, thinking like a VC before being one.",
-    format: "POST + POLL",
+    name: "Founder stories",
+    desc: "The specific decisions that built or broke companies. Not biographies — the inflection point and the number behind it.",
+    format: "CAROUSEL · REEL",
   },
 ];
 

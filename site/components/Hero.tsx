@@ -142,7 +142,7 @@ export default function Hero() {
               {/* HUD readout */}
               <dl className="voice-data grid shrink-0 grid-cols-3 gap-px overflow-hidden border border-rule bg-rule text-[10px] sm:w-[22rem]">
                 {[
-                  { k: "DESKS", v: "06" },
+                  { k: "DESKS", v: "04" },
                   { k: "TEARDOWNS", v: "04" },
                   { k: "AUM", v: "₹0" },
                 ].map((cell) => (

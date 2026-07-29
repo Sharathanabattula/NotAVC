@@ -4,6 +4,15 @@ import path from "node:path";
 import { deckBySlug, type Deck, type Slide } from "@/lib/slides";
 import { db } from "@/lib/supabase";
 import { BRAND, FONT, RADIUS } from "@/lib/brand";
+import {
+  GraphPaper,
+  ArrowDownLeft,
+  ArrowDownRight,
+  Underline,
+  StrikeMark,
+  ICONS,
+  type IconName,
+} from "@/lib/marks";
 
 export const dynamic = "force-dynamic";
 
@@ -112,12 +121,14 @@ function Frame({
   index,
   total,
   dark,
+  size,
 }: {
   children: React.ReactNode;
   ep: string;
   index: number;
   total: number;
   dark: boolean;
+  size: { width: number; height: number };
 }) {
   return (
     <div
@@ -128,46 +139,121 @@ function Frame({
         flexDirection: "column",
         justifyContent: "space-between",
         background: dark ? BRAND.surfaceDark : BRAND.canvas,
-        padding: 76,
+        padding: 64,
         fontFamily: FONT.body,
+        position: "relative",
       }}
     >
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <Wordmark dark={dark} />
-        <EpisodeBadge ep={ep} dark={dark} />
+      {/*
+        Graph paper, full bleed behind everything. Not BRAND.hairline:
+        #E5E5E5 on the #F2F1ED canvas is barely one step and the grid
+        vanishes at thumbnail size.
+      */}
+      <div style={{ position: "absolute", top: 0, left: 0, display: "flex" }}>
+        <GraphPaper
+          width={size.width}
+          height={size.height}
+          colour={dark ? "rgba(255,255,255,0.07)" : "rgba(11,11,11,0.09)"}
+        />
+      </div>
+
+      {/* Header rail */}
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-end",
+            paddingBottom: 16,
+          }}
+        >
+          <Wordmark dark={dark} />
+          <div
+            style={{
+              display: "flex",
+              fontFamily: FONT.data,
+              fontSize: 20,
+              letterSpacing: 3,
+              color: dark ? BRAND.white45 : BRAND.muted,
+            }}
+          >
+            {ep}
+          </div>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            height: 2,
+            background: dark ? BRAND.white10 : BRAND.ink,
+          }}
+        />
       </div>
 
       <div style={{ display: "flex", flexDirection: "column", flex: 1, justifyContent: "center" }}>
         {children}
       </div>
 
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      {/* Footer rail */}
+      <div style={{ display: "flex", flexDirection: "column" }}>
         <div
           style={{
             display: "flex",
-            fontFamily: FONT.data,
-            fontSize: 18,
-            letterSpacing: 2,
-            color: dark ? BRAND.white45 : BRAND.muted,
+            height: 2,
+            background: dark ? BRAND.white10 : BRAND.ink,
+            marginBottom: 20,
           }}
-        >
-          @notavc.co
-        </div>
-        {total > 1 ? (
-          <DotIndicator index={index} total={total} dark={dark} />
-        ) : (
+        />
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          {total > 1 && index < total - 1 ? (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 10,
+                border: `2px solid ${dark ? BRAND.white35 : BRAND.ink}`,
+                borderRadius: RADIUS.pill,
+                padding: "12px 24px",
+                fontFamily: FONT.data,
+                fontSize: 20,
+                letterSpacing: 3,
+                color: dark ? "#FFFFFF" : BRAND.ink,
+              }}
+            >
+              SWIPE ‹‹‹
+            </div>
+          ) : (
+            <div
+              style={{
+                display: "flex",
+                fontFamily: FONT.data,
+                fontSize: 20,
+                letterSpacing: 2,
+                color: dark ? BRAND.white45 : BRAND.muted,
+              }}
+            >
+              @notavc.co
+            </div>
+          )}
+
+          {/* Page number in a filled signal disc */}
           <div
             style={{
               display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: 56,
+              height: 56,
+              borderRadius: RADIUS.pill,
+              background: dark ? BRAND.accentOnDark : BRAND.signal,
+              color: dark ? BRAND.surfaceDark : "#FFFFFF",
               fontFamily: FONT.data,
-              fontSize: 18,
-              letterSpacing: 2,
-              color: dark ? BRAND.accentOnDark : BRAND.signal,
+              fontSize: 26,
+              fontWeight: 700,
             }}
           >
-            NOT A VC
+            {index + 1}
           </div>
-        )}
+        </div>
       </div>
     </div>
   );
@@ -246,30 +332,70 @@ function Body({ slide, dark }: { slide: Slide; dark: boolean }) {
         </div>
       );
 
-    case "statement":
+    /*
+      Paragraphs alternate alignment and get a marker mark between them —
+      the zigzag plus the drawn arrow is what makes the page read as
+      annotated rather than typeset.
+    */
+    case "statement": {
+      const paras = slide.body.split("\n\n");
       return (
         <div style={{ display: "flex", flexDirection: "column" }}>
           {slide.label ? <Kicker text={slide.label} dark={dark} /> : null}
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            {slide.body.split("\n\n").map((para, i) => (
+          {paras.map((para, i) => {
+            const right = i % 2 === 1;
+            const last = i === paras.length - 1;
+            return (
               <div
                 key={i}
                 style={{
                   display: "flex",
-                  fontFamily: FONT.display,
-                  fontSize: 60,
-                  lineHeight: 1.22,
-                  letterSpacing: -1.5,
-                  color: ink,
-                  marginBottom: 30,
+                  flexDirection: "column",
+                  alignItems: right ? "flex-end" : "flex-start",
                 }}
               >
-                {para}
+                <div
+                  style={{
+                    display: "flex",
+                    fontFamily: FONT.display,
+                    fontSize: 58,
+                    lineHeight: 1.2,
+                    letterSpacing: -1.5,
+                    color: ink,
+                    textAlign: right ? "right" : "left",
+                    maxWidth: 820,
+                  }}
+                >
+                  {para}
+                </div>
+
+                {last ? (
+                  <div style={{ display: "flex", marginTop: -6, marginLeft: right ? 0 : 30 }}>
+                    <Underline colour={accent} width={Math.min(700, para.length * 17)} />
+                  </div>
+                ) : (
+                  <div
+                    style={{
+                      display: "flex",
+                      marginTop: 8,
+                      marginBottom: 8,
+                      paddingLeft: right ? 0 : 120,
+                      paddingRight: right ? 120 : 0,
+                    }}
+                  >
+                    {right ? (
+                      <ArrowDownLeft colour={accent} width={150} height={118} />
+                    ) : (
+                      <ArrowDownRight colour={accent} width={150} height={118} />
+                    )}
+                  </div>
+                )}
               </div>
-            ))}
-          </div>
+            );
+          })}
         </div>
       );
+    }
 
     /* DataMetric — the number is the hero, on a tinted card */
     case "number":
@@ -318,9 +444,14 @@ function Body({ slide, dark }: { slide: Slide; dark: boolean }) {
             THE TAKE EVERYONE HAD
           </div>
 
+          {/*
+            The strike is a drawn scribble, not a rule — a straight bar
+            reads as text-decoration, and the point is that he crossed it
+            out by hand.
+          */}
           <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
             {slide.wrong.map((line, i) => (
-              <div key={i} style={{ display: "flex", position: "relative", marginBottom: 6 }}>
+              <div key={i} style={{ display: "flex", position: "relative", marginBottom: 4 }}>
                 <div
                   style={{
                     display: "flex",
@@ -336,17 +467,19 @@ function Body({ slide, dark }: { slide: Slide; dark: boolean }) {
                 <div
                   style={{
                     position: "absolute",
-                    left: -4,
-                    right: -4,
-                    top: "52%",
-                    height: 4,
-                    borderRadius: RADIUS.sm,
-                    background: accent,
+                    left: -8,
+                    top: "38%",
                     display: "flex",
                   }}
-                />
+                >
+                  <StrikeMark colour={accent} width={line.length * 27 + 20} height={26} />
+                </div>
               </div>
             ))}
+          </div>
+
+          <div style={{ display: "flex", marginTop: 6, marginLeft: 60 }}>
+            <ArrowDownRight colour={accent} width={140} height={110} />
           </div>
 
           <div style={{ display: "flex", marginTop: 46 }}>
@@ -622,7 +755,13 @@ export async function GET(request: Request) {
 
   return new ImageResponse(
     (
-      <Frame ep={deck.ep} index={index} total={deck.slides.length} dark={dark}>
+      <Frame
+        ep={deck.ep}
+        index={index}
+        total={deck.slides.length}
+        dark={dark}
+        size={SIZES[size]}
+      >
         <Body slide={slide} dark={dark} />
       </Frame>
     ),

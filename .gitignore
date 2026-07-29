@@ -1,4 +1,6 @@
-assets/
+# The clone of the original NotAVC repo. Leading slash matters: a bare
+# `assets/` also matches site/assets/, which silently dropped the OG fonts.
+/assets/
 node_modules/
 .next/
 *.tsbuildinfo

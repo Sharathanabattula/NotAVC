@@ -8,10 +8,26 @@
 
 const API = "https://api.telegram.org/bot";
 
+/*
+  A placeholder is truthy, so a `PASTE_` value would sail through a plain
+  presence check and every send would fail silently against a bogus token.
+  Treat those as unset, and say so once — a bot that appears dead because
+  of an unfilled variable is the hardest failure to diagnose from outside.
+*/
 function config() {
   const token = process.env.TELEGRAM_BOT_TOKEN;
   const chatId = process.env.TELEGRAM_CHAT_ID;
-  return token && chatId ? { token, chatId } : null;
+  const ok = (v?: string) => !!v && !v.startsWith("PASTE_");
+
+  if (!ok(token) || !ok(chatId)) {
+    console.warn(
+      "[telegram] not configured on this deployment — " +
+        `token ${ok(token) ? "ok" : "missing/placeholder"}, ` +
+        `chat id ${ok(chatId) ? "ok" : "missing/placeholder"}`,
+    );
+    return null;
+  }
+  return { token: token as string, chatId: chatId as string };
 }
 
 export async function notify(text: string): Promise<boolean> {

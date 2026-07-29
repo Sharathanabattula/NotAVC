@@ -46,7 +46,23 @@ export async function POST(request: Request) {
     acknowledge immediately and let the work finish in the background.
   */
   if (update.message?.text) {
-    if (String(update.message.chat?.id ?? "") !== allowedChat) {
+    /*
+      A mismatch here used to return 200 and drop the message with no trace,
+      which is indistinguishable from the bot being dead — and the usual
+      cause is a placeholder still sitting in the deployment's env, not a
+      genuine stranger. Log enough to tell those apart without printing the
+      configured id.
+    */
+    const from = String(update.message.chat?.id ?? "");
+    if (from !== allowedChat) {
+      console.warn(
+        `[telegram] dropped message from chat ${from}: ` +
+          (!allowedChat
+            ? "TELEGRAM_CHAT_ID is not set on this deployment"
+            : allowedChat.startsWith("PASTE_")
+              ? "TELEGRAM_CHAT_ID is still a placeholder on this deployment"
+              : "chat id does not match the configured one"),
+      );
       return NextResponse.json({ ok: true });
     }
 

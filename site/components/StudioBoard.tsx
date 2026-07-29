@@ -69,6 +69,13 @@ export default function StudioBoard({
             Studio<span className="text-accent">.</span>
           </h1>
         </div>
+        <div className="flex flex-col items-end gap-4">
+        <a
+          href="/studio/new"
+          className="press voice-data bg-accent px-6 py-3 text-sm font-semibold text-bg"
+        >
+          + WRITE A POST
+        </a>
         <dl className="voice-data grid grid-cols-3 gap-px overflow-hidden border border-rule bg-rule text-[10px] sm:w-80">
           {[
             { k: "PLATTERS", v: platters.length },
@@ -81,6 +88,7 @@ export default function StudioBoard({
             </div>
           ))}
         </dl>
+        </div>
       </header>
 
       {error ? (

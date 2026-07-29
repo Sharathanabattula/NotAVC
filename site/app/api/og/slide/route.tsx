@@ -6,6 +6,7 @@ import { db } from "@/lib/supabase";
 import { BRAND, FONT, RADIUS } from "@/lib/brand";
 import {
   GraphPaper,
+  CutoutPortrait,
   ArrowDownLeft,
   ArrowDownRight,
   Underline,
@@ -398,31 +399,43 @@ function Body({ slide, dark }: { slide: Slide; dark: boolean }) {
     }
 
     /* DataMetric — the number is the hero, on a tinted card */
-    case "number":
+    /*
+      DataMetric. The icon sits opposite the label rather than beside the
+      number — it weights the empty half of the frame instead of decorating
+      the value.
+    */
+    case "number": {
+      const Icon = ICONS[(slide.icon as IconName) ?? "chart"] ?? ICONS.chart;
       return (
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <Kicker text={slide.label} dark={dark} />
-          <Card dark={dark} tint>
-            <div
-              style={{
-                display: "flex",
-                fontFamily: FONT.display,
-                fontSize: 72,
-                lineHeight: 1.15,
-                letterSpacing: -2,
-                color: accent,
-              }}
-            >
-              {slide.value}
-            </div>
-          </Card>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+            <Kicker text={slide.label} dark={dark} />
+            <Icon size={150} accent={accent} ink={dark ? "#FFFFFF" : BRAND.ink} />
+          </div>
+          <div
+            style={{
+              display: "flex",
+              fontFamily: FONT.display,
+              fontSize: 78,
+              lineHeight: 1.1,
+              letterSpacing: -2.5,
+              color: accent,
+              marginTop: 8,
+            }}
+          >
+            {slide.value}
+          </div>
+          <div style={{ display: "flex", marginTop: 2, marginLeft: 20 }}>
+            <Underline colour={accent} width={620} />
+          </div>
           {slide.note ? (
-            <div style={{ display: "flex", marginTop: 32, fontSize: 34, lineHeight: 1.45, color: ink }}>
+            <div style={{ display: "flex", marginTop: 30, fontSize: 34, lineHeight: 1.45, color: ink, maxWidth: 820 }}>
               {slide.note}
             </div>
           ) : null}
         </div>
       );
+    }
 
     /*
       THE SIGNATURE. The strike is a bar per line: one bar over a wrapped
@@ -560,17 +573,21 @@ function Body({ slide, dark }: { slide: Slide; dark: boolean }) {
           >
             {slide.quote}
           </div>
-          <div
-            style={{
-              display: "flex",
-              marginTop: 40,
-              fontFamily: FONT.data,
-              fontSize: 20,
-              letterSpacing: 3,
-              color: muted,
-            }}
-          >
-            {(slide.attribution ?? "NOTAVC").toUpperCase()}
+          <div style={{ display: "flex", alignItems: "center", gap: 28, marginTop: 44 }}>
+            {slide.photo ? (
+              <CutoutPortrait src={slide.photo} width={130} height={160} accent={accent} offset={12} />
+            ) : null}
+            <div
+              style={{
+                display: "flex",
+                fontFamily: FONT.data,
+                fontSize: 20,
+                letterSpacing: 3,
+                color: muted,
+              }}
+            >
+              {(slide.attribution ?? "NOTAVC").toUpperCase()}
+            </div>
           </div>
         </div>
       );

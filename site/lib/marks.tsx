@@ -142,62 +142,85 @@ export function StrikeMark({ colour = BRAND.signal, width = 700, height = 30 }: 
   );
 }
 
-/* ── Line-art icons ───────────────────────────────────────── */
+/* ── Modernist icons ──────────────────────────────────────── */
 
-const ICON_STROKE = { stroke: BRAND.ink, strokeWidth: 5, fill: "none" as const };
+/*
+  Geometric, not illustrative. These are built from circles, quarter-arcs,
+  bars and triangles in two tones — closer to a Bauhaus pictogram than to
+  an outline icon set. Deliberately abstract: an icon that tries to draw
+  the literal object ends up as clipart, which is exactly the register the
+  reference deck sits in and the one to avoid.
 
-export function IconChart({ size = 130 }: { size?: number }) {
+  Rules: one stroke weight (10 at a 120 viewBox), flat ends, no rounding,
+  and never more than four elements per mark.
+*/
+
+type IconProps = { size?: number; accent?: string; ink?: string };
+
+export function IconChart({ size = 150, accent = BRAND.signal, ink = BRAND.ink }: IconProps) {
   return (
-    <svg width={size} height={size} viewBox="0 0 120 120">
-      <rect x="10" y="14" width="100" height="92" rx="8" {...ICON_STROKE} />
-      <path d="M28 82 L48 58 L66 72 L92 36" {...ICON_STROKE} strokeLinecap="round" />
-      <circle cx="48" cy="58" r="6" {...ICON_STROKE} />
-      <circle cx="66" cy="72" r="6" {...ICON_STROKE} />
+    <svg width={size} height={size} viewBox="0 0 120 120" fill="none">
+      <rect x="12" y="66" width="24" height="42" fill={ink} />
+      <rect x="48" y="40" width="24" height="68" fill={accent} />
+      <rect x="84" y="16" width="24" height="92" fill={ink} opacity="0.25" />
     </svg>
   );
 }
 
-export function IconBurn({ size = 130 }: { size?: number }) {
+/* Burn — a full disc consumed by a quarter cut. */
+export function IconBurn({ size = 150, accent = BRAND.signal, ink = BRAND.ink }: IconProps) {
   return (
-    <svg width={size} height={size} viewBox="0 0 120 120">
-      <path
-        d="M60 12 C74 36 92 46 92 70 C92 90 78 104 60 104 C42 104 28 90 28 70 C28 46 46 36 60 12 Z"
-        {...ICON_STROKE}
-        strokeLinejoin="round"
-      />
-      <path d="M60 60 C66 72 72 76 72 84 C72 92 66 96 60 96 C54 96 48 92 48 84 C48 76 54 72 60 60 Z" {...ICON_STROKE} />
+    <svg width={size} height={size} viewBox="0 0 120 120" fill="none">
+      <circle cx="60" cy="60" r="46" fill={ink} opacity="0.12" />
+      <path d="M60 14 A46 46 0 0 1 106 60 L60 60 Z" fill={accent} />
+      <circle cx="60" cy="60" r="46" stroke={ink} strokeWidth="10" />
     </svg>
   );
 }
 
-export function IconScale({ size = 130 }: { size?: number }) {
+/* Scale — an off-centre fulcrum, weight on one side. */
+export function IconScale({ size = 150, accent = BRAND.signal, ink = BRAND.ink }: IconProps) {
   return (
-    <svg width={size} height={size} viewBox="0 0 120 120">
-      <path d="M60 16 L60 100" {...ICON_STROKE} strokeLinecap="round" />
-      <path d="M24 34 L96 34" {...ICON_STROKE} strokeLinecap="round" />
-      <path d="M36 100 L84 100" {...ICON_STROKE} strokeLinecap="round" />
-      <path d="M24 34 L10 66 A18 14 0 0 0 38 66 Z" {...ICON_STROKE} strokeLinejoin="round" />
-      <path d="M96 34 L82 66 A18 14 0 0 0 110 66 Z" {...ICON_STROKE} strokeLinejoin="round" />
+    <svg width={size} height={size} viewBox="0 0 120 120" fill="none">
+      <path d="M10 44 L110 76" stroke={ink} strokeWidth="10" />
+      <circle cx="26" cy="49" r="18" fill={accent} />
+      <rect x="80" y="60" width="30" height="30" fill={ink} />
+      <path d="M60 60 L60 108" stroke={ink} strokeWidth="10" />
     </svg>
   );
 }
 
-export function IconDoc({ size = 130 }: { size?: number }) {
+/* Document — a plate with a corner cut and one signal rule. */
+export function IconDoc({ size = 150, accent = BRAND.signal, ink = BRAND.ink }: IconProps) {
   return (
-    <svg width={size} height={size} viewBox="0 0 120 120">
-      <path d="M28 12 H72 L92 34 V108 H28 Z" {...ICON_STROKE} strokeLinejoin="round" />
-      <path d="M72 12 V34 H92" {...ICON_STROKE} strokeLinejoin="round" />
-      <path d="M44 58 H76 M44 74 H76 M44 90 H62" {...ICON_STROKE} strokeLinecap="round" />
+    <svg width={size} height={size} viewBox="0 0 120 120" fill="none">
+      <path d="M22 10 H76 L98 32 V110 H22 Z" stroke={ink} strokeWidth="10" />
+      <path d="M76 10 L76 32 L98 32" stroke={ink} strokeWidth="10" />
+      <rect x="40" y="62" width="42" height="10" fill={accent} />
+      <rect x="40" y="84" width="26" height="10" fill={ink} opacity="0.3" />
     </svg>
   );
 }
 
-export function IconCoins({ size = 130 }: { size?: number }) {
+/* Capital — stacked discs, the top one live. */
+export function IconCoins({ size = 150, accent = BRAND.signal, ink = BRAND.ink }: IconProps) {
   return (
-    <svg width={size} height={size} viewBox="0 0 120 120">
-      <ellipse cx="60" cy="30" rx="34" ry="14" {...ICON_STROKE} />
-      <path d="M26 30 V58 C26 66 41 72 60 72 C79 72 94 66 94 58 V30" {...ICON_STROKE} />
-      <path d="M26 58 V84 C26 92 41 98 60 98 C79 98 94 92 94 84 V58" {...ICON_STROKE} />
+    <svg width={size} height={size} viewBox="0 0 120 120" fill="none">
+      <ellipse cx="60" cy="88" rx="42" ry="16" fill={ink} opacity="0.15" />
+      <ellipse cx="60" cy="62" rx="42" ry="16" fill={ink} opacity="0.3" />
+      <ellipse cx="60" cy="36" rx="42" ry="16" fill={accent} />
+    </svg>
+  );
+}
+
+/* Divergence — two paths from one origin, one favoured. */
+export function IconSplit({ size = 150, accent = BRAND.signal, ink = BRAND.ink }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 120 120" fill="none">
+      <path d="M14 60 H52" stroke={ink} strokeWidth="10" />
+      <path d="M52 60 L104 20" stroke={accent} strokeWidth="10" />
+      <path d="M52 60 L104 100" stroke={ink} strokeWidth="10" opacity="0.25" />
+      <circle cx="52" cy="60" r="12" fill={ink} />
     </svg>
   );
 }
@@ -208,6 +231,103 @@ export const ICONS = {
   scale: IconScale,
   doc: IconDoc,
   coins: IconCoins,
+  split: IconSplit,
 } as const;
 
 export type IconName = keyof typeof ICONS;
+
+/*
+  Cutout portrait on an offset plate.
+
+  Satori supports no CSS `filter`, so there is no grayscale() and no true
+  duotone. The look is built by composition instead: a flat signal plate
+  offset behind the image, and a signal wash laid over it at low alpha.
+  That reads as a deliberate treatment rather than a raw photo dropped in,
+  which is the difference between modernist and scrapbook.
+
+  `src` must be an absolute URL — Satori fetches it at render time.
+*/
+export function CutoutPortrait({
+  src,
+  width = 300,
+  height = 375,
+  accent = BRAND.signal,
+  offset = 18,
+}: {
+  src: string;
+  width?: number;
+  height?: number;
+  accent?: string;
+  offset?: number;
+}) {
+  return (
+    <div style={{ display: "flex", position: "relative", width: width + offset, height: height + offset }}>
+      {/* Plate */}
+      <div
+        style={{
+          position: "absolute",
+          left: offset,
+          top: offset,
+          width,
+          height,
+          display: "flex",
+          background: accent,
+        }}
+      />
+      {/* Photo */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={src}
+        alt=""
+        width={width}
+        height={height}
+        style={{ position: "absolute", left: 0, top: 0, objectFit: "cover" }}
+      />
+      {/* Wash — ties the photo to the palette without a filter */}
+      <div
+        style={{
+          position: "absolute",
+          left: 0,
+          top: 0,
+          width,
+          height,
+          display: "flex",
+          background: accent,
+          opacity: 0.22,
+        }}
+      />
+    </div>
+  );
+}
+
+/*
+  Filled grid cells. Uses the graph paper as a compositional device rather
+  than wallpaper — a few cells inked in to weight a corner.
+*/
+export function GridBlocks({
+  cells,
+  step = 108,
+  colour = BRAND.signal,
+  opacity = 0.1,
+}: {
+  cells: { col: number; row: number; w?: number; h?: number }[];
+  step?: number;
+  colour?: string;
+  opacity?: number;
+}) {
+  return (
+    <svg width={1080} height={1920} viewBox="0 0 1080 1920" fill="none">
+      {cells.map((c, i) => (
+        <rect
+          key={i}
+          x={c.col * step}
+          y={c.row * step}
+          width={(c.w ?? 1) * step}
+          height={(c.h ?? 1) * step}
+          fill={colour}
+          opacity={opacity}
+        />
+      ))}
+    </svg>
+  );
+}

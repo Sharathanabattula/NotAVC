@@ -12,7 +12,14 @@
 export type Slide =
   | { kind: "cover"; ep: string; desk: string; title: string; sub?: string }
   | { kind: "statement"; label?: string; body: string }
-  | { kind: "number"; value: string; label: string; note?: string }
+  | {
+      kind: "number";
+      value: string;
+      label: string;
+      note?: string;
+      /* Modernist pictogram slot — see lib/marks.tsx ICONS */
+      icon?: "chart" | "burn" | "scale" | "doc" | "coins" | "split";
+    }
   /*
     `wrong` is an array because the strike is drawn as a bar per line —
     a single bar over a wrapped block crosses only the first line and
@@ -22,7 +29,13 @@ export type Slide =
   | { kind: "list"; label: string; items: { k: string; v: string }[] }
   | { kind: "cta"; heading: string; sub: string; handle: string }
   /* Single-post kinds — these have to work with no slides either side */
-  | { kind: "quote"; quote: string; attribution?: string }
+  | {
+      kind: "quote";
+      quote: string;
+      attribution?: string;
+      /* Absolute URL — Satori fetches it at render time */
+      photo?: string;
+    }
   | {
       kind: "teardown";
       company: string;
@@ -69,6 +82,7 @@ export const DECKS: Deck[] = [
         kind: "number",
         value: "Net burn ÷ net new ARR",
         label: "Burn multiple",
+        icon: "burn",
         note: "Burn ₹4Cr to add ₹1Cr of ARR → burn multiple of 4.",
       },
       {

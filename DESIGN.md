@@ -39,9 +39,21 @@
 - **Loading:** `next/font/google` (self-hosted at build, zero external requests, zero CLS).
 - **Scale:** hero clamp(52px, 9vw, 116px) · h2 38–48px · h3 26px · body 19px · small 16px · caption 13px · micro 10.5–11px.
 
-### Retired
+### Scope of this document
 
-Plus Jakarta Sans, Outfit, Space Mono. Do not reintroduce. Never use Inter, Roboto, Arial, Helvetica, Montserrat, Poppins, or Space Grotesk.
+**This file governs the website only.** Post artwork follows the *NotAVC
+Design System* in Claude Design (owned by Sharath, updated 2026-07-29),
+transcribed into `site/lib/brand.ts`. That system specifies Plus Jakarta
+Sans / Outfit / Space Mono on a light `#F2F1ED` canvas, with `#710014` as
+the signal colour — deliberately different from the site.
+
+An earlier version of this file listed those three fonts as "retired, do
+not reintroduce". That was wrong: it overrode Sharath's own design system,
+and every post template built against it missed. The site and the feed are
+allowed to be different systems; only the correction layer must appear in
+both.
+
+Never use Inter, Roboto, Arial, Helvetica, Montserrat, Poppins, or Space Grotesk.
 
 ## Color
 

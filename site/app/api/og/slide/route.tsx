@@ -3,29 +3,24 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { deckBySlug, type Deck, type Slide } from "@/lib/slides";
 import { db } from "@/lib/supabase";
+import { BRAND, FONT, RADIUS } from "@/lib/brand";
 
 export const dynamic = "force-dynamic";
 
 /*
-  Renders one carousel slide as a PNG at a public URL.
+  Renders one slide as a PNG at a public URL.
 
   This is what makes Instagram publishing work at all: the Graph API
-  downloads media from a URL, it cannot accept an upload from us. Rendering
-  the artwork here means the same brand tokens drive the site and the feed,
-  and there is no design step between writing a platter and posting it.
+  downloads media from a URL, it cannot accept an upload from us.
+
+  Everything visual comes from lib/brand.ts, which transcribes the NotAVC
+  Design System. Carousels and posts sit on light canvas; only reels and
+  story formats invert to dark, where crimson becomes unreadable and the
+  system switches the accent to bronze.
 
   Satori (behind ImageResponse) supports flexbox only — no CSS grid, no
-  float, and every text node needs an explicit display. Layouts below are
-  built accordingly.
+  float, and every text node needs an explicit display.
 */
-
-const BG = "#08070a";
-const SURFACE = "#14111a";
-const INK = "#ece7e1";
-const MUTED = "#8b8494";
-const FAINT = "#5b5566";
-const ACCENT = "#e23e52";
-const RULE = "rgba(236,231,225,0.14)";
 
 const SIZES = {
   square: { width: 1080, height: 1080 },
@@ -35,29 +30,94 @@ const SIZES = {
 
 async function fonts() {
   const dir = path.join(process.cwd(), "assets", "fonts");
-  const [display, mono, monoBold] = await Promise.all([
-    readFile(path.join(dir, "Fraunces-Bold.ttf")),
-    readFile(path.join(dir, "PlexMono-Regular.ttf")),
-    readFile(path.join(dir, "PlexMono-SemiBold.ttf")),
+  const [display, body, bodySemi, mono, monoBold] = await Promise.all([
+    readFile(path.join(dir, "Jakarta-ExtraBold.ttf")),
+    readFile(path.join(dir, "Outfit-Regular.ttf")),
+    readFile(path.join(dir, "Outfit-SemiBold.ttf")),
+    readFile(path.join(dir, "SpaceMono-Regular.ttf")),
+    readFile(path.join(dir, "SpaceMono-Bold.ttf")),
   ]);
+  const n = "normal" as const;
   return [
-    { name: "Fraunces", data: display, weight: 700 as const, style: "normal" as const },
-    { name: "Plex", data: mono, weight: 400 as const, style: "normal" as const },
-    { name: "Plex", data: monoBold, weight: 600 as const, style: "normal" as const },
+    { name: "Jakarta", data: display, weight: 800 as const, style: n },
+    { name: "Outfit", data: body, weight: 400 as const, style: n },
+    { name: "Outfit", data: bodySemi, weight: 600 as const, style: n },
+    { name: "SpaceMono", data: mono, weight: 400 as const, style: n },
+    { name: "SpaceMono", data: monoBold, weight: 700 as const, style: n },
   ];
 }
 
-/* Shared chrome: hairline grid, corner ticks, footer rail. */
+/* Wordmark: "Not" at 35% opacity, "AVC" full weight. */
+function Wordmark({ dark }: { dark: boolean }) {
+  const colour = dark ? "#FFFFFF" : BRAND.ink;
+  return (
+    <div style={{ display: "flex", alignItems: "baseline", fontFamily: FONT.display, fontSize: 30 }}>
+      <span style={{ color: colour, opacity: 0.35 }}>Not</span>
+      <span style={{ color: colour }}>AVC</span>
+      <span style={{ color: dark ? BRAND.accentOnDark : BRAND.signal }}>.</span>
+    </div>
+  );
+}
+
+/* EpisodeBadge — EP.001 in Space Mono, on a signal tint. */
+function EpisodeBadge({ ep, dark }: { ep: string; dark: boolean }) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        fontFamily: FONT.data,
+        fontSize: 20,
+        letterSpacing: 2,
+        padding: "10px 18px",
+        borderRadius: RADIUS.pill,
+        background: dark ? BRAND.white06 : BRAND.signal08,
+        color: dark ? BRAND.accentOnDark : BRAND.signal,
+      }}
+    >
+      {ep}
+    </div>
+  );
+}
+
+/* DotIndicator — carousel progress. */
+function DotIndicator({ index, total, dark }: { index: number; total: number; dark: boolean }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+      {Array.from({ length: total }).map((_, i) => (
+        <div
+          key={i}
+          style={{
+            display: "flex",
+            width: i === index ? 26 : 8,
+            height: 8,
+            borderRadius: RADIUS.pill,
+            background:
+              i === index
+                ? dark
+                  ? BRAND.accentOnDark
+                  : BRAND.signal
+                : dark
+                  ? BRAND.white10
+                  : BRAND.signal18,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
 function Frame({
   children,
   ep,
   index,
   total,
+  dark,
 }: {
   children: React.ReactNode;
   ep: string;
   index: number;
   total: number;
+  dark: boolean;
 }) {
   return (
     <div
@@ -66,79 +126,46 @@ function Frame({
         height: "100%",
         display: "flex",
         flexDirection: "column",
-        background: BG,
-        position: "relative",
-        padding: 72,
-        fontFamily: "Plex",
+        justifyContent: "space-between",
+        background: dark ? BRAND.surfaceDark : BRAND.canvas,
+        padding: 76,
+        fontFamily: FONT.body,
       }}
     >
-      {/* Backlit grid */}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          display: "flex",
-          backgroundImage: `linear-gradient(to right, ${RULE} 1px, transparent 1px), linear-gradient(to bottom, ${RULE} 1px, transparent 1px)`,
-          backgroundSize: "108px 108px",
-          opacity: 0.5,
-        }}
-      />
-      {/* Crimson horizon */}
-      <div
-        style={{
-          position: "absolute",
-          left: 0,
-          right: 0,
-          bottom: 0,
-          height: 420,
-          display: "flex",
-          background:
-            "radial-gradient(ellipse 70% 100% at 50% 130%, rgba(226,62,82,0.30), transparent 70%)",
-        }}
-      />
-
-      {/* Corner ticks */}
-      <div style={{ position: "absolute", top: 40, left: 40, width: 34, height: 34, display: "flex", borderTop: `2px solid ${ACCENT}`, borderLeft: `2px solid ${ACCENT}`, opacity: 0.8 }} />
-      <div style={{ position: "absolute", bottom: 40, right: 40, width: 34, height: 34, display: "flex", borderBottom: `2px solid ${ACCENT}`, borderRight: `2px solid ${ACCENT}`, opacity: 0.8 }} />
-
-      {/* Header rail */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", zIndex: 1 }}>
-        <div style={{ display: "flex", alignItems: "center", fontSize: 22, letterSpacing: 4, color: ACCENT, fontWeight: 600 }}>
-          NOTAVC
-        </div>
-        <div style={{ display: "flex", fontSize: 22, letterSpacing: 4, color: FAINT }}>
-          {ep}
-        </div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <Wordmark dark={dark} />
+        <EpisodeBadge ep={ep} dark={dark} />
       </div>
 
-      {/* Body */}
-      <div style={{ display: "flex", flexDirection: "column", flex: 1, justifyContent: "center", zIndex: 1 }}>
+      <div style={{ display: "flex", flexDirection: "column", flex: 1, justifyContent: "center" }}>
         {children}
       </div>
 
-      {/* Footer rail with progress pips */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", zIndex: 1 }}>
-        <div style={{ display: "flex", fontSize: 20, letterSpacing: 4, color: FAINT }}>
-          NOT A VC
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div
+          style={{
+            display: "flex",
+            fontFamily: FONT.data,
+            fontSize: 18,
+            letterSpacing: 2,
+            color: dark ? BRAND.white45 : BRAND.muted,
+          }}
+        >
+          @notavc.co
         </div>
-        {/* Pips only make sense when there is something to swipe to */}
         {total > 1 ? (
-          <div style={{ display: "flex", gap: 10 }}>
-            {Array.from({ length: total }).map((_, i) => (
-              <div
-                key={i}
-                style={{
-                  display: "flex",
-                  width: i === index ? 34 : 10,
-                  height: 4,
-                  background: i === index ? ACCENT : RULE,
-                }}
-              />
-            ))}
-          </div>
+          <DotIndicator index={index} total={total} dark={dark} />
         ) : (
-          <div style={{ display: "flex", fontSize: 20, letterSpacing: 4, color: ACCENT }}>
-            @NOTAVC.CO
+          <div
+            style={{
+              display: "flex",
+              fontFamily: FONT.data,
+              fontSize: 18,
+              letterSpacing: 2,
+              color: dark ? BRAND.accentOnDark : BRAND.signal,
+            }}
+          >
+            NOT A VC
           </div>
         )}
       </div>
@@ -146,20 +173,73 @@ function Frame({
   );
 }
 
-function Body({ slide }: { slide: Slide }) {
+/* Card — hairline border, 12px radius, white surface. Never heavy strokes. */
+function Card({
+  children,
+  dark,
+  tint,
+}: {
+  children: React.ReactNode;
+  dark: boolean;
+  tint?: boolean;
+}) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        background: dark ? BRAND.white06 : tint ? BRAND.signal08 : BRAND.paper,
+        border: `1px solid ${dark ? BRAND.white10 : BRAND.borderDefault}`,
+        borderRadius: RADIUS.lg,
+        padding: 40,
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
+function Kicker({ text, dark }: { text: string; dark: boolean }) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        fontFamily: FONT.data,
+        fontSize: 20,
+        letterSpacing: 4,
+        marginBottom: 28,
+        color: dark ? BRAND.accentOnDark : BRAND.signal,
+      }}
+    >
+      {text.toUpperCase()}
+    </div>
+  );
+}
+
+function Body({ slide, dark }: { slide: Slide; dark: boolean }) {
+  const ink = dark ? "#FFFFFF" : BRAND.ink;
+  const muted = dark ? BRAND.white45 : BRAND.muted;
+  const accent = dark ? BRAND.accentOnDark : BRAND.signal;
+
   switch (slide.kind) {
     case "cover":
       return (
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ display: "flex", fontSize: 24, letterSpacing: 6, color: ACCENT, marginBottom: 34 }}>
-            {slide.desk.toUpperCase()}
-          </div>
-          <div style={{ display: "flex", fontFamily: "Fraunces", fontSize: 118, lineHeight: 1.02, color: INK, letterSpacing: -3 }}>
+          <Kicker text={slide.desk} dark={dark} />
+          <div
+            style={{
+              display: "flex",
+              fontFamily: FONT.display,
+              fontSize: 112,
+              lineHeight: 1.04,
+              letterSpacing: -3,
+              color: ink,
+            }}
+          >
             {slide.title}
           </div>
-          <div style={{ display: "flex", width: 180, height: 4, background: ACCENT, margin: "44px 0" }} />
           {slide.sub ? (
-            <div style={{ display: "flex", fontSize: 30, color: MUTED, letterSpacing: 1 }}>
+            <div style={{ display: "flex", marginTop: 36, fontSize: 34, color: muted }}>
               {slide.sub}
             </div>
           ) : null}
@@ -169,23 +249,19 @@ function Body({ slide }: { slide: Slide }) {
     case "statement":
       return (
         <div style={{ display: "flex", flexDirection: "column" }}>
-          {slide.label ? (
-            <div style={{ display: "flex", fontSize: 22, letterSpacing: 6, color: ACCENT, marginBottom: 40 }}>
-              {slide.label.toUpperCase()}
-            </div>
-          ) : null}
+          {slide.label ? <Kicker text={slide.label} dark={dark} /> : null}
           <div style={{ display: "flex", flexDirection: "column" }}>
             {slide.body.split("\n\n").map((para, i) => (
               <div
                 key={i}
                 style={{
                   display: "flex",
-                  fontFamily: "Fraunces",
-                  fontSize: 62,
+                  fontFamily: FONT.display,
+                  fontSize: 60,
                   lineHeight: 1.22,
-                  color: INK,
-                  marginBottom: 32,
-                  letterSpacing: -1,
+                  letterSpacing: -1.5,
+                  color: ink,
+                  marginBottom: 30,
                 }}
               >
                 {para}
@@ -195,17 +271,27 @@ function Body({ slide }: { slide: Slide }) {
         </div>
       );
 
+    /* DataMetric — the number is the hero, on a tinted card */
     case "number":
       return (
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ display: "flex", fontSize: 24, letterSpacing: 6, color: MUTED, marginBottom: 30 }}>
-            {slide.label.toUpperCase()}
-          </div>
-          <div style={{ display: "flex", fontSize: 78, fontWeight: 600, color: ACCENT, lineHeight: 1.15, letterSpacing: -2 }}>
-            {slide.value}
-          </div>
+          <Kicker text={slide.label} dark={dark} />
+          <Card dark={dark} tint>
+            <div
+              style={{
+                display: "flex",
+                fontFamily: FONT.display,
+                fontSize: 72,
+                lineHeight: 1.15,
+                letterSpacing: -2,
+                color: accent,
+              }}
+            >
+              {slide.value}
+            </div>
+          </Card>
           {slide.note ? (
-            <div style={{ display: "flex", marginTop: 48, paddingLeft: 28, borderLeft: `3px solid ${ACCENT}`, fontSize: 34, lineHeight: 1.45, color: INK }}>
+            <div style={{ display: "flex", marginTop: 32, fontSize: 34, lineHeight: 1.45, color: ink }}>
               {slide.note}
             </div>
           ) : null}
@@ -213,34 +299,74 @@ function Body({ slide }: { slide: Slide }) {
       );
 
     /*
-      The signature. The strikethrough is drawn as an absolutely positioned
-      bar rather than text-decoration, which Satori renders inconsistently
-      at large sizes.
+      THE SIGNATURE. The strike is a bar per line: one bar over a wrapped
+      block crosses only the first line and dangles past the last.
     */
     case "correction":
       return (
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ display: "flex", fontSize: 22, letterSpacing: 6, color: MUTED, marginBottom: 34 }}>
+          <div
+            style={{
+              display: "flex",
+              fontFamily: FONT.data,
+              fontSize: 18,
+              letterSpacing: 4,
+              color: muted,
+              marginBottom: 26,
+            }}
+          >
             THE TAKE EVERYONE HAD
           </div>
+
           <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
             {slide.wrong.map((line, i) => (
-              // Each line is its own inline box so the bar matches its width
-              <div key={i} style={{ display: "flex", position: "relative", marginBottom: 8 }}>
-                <div style={{ display: "flex", fontFamily: "Fraunces", fontSize: 56, lineHeight: 1.2, color: MUTED, letterSpacing: -1 }}>
+              <div key={i} style={{ display: "flex", position: "relative", marginBottom: 6 }}>
+                <div
+                  style={{
+                    display: "flex",
+                    fontFamily: FONT.display,
+                    fontSize: 54,
+                    lineHeight: 1.2,
+                    letterSpacing: -1.5,
+                    color: muted,
+                  }}
+                >
                   {line}
                 </div>
-                <div style={{ position: "absolute", left: -6, right: -6, top: "52%", height: 5, background: ACCENT, display: "flex" }} />
+                <div
+                  style={{
+                    position: "absolute",
+                    left: -4,
+                    right: -4,
+                    top: "52%",
+                    height: 4,
+                    borderRadius: RADIUS.sm,
+                    background: accent,
+                    display: "flex",
+                  }}
+                />
               </div>
             ))}
           </div>
-          <div style={{ display: "flex", marginTop: 60, paddingLeft: 28, borderLeft: `4px solid ${ACCENT}`, flexDirection: "column" }}>
-            <div style={{ display: "flex", fontSize: 22, letterSpacing: 6, color: ACCENT, marginBottom: 22 }}>
-              WHAT THE NUMBERS SAID
-            </div>
-            <div style={{ display: "flex", fontSize: 40, lineHeight: 1.4, color: INK }}>
-              {slide.right}
-            </div>
+
+          <div style={{ display: "flex", marginTop: 46 }}>
+            <Card dark={dark} tint>
+              <div
+                style={{
+                  display: "flex",
+                  fontFamily: FONT.data,
+                  fontSize: 18,
+                  letterSpacing: 4,
+                  color: accent,
+                  marginBottom: 20,
+                }}
+              >
+                WHAT THE NUMBERS SAID
+              </div>
+              <div style={{ display: "flex", fontSize: 38, lineHeight: 1.4, color: ink }}>
+                {slide.right}
+              </div>
+            </Card>
           </div>
         </div>
       );
@@ -248,30 +374,27 @@ function Body({ slide }: { slide: Slide }) {
     case "list":
       return (
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ display: "flex", fontSize: 22, letterSpacing: 6, color: ACCENT, marginBottom: 48 }}>
-            {slide.label.toUpperCase()}
-          </div>
-          <div style={{ display: "flex", flexDirection: "column" }}>
+          <Kicker text={slide.label} dark={dark} />
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             {slide.items.map((item) => (
-              <div
-                key={item.k}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  borderTop: `1px solid ${RULE}`,
-                  padding: "34px 0",
-                  background: SURFACE,
-                  paddingLeft: 28,
-                  marginBottom: 4,
-                }}
-              >
-                <div style={{ display: "flex", fontSize: 30, fontWeight: 600, color: ACCENT, letterSpacing: 3, marginBottom: 14 }}>
+              <Card key={item.k} dark={dark}>
+                <div
+                  style={{
+                    display: "flex",
+                    fontFamily: FONT.data,
+                    fontSize: 24,
+                    fontWeight: 700,
+                    letterSpacing: 2,
+                    color: accent,
+                    marginBottom: 12,
+                  }}
+                >
                   {item.k}
                 </div>
-                <div style={{ display: "flex", fontSize: 34, color: INK, lineHeight: 1.35 }}>
+                <div style={{ display: "flex", fontSize: 32, lineHeight: 1.35, color: ink }}>
                   {item.v}
                 </div>
-              </div>
+              </Card>
             ))}
           </div>
         </div>
@@ -280,14 +403,40 @@ function Body({ slide }: { slide: Slide }) {
     case "quote":
       return (
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ display: "flex", fontSize: 100, color: ACCENT, fontFamily: "Fraunces", lineHeight: 0.7, marginBottom: 20 }}>
-            “
+          <div
+            style={{
+              display: "flex",
+              fontFamily: FONT.display,
+              fontSize: 110,
+              lineHeight: 0.7,
+              color: accent,
+              marginBottom: 24,
+            }}
+          >
+            &ldquo;
           </div>
-          <div style={{ display: "flex", fontFamily: "Fraunces", fontSize: 68, lineHeight: 1.2, color: INK, letterSpacing: -2 }}>
+          <div
+            style={{
+              display: "flex",
+              fontFamily: FONT.display,
+              fontSize: 66,
+              lineHeight: 1.2,
+              letterSpacing: -2,
+              color: ink,
+            }}
+          >
             {slide.quote}
           </div>
-          <div style={{ display: "flex", width: 160, height: 4, background: ACCENT, margin: "48px 0 28px" }} />
-          <div style={{ display: "flex", fontSize: 26, letterSpacing: 4, color: MUTED }}>
+          <div
+            style={{
+              display: "flex",
+              marginTop: 40,
+              fontFamily: FONT.data,
+              fontSize: 20,
+              letterSpacing: 3,
+              color: muted,
+            }}
+          >
             {(slide.attribution ?? "NOTAVC").toUpperCase()}
           </div>
         </div>
@@ -296,21 +445,62 @@ function Body({ slide }: { slide: Slide }) {
     case "teardown":
       return (
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ display: "flex", alignItems: "center", marginBottom: 28 }}>
-            <div style={{ display: "flex", border: `2px solid ${ACCENT}`, color: ACCENT, fontSize: 22, letterSpacing: 4, padding: "10px 20px" }}>
+          <div style={{ display: "flex", marginBottom: 24 }}>
+            <div
+              style={{
+                display: "flex",
+                fontFamily: FONT.data,
+                fontSize: 20,
+                letterSpacing: 3,
+                padding: "10px 20px",
+                borderRadius: RADIUS.pill,
+                background: BRAND.signal12,
+                color: accent,
+              }}
+            >
               {slide.verdict}
             </div>
           </div>
-          <div style={{ display: "flex", fontFamily: "Fraunces", fontSize: 104, color: INK, letterSpacing: -3, lineHeight: 1 }}>
+          <div
+            style={{
+              display: "flex",
+              fontFamily: FONT.display,
+              fontSize: 96,
+              letterSpacing: -3,
+              lineHeight: 1,
+              color: ink,
+            }}
+          >
             {slide.company}
           </div>
-          <div style={{ display: "flex", fontSize: 76, fontWeight: 600, color: ACCENT, marginTop: 48, letterSpacing: -2 }}>
-            {slide.number}
+          <div style={{ display: "flex", marginTop: 36 }}>
+            <Card dark={dark} tint>
+              <div
+                style={{
+                  display: "flex",
+                  fontFamily: FONT.display,
+                  fontSize: 68,
+                  letterSpacing: -2,
+                  color: accent,
+                }}
+              >
+                {slide.number}
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  marginTop: 14,
+                  fontFamily: FONT.data,
+                  fontSize: 18,
+                  letterSpacing: 2,
+                  color: muted,
+                }}
+              >
+                {slide.numberLabel.toUpperCase()}
+              </div>
+            </Card>
           </div>
-          <div style={{ display: "flex", fontSize: 24, letterSpacing: 3, color: MUTED, marginTop: 18 }}>
-            {slide.numberLabel.toUpperCase()}
-          </div>
-          <div style={{ display: "flex", marginTop: 52, paddingLeft: 28, borderLeft: `4px solid ${ACCENT}`, fontSize: 38, lineHeight: 1.35, color: INK }}>
+          <div style={{ display: "flex", marginTop: 32, fontSize: 36, lineHeight: 1.35, color: ink }}>
             {slide.take}
           </div>
         </div>
@@ -319,14 +509,29 @@ function Body({ slide }: { slide: Slide }) {
     case "hook":
       return (
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ display: "flex", fontSize: 26, letterSpacing: 6, color: ACCENT, marginBottom: 40 }}>
-            {slide.overline.toUpperCase()}
-          </div>
-          <div style={{ display: "flex", fontFamily: "Fraunces", fontSize: 110, lineHeight: 1.05, color: INK, letterSpacing: -3 }}>
+          <Kicker text={slide.overline} dark={dark} />
+          <div
+            style={{
+              display: "flex",
+              fontFamily: FONT.display,
+              fontSize: 104,
+              lineHeight: 1.06,
+              letterSpacing: -3,
+              color: ink,
+            }}
+          >
             {slide.hook}
           </div>
-          <div style={{ display: "flex", width: 180, height: 4, background: ACCENT, margin: "56px 0" }} />
-          <div style={{ display: "flex", fontSize: 32, letterSpacing: 3, color: MUTED }}>
+          <div
+            style={{
+              display: "flex",
+              marginTop: 48,
+              fontFamily: FONT.data,
+              fontSize: 26,
+              letterSpacing: 3,
+              color: accent,
+            }}
+          >
             {slide.kicker}
           </div>
         </div>
@@ -335,22 +540,42 @@ function Body({ slide }: { slide: Slide }) {
     case "cta":
       return (
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ display: "flex", fontFamily: "Fraunces", fontSize: 130, color: INK, letterSpacing: -4, lineHeight: 1 }}>
+          <div
+            style={{
+              display: "flex",
+              fontFamily: FONT.display,
+              fontSize: 118,
+              letterSpacing: -4,
+              lineHeight: 1,
+              color: ink,
+            }}
+          >
             {slide.heading}
           </div>
-          <div style={{ display: "flex", width: 180, height: 4, background: ACCENT, margin: "48px 0" }} />
-          <div style={{ display: "flex", fontSize: 34, color: MUTED, lineHeight: 1.45, maxWidth: 780 }}>
+          <div style={{ display: "flex", marginTop: 36, fontSize: 34, lineHeight: 1.45, color: muted, maxWidth: 760 }}>
             {slide.sub}
           </div>
-          <div style={{ display: "flex", marginTop: 56, fontSize: 34, fontWeight: 600, letterSpacing: 4, color: ACCENT }}>
-            {slide.handle}
+          <div style={{ display: "flex", marginTop: 44 }}>
+            <div
+              style={{
+                display: "flex",
+                fontFamily: FONT.data,
+                fontSize: 26,
+                letterSpacing: 3,
+                padding: "16px 30px",
+                borderRadius: RADIUS.pill,
+                background: accent,
+                color: dark ? BRAND.surfaceDark : BRAND.paper,
+              }}
+            >
+              {slide.handle}
+            </div>
           </div>
         </div>
       );
   }
 }
 
-/* A drafted post carries its own slides; the ep comes from its platter. */
 async function deckFromPost(postId: string): Promise<Deck | null> {
   const supabase = db();
   const { data } = await supabase
@@ -359,9 +584,7 @@ async function deckFromPost(postId: string): Promise<Deck | null> {
     .eq("id", postId)
     .maybeSingle();
 
-  if (!data?.slides || !Array.isArray(data.slides) || !data.slides.length) {
-    return null;
-  }
+  if (!data?.slides || !Array.isArray(data.slides) || !data.slides.length) return null;
 
   const platter = data.platters as unknown as { ep: string; title: string } | null;
   return {
@@ -378,24 +601,11 @@ export async function GET(request: Request) {
   const index = Number(url.searchParams.get("i") ?? 0);
   const postId = url.searchParams.get("post");
 
-  /*
-    Two sources. `post` reads slides written by the drafter, which is how
-    generated decks render at a public URL that Instagram can fetch. `deck`
-    reads the hand-authored ones in lib/slides.ts.
-  */
-  const deck = postId ? await deckFromPost(postId) : deckBySlug(url.searchParams.get("deck") ?? "");
-  if (!deck) {
-    return new Response("Unknown deck", { status: 404 });
-  }
+  const deck = postId
+    ? await deckFromPost(postId)
+    : deckBySlug(url.searchParams.get("deck") ?? "");
+  if (!deck) return new Response("Unknown deck", { status: 404 });
 
-  // Size follows the deck's format unless explicitly overridden
-  const requested = url.searchParams.get("size") as keyof typeof SIZES | null;
-  const size: keyof typeof SIZES =
-    requested && requested in SIZES
-      ? requested
-      : deck.format === "story"
-        ? "story"
-        : "portrait";
   const slide = deck.slides[index];
   if (!slide) {
     return new Response(`Slide ${index} out of range (deck has ${deck.slides.length})`, {
@@ -403,15 +613,19 @@ export async function GET(request: Request) {
     });
   }
 
+  const requested = url.searchParams.get("size") as keyof typeof SIZES | null;
+  const size: keyof typeof SIZES =
+    requested && requested in SIZES ? requested : deck.format === "story" ? "story" : "portrait";
+
+  // Only the 9:16 story/reel format inverts; carousels and posts stay light.
+  const dark = size === "story";
+
   return new ImageResponse(
     (
-      <Frame ep={deck.ep} index={index} total={deck.slides.length}>
-        <Body slide={slide} />
+      <Frame ep={deck.ep} index={index} total={deck.slides.length} dark={dark}>
+        <Body slide={slide} dark={dark} />
       </Frame>
     ),
-    {
-      ...(SIZES[size] ?? SIZES.portrait),
-      fonts: await fonts(),
-    },
+    { ...SIZES[size], fonts: await fonts() },
   );
 }

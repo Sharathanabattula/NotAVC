@@ -58,6 +58,8 @@ export default function ComposeForm() {
     wrong1: "", wrong2: "", wrong3: "",
     right: "",
     finding: "",
+    logoSrc: "", logoCompany: "", logoVerdict: "",
+    photoSrc: "", photoCaption: "", photoCredit: "",
     linkedin: "",
     instagram: "",
     hashtags: "",
@@ -98,6 +100,12 @@ export default function ComposeForm() {
           wrong: [f.wrong1, f.wrong2, f.wrong3],
           right: f.right,
           finding: f.finding,
+          logoSrc: f.logoSrc,
+          logoCompany: f.logoCompany,
+          logoVerdict: f.logoVerdict,
+          photoSrc: f.photoSrc,
+          photoCaption: f.photoCaption,
+          photoCredit: f.photoCredit,
           linkedin: f.linkedin,
           instagram: f.instagram,
           hashtags: f.hashtags.split(/[\s,]+/).filter(Boolean),
@@ -236,6 +244,34 @@ export default function ComposeForm() {
         <h2 className="voice-heading mb-6 text-xl text-ink">6 · What you found</h2>
         <textarea required rows={4} value={f.finding} onChange={set("finding")} className={field}
           placeholder={"I went looking for this number in six Indian SaaS decks.\n\nFound it in zero.\n\nThat absence is the signal."} />
+      </section>
+
+      <section className="panel p-6 sm:p-8">
+        <h2 className="voice-heading mb-2 text-xl text-ink">
+          Images <span className="text-muted">— optional</span>
+        </h2>
+        <p className="mb-6 text-sm font-light leading-relaxed text-muted">
+          Both slides are skipped unless you fill them. Editorial use only:
+          a company mark for the company you&rsquo;re discussing, and photos
+          from a press kit or your own camera — not agency or news images.
+        </p>
+
+        <label className={label} htmlFor="logoCompany">Logo card</label>
+        <div className="grid gap-4 sm:grid-cols-3">
+          <input id="logoCompany" value={f.logoCompany} onChange={set("logoCompany")} className={field} placeholder="ZERODHA" />
+          <input value={f.logoVerdict} onChange={set("logoVerdict")} className={field} placeholder="THE QUIET ONE" />
+          <input value={f.logoSrc} onChange={set("logoSrc")} className={field} placeholder="https://…/logo.png" />
+        </div>
+        <p className="voice-data mt-2 text-[10px] leading-relaxed text-faint">
+          Quick logo URL: <code className="text-muted">https://img.logo.dev/zerodha.com?token=pk_X-1ZO13GSgeOoUrIuJ6GMQ&amp;size=200&amp;format=png</code> — swap the domain.
+        </p>
+
+        <label className={`${label} mt-6`} htmlFor="photoSrc">Photo</label>
+        <div className="flex flex-col gap-4">
+          <input id="photoSrc" value={f.photoSrc} onChange={set("photoSrc")} className={field} placeholder="https://…/photo.jpg" />
+          <input value={f.photoCaption} onChange={set("photoCaption")} className={field} placeholder="Caption — what this image proves" />
+          <input value={f.photoCredit} onChange={set("photoCredit")} className={field} placeholder="Credit — e.g. Company press kit" />
+        </div>
       </section>
 
       <section className="panel p-6 sm:p-8">

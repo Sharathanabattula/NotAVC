@@ -35,6 +35,13 @@ type Body = {
   wrong: string[];
   right: string;
   finding: string;
+  /* Optional image slides — inserted only when a src is supplied */
+  logoSrc?: string;
+  logoCompany?: string;
+  logoVerdict?: string;
+  photoSrc?: string;
+  photoCaption?: string;
+  photoCredit?: string;
   linkedin: string;
   instagram: string;
   hashtags: string[];
@@ -90,6 +97,23 @@ export async function POST(request: Request) {
       sub: b.coverSub?.trim() || undefined,
     },
     { kind: "statement", label: "The setup", body: b.setup.trim() },
+    /*
+      The logo card lands second when supplied: it names the subject before
+      the argument starts, which is what makes a teardown legible in a feed
+      where the cover may be the only slide anyone sees.
+    */
+    ...(b.logoSrc?.trim() && b.logoCompany?.trim()
+      ? ([
+          {
+            kind: "logo",
+            src: b.logoSrc.trim(),
+            company: b.logoCompany.trim(),
+            verdict: b.logoVerdict?.trim() || undefined,
+            number: b.numberValue.trim(),
+            numberLabel: b.numberLabel.trim(),
+          },
+        ] as Slide[])
+      : []),
     {
       kind: "number",
       label: b.numberLabel.trim(),
@@ -103,6 +127,18 @@ export async function POST(request: Request) {
       items: (b.tiers ?? []).filter((t) => t.k?.trim() && t.v?.trim()),
     },
     { kind: "correction", wrong, right: b.right.trim() },
+    /* A photo sits after the correction — evidence, then the human face of it */
+    ...(b.photoSrc?.trim() && b.photoCaption?.trim()
+      ? ([
+          {
+            kind: "photo",
+            src: b.photoSrc.trim(),
+            overline: "On the record",
+            caption: b.photoCaption.trim(),
+            credit: b.photoCredit?.trim() || undefined,
+          },
+        ] as Slide[])
+      : []),
     { kind: "statement", label: "What I found", body: b.finding.trim() },
     {
       kind: "cta",

@@ -9,16 +9,18 @@
   to survive into the feed, otherwise the posts are just quote cards.
 */
 
+import type { IconName } from "./icons";
+
 export type Slide =
   | { kind: "cover"; ep: string; desk: string; title: string; sub?: string }
-  | { kind: "statement"; label?: string; body: string }
+  | { kind: "statement"; label?: string; body: string; icon?: IconName }
   | {
       kind: "number";
       value: string;
       label: string;
       note?: string;
-      /* Modernist pictogram slot — see lib/marks.tsx ICONS */
-      icon?: "chart" | "burn" | "scale" | "doc" | "coins" | "split";
+      /* Pictogram slot — any key from lib/icons.tsx ICONS */
+      icon?: IconName;
     }
   /*
     `wrong` is an array because the strike is drawn as a bar per line —
@@ -26,7 +28,7 @@ export type Slide =
     dangles past the last one. The author controls the break.
   */
   | { kind: "correction"; wrong: string[]; right: string }
-  | { kind: "list"; label: string; items: { k: string; v: string }[] }
+  | { kind: "list"; label: string; items: { k: string; v: string }[]; icon?: IconName }
   | { kind: "cta"; heading: string; sub: string; handle: string }
   /* Single-post kinds — these have to work with no slides either side */
   | {
@@ -43,6 +45,7 @@ export type Slide =
       number: string;
       numberLabel: string;
       take: string;
+      icon?: IconName;
     }
   | { kind: "hook"; overline: string; hook: string; kicker: string };
 

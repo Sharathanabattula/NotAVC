@@ -12,7 +12,8 @@
 import type { IconName } from "./icons";
 
 export type Slide =
-  | { kind: "cover"; ep: string; desk: string; title: string; sub?: string }
+  /* `ep` is optional and no longer rendered — kept for ordering only */
+  | { kind: "cover"; ep?: string; desk: string; title: string; sub?: string }
   | { kind: "statement"; label?: string; body: string; icon?: IconName }
   | {
       kind: "number";

@@ -128,7 +128,7 @@ Nine slots. Image slides are optional and skipped when unused.
 
 | # | Kind | Job | Required |
 |---|---|---|---|
-| 1 | `cover` | The hook. Short — set at 112px. | ✅ |
+| 1 | `cover` | The hook. Short — set at 112px. No episode number. | ✅ |
 | 2 | `logo` | Names the subject. Company mark + headline number. | optional |
 | 3 | `statement` | The setup — what everyone assumes. | ✅ |
 | 4 | `number` | The metric, with a pictogram. | ✅ |
@@ -204,8 +204,9 @@ correction wrong-take 54px · body 32–38px · kicker/label 18–24px.
 
 - **Graph paper:** 108px grid, `rgba(11,11,11,0.09)`, full bleed. Drawn as
   explicit SVG lines — a tiled CSS gradient renders nothing in Satori.
-- **Header rail:** wordmark left ("Not" at 35% opacity + "AVC" full + signal
-  full stop), EP number right, 2px ink rule beneath.
+- **Header rail:** wordmark only ("Not" at 35% opacity + "AVC" full + signal
+  full stop), 2px ink rule beneath. **No episode number** — the archive is
+  numbered internally for ordering, never shown to the reader.
 - **Footer rail:** 2px rule, SWIPE pill left (last slide shows @notavc.co),
   page number in a filled signal disc right.
 - **Borders:** hairline at 8/12/18% black. Never heavy strokes.
@@ -278,7 +279,7 @@ disc, zigzag left/right alignment. NotAVC uses that structural language with
 
 **Cover:** The 10-year seed cheque
 **Sub:** What Blume's exits actually took
-**Desk:** The uncomfortable
+**Desk:** The uncomfortable *(no episode number on any slide)*
 
 **Logo slide:** BLUME · MUMBAI · SINCE 2010 · **341** companies backed, 278
 in India

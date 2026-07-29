@@ -69,26 +69,6 @@ function Wordmark({ dark }: { dark: boolean }) {
   );
 }
 
-/* EpisodeBadge — EP.001 in Space Mono, on a signal tint. */
-function EpisodeBadge({ ep, dark }: { ep: string; dark: boolean }) {
-  return (
-    <div
-      style={{
-        display: "flex",
-        fontFamily: FONT.data,
-        fontSize: 20,
-        letterSpacing: 2,
-        padding: "10px 18px",
-        borderRadius: RADIUS.pill,
-        background: dark ? BRAND.white06 : BRAND.signal08,
-        color: dark ? BRAND.accentOnDark : BRAND.signal,
-      }}
-    >
-      {ep}
-    </div>
-  );
-}
-
 /* DotIndicator — carousel progress. */
 function DotIndicator({ index, total, dark }: { index: number; total: number; dark: boolean }) {
   return (
@@ -118,14 +98,12 @@ function DotIndicator({ index, total, dark }: { index: number; total: number; da
 
 function Frame({
   children,
-  ep,
   index,
   total,
   dark,
   size,
 }: {
   children: React.ReactNode;
-  ep: string;
   index: number;
   total: number;
   dark: boolean;
@@ -169,17 +147,11 @@ function Frame({
           }}
         >
           <Wordmark dark={dark} />
-          <div
-            style={{
-              display: "flex",
-              fontFamily: FONT.data,
-              fontSize: 20,
-              letterSpacing: 3,
-              color: dark ? BRAND.white45 : BRAND.muted,
-            }}
-          >
-            {ep}
-          </div>
+          {/*
+            No episode number. Kept in the database for ordering and
+            uniqueness, deliberately not shown — the archive is numbered
+            for us, not for the reader.
+          */}
         </div>
         <div
           style={{
@@ -914,7 +886,6 @@ export async function GET(request: Request) {
   return new ImageResponse(
     (
       <Frame
-        ep={deck.ep}
         index={index}
         total={deck.slides.length}
         dark={dark}

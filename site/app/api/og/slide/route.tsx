@@ -1,7 +1,8 @@
 import { ImageResponse } from "next/og";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import { deckBySlug, type Slide } from "@/lib/slides";
+import { deckBySlug, type Deck, type Slide } from "@/lib/slides";
+import { db } from "@/lib/supabase";
 
 export const dynamic = "force-dynamic";
 
@@ -349,14 +350,42 @@ function Body({ slide }: { slide: Slide }) {
   }
 }
 
+/* A drafted post carries its own slides; the ep comes from its platter. */
+async function deckFromPost(postId: string): Promise<Deck | null> {
+  const supabase = db();
+  const { data } = await supabase
+    .from("posts")
+    .select("id, slides, platters(ep, title)")
+    .eq("id", postId)
+    .maybeSingle();
+
+  if (!data?.slides || !Array.isArray(data.slides) || !data.slides.length) {
+    return null;
+  }
+
+  const platter = data.platters as unknown as { ep: string; title: string } | null;
+  return {
+    slug: data.id,
+    ep: platter?.ep ?? "EP.???",
+    title: platter?.title ?? "",
+    format: "carousel",
+    slides: data.slides as Slide[],
+  };
+}
+
 export async function GET(request: Request) {
   const url = new URL(request.url);
-  const slug = url.searchParams.get("deck") ?? "";
   const index = Number(url.searchParams.get("i") ?? 0);
+  const postId = url.searchParams.get("post");
 
-  const deck = deckBySlug(slug);
+  /*
+    Two sources. `post` reads slides written by the drafter, which is how
+    generated decks render at a public URL that Instagram can fetch. `deck`
+    reads the hand-authored ones in lib/slides.ts.
+  */
+  const deck = postId ? await deckFromPost(postId) : deckBySlug(url.searchParams.get("deck") ?? "");
   if (!deck) {
-    return new Response(`Unknown deck: ${slug}`, { status: 404 });
+    return new Response("Unknown deck", { status: 404 });
   }
 
   // Size follows the deck's format unless explicitly overridden

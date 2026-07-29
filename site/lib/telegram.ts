@@ -100,6 +100,39 @@ export async function sendApprovalCard(card: ApprovalCard): Promise<boolean> {
   }
 }
 
+/*
+  Sends the artwork as an album, then the approval card beneath it.
+
+  Two messages on purpose: Telegram albums cannot carry inline keyboards,
+  so the buttons have to ride on a separate message. Sending the album
+  first means the images are what Sharath sees when the notification opens.
+*/
+export async function sendCarousel(
+  card: ApprovalCard & { imageUrls: string[] },
+): Promise<boolean> {
+  const cfg = config();
+  if (!cfg) return false;
+
+  if (card.imageUrls.length) {
+    try {
+      await fetch(`${API}${cfg.token}/sendMediaGroup`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: cfg.chatId,
+          // Telegram caps an album at 10
+          media: card.imageUrls.slice(0, 10).map((url) => ({ type: "photo", media: url })),
+        }),
+      });
+    } catch {
+      // Artwork is nice to have; the card carries the decision, so a failed
+      // album must not stop the approval request going out.
+    }
+  }
+
+  return sendApprovalCard(card);
+}
+
 export async function answerCallback(callbackId: string, text: string) {
   const cfg = config();
   if (!cfg) return;

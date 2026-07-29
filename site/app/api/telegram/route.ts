@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/supabase";
 import { answerCallback, notify } from "@/lib/telegram";
+import { processIdea } from "@/lib/intake";
 
 export const dynamic = "force-dynamic";
 
@@ -31,11 +32,52 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
 
-  const update = (await request.json()) as { callback_query?: CallbackQuery };
-  const cb = update.callback_query;
-  if (!cb?.data) return NextResponse.json({ ok: true });
+  const update = (await request.json()) as {
+    callback_query?: CallbackQuery;
+    message?: { chat?: { id: number }; text?: string };
+  };
 
   const allowedChat = process.env.TELEGRAM_CHAT_ID;
+
+  /*
+    A plain text message is an idea. Drafting takes ~20s, which is longer
+    than Telegram's webhook patience — it retries anything slow, and a
+    retry would bill a second draft and post a duplicate card. So
+    acknowledge immediately and let the work finish in the background.
+  */
+  if (update.message?.text) {
+    if (String(update.message.chat?.id ?? "") !== allowedChat) {
+      return NextResponse.json({ ok: true });
+    }
+
+    const text = update.message.text.trim();
+    if (text.startsWith("/")) {
+      await notify(
+        text === "/start"
+          ? "Send me a news link or an idea and I'll draft the platter."
+          : "Unknown command. Just send the idea as a message.",
+      );
+      return NextResponse.json({ ok: true });
+    }
+    if (text.length < 20) {
+      await notify("Give me a bit more — a link, or a sentence about the idea.");
+      return NextResponse.json({ ok: true });
+    }
+
+    await notify("📝 Drafting… the card lands here in about 20 seconds.");
+
+    const siteUrl =
+      process.env.SITE_URL ??
+      (process.env.VERCEL_PROJECT_PRODUCTION_URL
+        ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+        : new URL(request.url).origin);
+
+    void processIdea(text, allowedChat, siteUrl);
+    return NextResponse.json({ ok: true });
+  }
+
+  const cb = update.callback_query;
+  if (!cb?.data) return NextResponse.json({ ok: true });
   if (String(cb.message?.chat?.id ?? "") !== allowedChat) {
     await answerCallback(cb.id, "Not authorised.");
     return NextResponse.json({ ok: true });

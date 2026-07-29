@@ -20,9 +20,9 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "NotAVC — Venture Intelligence for Everyone",
+  title: "NotAVC — I read the filings, not the press release",
   description:
-    "An MBA student reverse-engineering venture capital in public. Company teardowns, term-sheet literacy, and the one number everyone else skips.",
+    "Startup headlines are written by PR firms. An MBA student reads the filings instead, and shows where the math stops matching the announcement.",
 };
 
 export const viewport: Viewport = {

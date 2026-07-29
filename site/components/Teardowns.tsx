@@ -132,17 +132,15 @@ export default function Teardowns() {
           <div className="mb-6 flex flex-wrap items-end justify-between gap-6">
             <div>
               <p className="voice-kicker zone mb-6 text-accent">
-                The teardown desk
+                What the filings said
               </p>
               <h2 className="voice-display zone text-6xl text-ink sm:text-7xl">
-                Companies,
-                <br />
-                autopsied<span className="zone text-accent">.</span>
+                The receipts<span className="zone text-accent">.</span>
               </h2>
             </div>
             <p className="voice-data zone max-w-xs text-xs leading-loose text-muted">
-              EVERY TEARDOWN HAS ONE NUMBER THAT TELLS THE REAL STORY. THESE ARE
-              THOSE NUMBERS.
+              FOUR COMPANIES. FOUR HEADLINES EVERYONE BELIEVED. FOUR NUMBERS
+              THAT SAID OTHERWISE.
             </p>
           </div>
 

@@ -25,54 +25,54 @@ export const TICKER_TERMS = [
 ];
 
 export const MANIFESTO = {
-  kicker: "EP.000 — The thesis",
-  heading: "Most people learn venture quietly. I take notes in public.",
+  kicker: "EP.000 — Why this exists",
+  heading: "The headline said ₹800Cr raised. The filing said convertible debt.",
   paragraphs: [
-    "I'm Sharath — an MBA student at SR University studying finance and derivatives, working through venture capital and private equity one term sheet at a time. Not from inside a fund. From the outside, with library access and stubbornness.",
-    "Every teardown, every concept, every mistake goes on the record. When I misread a cap table, you'll see the correction. When a \"₹800Cr valuation\" turns out to be a liquidation-preference mirage, you'll see the math.",
-    "This is not a 30-day challenge. It's a permanent, numbered archive — the venture education I wanted and couldn't find in a textbook.",
+    "I'm Sharath. MBA student, SR University, finance and derivatives. Nobody pays me to have an opinion about startups, which is most of the reason you should read this.",
+    "This started because a funding announcement made me feel stupid. Everyone was congratulating a company on a raise. I read it three times and still couldn't tell what had actually happened. So I found the filing. Most of the money was debt converting, not new capital. Not a lie. Just a story told the way the people telling it wanted it to land.",
+    "Now I check. Every teardown here is me pulling the actual numbers and writing down the exact point where the press release and the arithmetic stop agreeing. When I get it wrong — and I have — the wrong version stays on the page with a line through it.",
   ],
   pullQuote:
-    "Venture intelligence shouldn't need a Sand Hill Road address. Or a Bandra one.",
+    "You don't need a Sand Hill Road address to read a balance sheet. You need an afternoon and no reason to flatter anyone.",
   /* Margin annotations — the notes in the left gutter */
   margin: [
-    { label: "Filed", note: "EP.000 — thesis" },
-    { label: "Status", note: "Open, revised in public" },
-    { label: "Rule", note: "One number per claim" },
+    { label: "Filed", note: "EP.000" },
+    { label: "Status", note: "Open. Revised when wrong" },
+    { label: "Rule", note: "No claim without a number" },
   ],
   stats: [
-    { value: "₹0", label: "Assets under management" },
-    { value: "04", label: "Desks, always open" },
-    { value: "EP.∞", label: "Numbered, never expiring" },
-    { value: "100%", label: "Work shown, errors included" },
+    { value: "₹0", label: "Under management" },
+    { value: "₹0", label: "Paid to say this" },
+    { value: "04", label: "Desks" },
+    { value: "100%", label: "Corrections left visible" },
   ],
 };
 
 export const BOOT_LINES = [
-  "NOTAVC // VENTURE INTELLIGENCE TERMINAL",
-  "> mounting archive ................ OK",
-  "> desks online [04] ............... OK",
-  "> teardowns indexed [04] .......... OK",
-  "> analyst .......... SHARATH C. ANABATTULA",
-  "> credential ....... BOWER SCHOOL — VC/PE",
+  "NOTAVC // READING THE FILINGS SO YOU DON'T HAVE TO",
+  "> press releases ignored .......... OK",
+  "> filings pulled [04] ............. OK",
+  "> corrections logged .............. OK",
+  "> written by ....... SHARATH C. ANABATTULA",
+  "> paid by .......... NOBODY",
   "> status ........... NOT A VC",
 ];
 
 export const FOUNDER = {
-  kicker: "The analyst",
-  heading: "I'm Sharath. I'm not a VC — I'm the guy doing the homework in public.",
+  kicker: "Who's writing this",
+  heading: "I read the filings that the headlines skip.",
   paragraphs: [
-    "MBA student at SR University, specialising in Finance & Derivatives, and part of the Bower School of Entrepreneurship's VC/PE programme — deal simulations, term-sheet negotiations, and Indian case studies like the Zomato and Paytm IPOs.",
-    "I fell for two things at once: finance and startups. Finance because the numbers never flatter anyone for long. Startups because they're the only place where a spreadsheet and a stubborn idea can fight it out in public.",
-    "So I stopped waiting for a fund to hire me before I was allowed to think like an investor. Every teardown here is me doing the work early, out loud, with the mistakes left in.",
+    "MBA at SR University — finance and derivatives — and part of the Bower School of Entrepreneurship's VC/PE programme. Deal simulations, term-sheet negotiations, Indian case studies. The Zomato and Paytm IPOs, taken apart line by line.",
+    "The first real term sheet I read wasn't about valuation at all. It was about who gets to say no. Twelve clauses of control, and the number everyone quotes — the valuation — barely mattered next to them. That's the kind of thing nobody tells you until you're in the room.",
+    "I'm not an investor and I'm not pretending to be. I'm the guy in the back of the class who looked up the filing while everyone else was reading the press release.",
   ],
   credentials: [
     { k: "PROGRAMME", v: "Bower School — LEAD VC/PE" },
     { k: "DEGREE", v: "MBA · Finance & Derivatives" },
     { k: "INSTITUTION", v: "SR University" },
-    { k: "BASED", v: "India · Building in public" },
+    { k: "CONFLICTS", v: "None. Nobody pays me." },
   ],
-  pull: "Nobody gave me a fund. So I gave myself the syllabus.",
+  pull: "If you've ever read a funding headline and thought \"am I stupid, or is this spin?\" — you're the reason this exists.",
 };
 
 export type Teardown = {
@@ -218,15 +218,15 @@ export const FIELD_NOTES = [
 ];
 
 export const NEWSLETTER = {
-  kicker: "The wire — weekly",
-  heading: "One startup, torn down, every Sunday",
-  sub: "Not a link roundup. One company, one number that decides its fate, and the take I had to correct. Written the same week the news breaks, not recycled from a thread.",
+  kicker: "The wire — sundays",
+  heading: "One company, one number, every Sunday",
+  sub: "Not a news roundup. One company whose filing says something different from its press release, the number that gives it away, and the sources so you can check my work.",
   cadence: "Sundays, 08:00 IST",
 };
 
 export const CLOSER = {
-  kicker: "The inbox is open",
+  kicker: "Argue with me",
   heading: "Still not a VC.",
-  sub: "Following along costs nothing. Suggest a company to tear down, correct my math, or just watch me get better in public.",
+  sub: "If I've got a number wrong, tell me — I'd rather be corrected here than be confidently wrong in front of a fund later. Got a company whose press release doesn't match its filings? Send it.",
   legal: "© 2026 NOTAVC — NOT INVESTMENT ADVICE. OBVIOUSLY.",
 };

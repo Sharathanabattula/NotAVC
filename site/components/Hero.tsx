@@ -85,7 +85,7 @@ export default function Hero() {
               <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
             </span>
             <Decode
-              text="EP.000 — THE PERMANENT RECORD OF AN MBA STUDENT"
+              text="EP.000 — I READ THE FILINGS, NOT THE PRESS RELEASE"
               className="voice-kicker text-accent"
               delay={280}
             />
@@ -134,9 +134,9 @@ export default function Hero() {
               className="flex flex-col justify-between gap-10 sm:flex-row sm:items-end"
             >
               <p className="max-w-md text-lg font-light leading-relaxed text-ink/80">
-                A student who refuses to learn venture capital quietly.
-                Teardowns, term sheets, and the one number everyone else skips —
-                documented in public, mistakes included.
+                Startup headlines are written by PR firms. I&rsquo;m an MBA
+                student who reads the filings instead. When the math stops
+                matching the announcement, I show you both.
               </p>
 
               {/* HUD readout */}
@@ -159,7 +159,7 @@ export default function Hero() {
         </div>
 
         <div className="voice-kicker mx-auto mt-14 flex w-full max-w-7xl items-center gap-4 text-faint">
-          <span>SCROLL FOR THE THESIS</span>
+          <span>START WITH WHY THIS EXISTS</span>
           <div className="sweep h-px flex-1 bg-rule" />
           <span className="text-accent">↓</span>
         </div>

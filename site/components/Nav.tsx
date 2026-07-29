@@ -4,12 +4,12 @@ import { LazyMotion, domAnimation, m, useScroll } from "framer-motion";
 import { Wordmark } from "./Logo";
 
 const LINKS = [
-  { href: "#thesis", label: "Thesis" },
-  { href: "#analyst", label: "Analyst" },
+  { href: "#thesis", label: "Why" },
+  { href: "#analyst", label: "Who" },
   { href: "#desks", label: "Desks" },
-  { href: "#teardowns", label: "Teardowns" },
+  { href: "#teardowns", label: "Receipts" },
   { href: "#wire", label: "The Wire" },
-  { href: "#signal", label: "Signal" },
+  { href: "#signal", label: "Argue" },
 ];
 
 export default function Nav() {

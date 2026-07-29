@@ -50,7 +50,7 @@ export default function Closer() {
           <div>
             <Wordmark className="text-lg" />
             <p className="voice-kicker zone mt-1 text-[9px] text-muted">
-              Venture intelligence for everyone
+              I read the filings, not the press release
             </p>
           </div>
         </div>

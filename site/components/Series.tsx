@@ -7,11 +7,11 @@ export default function Series() {
       <div className="grid gap-16 lg:grid-cols-12">
         <div className="lg:col-span-7">
           <Reveal>
-            <p className="voice-kicker zone mb-6 text-accent">The four desks</p>
+            <p className="voice-kicker zone mb-6 text-accent">What I actually publish</p>
             <h2 className="voice-display zone mb-14 text-5xl text-ink sm:text-6xl">
-              One archive,
+              Four things
               <br />
-              four obsessions<span className="zone text-accent">.</span>
+              worth checking<span className="zone text-accent">.</span>
             </h2>
           </Reveal>
 

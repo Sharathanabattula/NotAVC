@@ -47,7 +47,30 @@ export type Slide =
       take: string;
       icon?: IconName;
     }
-  | { kind: "hook"; overline: string; hook: string; kicker: string };
+  | { kind: "hook"; overline: string; hook: string; kicker: string }
+  /*
+    Image-bearing kinds. `src` must be an absolute, publicly reachable URL —
+    Satori fetches it at render time, so a private or relative path fails at
+    render rather than at author time.
+
+    Editorial use only: a company mark identifying the company under
+    discussion. Do not use agency or news photography.
+  */
+  | {
+      kind: "logo";
+      src: string;
+      company: string;
+      verdict?: string;
+      number: string;
+      numberLabel: string;
+    }
+  | {
+      kind: "photo";
+      src: string;
+      overline?: string;
+      caption: string;
+      credit?: string;
+    };
 
 export type Deck = {
   slug: string;
@@ -131,6 +154,24 @@ DECKS.push(
         quote:
           "A liquidation preference isn't a term. It's the entire deal wearing a disguise.",
         attribution: "Field note — Jul 21",
+      },
+    ],
+  },
+  {
+    slug: "demo-logo-card",
+    ep: "EP.007",
+    title: "Zerodha — logo card",
+    format: "single",
+    slides: [
+      {
+        kind: "logo",
+        // logo.dev serves marks by domain; swap for a self-hosted file if
+        // you would rather not depend on a third party at render time
+        src: "https://img.logo.dev/zerodha.com?token=pk_X-1ZO13GSgeOoUrIuJ6GMQ&size=200&format=png",
+        company: "ZERODHA",
+        verdict: "THE QUIET ONE",
+        number: "₹4,700 Cr",
+        numberLabel: "Profit, with roughly zero marketing spend",
       },
     ],
   },

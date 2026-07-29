@@ -687,6 +687,147 @@ function Body({ slide, dark }: { slide: Slide; dark: boolean }) {
         </div>
       );
 
+    /*
+      Logo card. The mark sits on its own white plate rather than directly
+      on the canvas: most logos ship with a transparent background and are
+      drawn for white, so placing one on #F2F1ED breaks the darker ones.
+    */
+    case "logo":
+      return (
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 28, marginBottom: 40 }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: 150,
+                height: 150,
+                borderRadius: RADIUS.lg,
+                background: BRAND.paper,
+                border: `1px solid ${BRAND.borderDefault}`,
+              }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={slide.src} alt="" width={110} height={110} style={{ objectFit: "contain" }} />
+            </div>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <div
+                style={{
+                  display: "flex",
+                  fontFamily: FONT.display,
+                  fontSize: 76,
+                  letterSpacing: -2.5,
+                  color: ink,
+                  lineHeight: 1,
+                }}
+              >
+                {slide.company}
+              </div>
+              {slide.verdict ? (
+                <div
+                  style={{
+                    display: "flex",
+                    marginTop: 16,
+                    alignSelf: "flex-start",
+                    fontFamily: FONT.data,
+                    fontSize: 18,
+                    letterSpacing: 3,
+                    padding: "8px 18px",
+                    borderRadius: RADIUS.pill,
+                    background: BRAND.signal12,
+                    color: accent,
+                  }}
+                >
+                  {slide.verdict}
+                </div>
+              ) : null}
+            </div>
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              fontFamily: FONT.display,
+              fontSize: 84,
+              letterSpacing: -2.5,
+              color: accent,
+            }}
+          >
+            {slide.number}
+          </div>
+          <div style={{ display: "flex", marginTop: 2, marginLeft: 16 }}>
+            <Underline colour={accent} width={560} />
+          </div>
+          <div
+            style={{
+              display: "flex",
+              marginTop: 22,
+              fontFamily: FONT.data,
+              fontSize: 20,
+              letterSpacing: 2,
+              color: muted,
+            }}
+          >
+            {slide.numberLabel.toUpperCase()}
+          </div>
+        </div>
+      );
+
+    /*
+      Full-bleed photo with the caption on a plate over it. Satori has no
+      filters, so legibility comes from the plate rather than from dimming
+      the image — an overlay dark enough to guarantee contrast would kill
+      the photo it is there to show.
+    */
+    case "photo":
+      return (
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          {slide.overline ? <Kicker text={slide.overline} dark={dark} /> : null}
+          <div
+            style={{
+              display: "flex",
+              position: "relative",
+              width: "100%",
+              height: 560,
+              borderRadius: RADIUS.lg,
+              overflow: "hidden",
+              border: `1px solid ${BRAND.borderDefault}`,
+            }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={slide.src} alt="" width={952} height={560} style={{ objectFit: "cover" }} />
+          </div>
+          <div
+            style={{
+              display: "flex",
+              marginTop: 32,
+              fontFamily: FONT.display,
+              fontSize: 46,
+              lineHeight: 1.25,
+              letterSpacing: -1.5,
+              color: ink,
+            }}
+          >
+            {slide.caption}
+          </div>
+          {slide.credit ? (
+            <div
+              style={{
+                display: "flex",
+                marginTop: 18,
+                fontFamily: FONT.data,
+                fontSize: 16,
+                letterSpacing: 2,
+                color: muted,
+              }}
+            >
+              {slide.credit.toUpperCase()}
+            </div>
+          ) : null}
+        </div>
+      );
+
     case "cta":
       return (
         <div style={{ display: "flex", flexDirection: "column" }}>

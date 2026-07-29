@@ -171,9 +171,15 @@ Worth knowing, because this posts to your real accounts:
 
 ## What is not built yet
 
-- **The daily writer.** Platters are written by hand today. The routine that
-  drafts them from the morning's news is designed but not wired to the
-  database.
+- **The daily writer.** Platters are written by hand today. A Claude cloud
+  routine ("NotAVC Daily Platter", 6:04 AM IST) already drafts them from that
+  morning's India startup/VC news into the Google Drive folder "NotAVC
+  Content HQ" — but it writes to Drive, not to the database, so its output
+  doesn't yet flow into this pipeline. Wiring that up is the next build.
+  Manage or pause it at <https://claude.ai/code/routines>.
+
+  There is no 24-hour pressure: if a day slips, the platter rolls forward.
+  Episode numbers are sequential, not date-locked.
 - **Newsletter sending.** Signups are captured; the confirmation email and
   the send pipeline need an email provider (Resend — 3,000/month free, and
   not capped by contact count).

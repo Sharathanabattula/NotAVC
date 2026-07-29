@@ -1,6 +1,6 @@
 # NotAVC HQ
 
-Brand HQ for NotAVC: `site/` (Next.js), `brand/` (design system v3), `content-hq/` (daily platter system), `automation/` (LinkedIn + Instagram publishing).
+Brand HQ for NotAVC: `site/` (Next.js), `brand/` (logos + archived v3 system), `content-hq/` (platter system), `automation/` (LinkedIn + Instagram publishers). Start with HOW-IT-WORKS.md.
 
 ## Skill routing
 

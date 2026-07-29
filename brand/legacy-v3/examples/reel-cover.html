@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NotAVC Reel Cover Template</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Source+Sans+3:wght@300;400;500;600;700&family=Source+Code+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+.reel-frame {
+  width: 360px;
+  aspect-ratio: 9 / 16;
+  background: #0B0B0B;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  margin: 2rem auto;
+}
+
+.reel-topbar {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand-pill {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.10);
+  padding: 5px 12px;
+  border-radius: 20px;
+  backdrop-filter: blur(8px);
+  letter-spacing: 0.5px;
+}
+
+.episode-num {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 1px;
+}
+
+.avatar-placeholder {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.2);
+  font-size: 14px;
+  font-family: 'Source Sans 3', sans-serif;
+}
+
+.hook-text {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 20px;
+  color: #FFFFFF;
+  line-height: 1.2;
+  letter-spacing: -0.3px;
+  margin: 0 0 10px;
+}
+
+.hook-text .highlight {
+  color: #4ADE9F;
+}
+
+.sub-hook {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.45);
+  line-height: 1.4;
+}
+</style>
+</head>
+<body style="background: #f5f5f5; padding: 2rem;">
+
+<!-- REEL COVER: VC CONCEPT EXPLAINED -->
+<div class="reel-frame">
+  <div class="reel-topbar">
+    <div class="brand-pill">NotAVC</div>
+    <div class="episode-num">EP.007</div>
+  </div>
+  <div class="avatar-placeholder">Your face here</div>
+  <div>
+    <div class="hook-text">
+      What is a <span class="highlight">cap table</span> — and why do founders lose their own company?
+    </div>
+    <div class="sub-hook">
+      VC concepts explained in 60 seconds. No jargon. No BS.
+    </div>
+  </div>
+</div>
+
+<!-- REEL COVER: COMPANY TEARDOWN -->
+<div class="reel-frame" style="background: #1A1A2E;">
+  <div class="reel-topbar">
+    <div class="brand-pill">NotAVC · TEARDOWN</div>
+    <div class="episode-num">EP.014</div>
+  </div>
+  <div style="position: absolute; top: 30%; left: 24px; right: 24px; text-align: center;">
+    <div style="font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 42px; color: #4ADE9F; letter-spacing: -1.5px; line-height: 1;">$5.2B</div>
+    <div style="font-family: 'Source Sans 3', sans-serif; font-size: 12px; color: rgba(255,255,255,0.45); margin: 8px 0 0; letter-spacing: 1px;">ZEPTO'S LATEST VALUATION</div>
+  </div>
+  <div>
+    <div class="hook-text" style="font-size: 16px;">
+      The number that tells the real story isn't the valuation — it's the <span class="highlight">burn multiple</span>.
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

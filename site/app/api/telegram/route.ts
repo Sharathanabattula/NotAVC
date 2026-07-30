@@ -2,6 +2,8 @@ import { NextResponse, after } from "next/server";
 import { db } from "@/lib/supabase";
 import { answerCallback, notify } from "@/lib/telegram";
 import { processIdea } from "@/lib/intake";
+import { handleQuickPost } from "@/lib/publish-quick";
+import { QUICK_HELP } from "@/lib/quickpost";
 
 export const dynamic = "force-dynamic";
 // Drafting takes ~20s and runs in `after`, past the default 10s ceiling
@@ -69,16 +71,35 @@ export async function POST(request: Request) {
     }
 
     const text = update.message.text.trim();
-    if (text.startsWith("/")) {
-      await notify(
-        text === "/start"
-          ? "Send me a news link or an idea and I'll draft the platter."
-          : "Unknown command. Just send the idea as a message.",
-      );
+
+    if (text.startsWith("/") || /^help$/i.test(text)) {
+      await notify(QUICK_HELP);
       return NextResponse.json({ ok: true });
     }
+
+    const siteUrlForPost =
+      process.env.SITE_URL ??
+      (process.env.VERCEL_PROJECT_PRODUCTION_URL
+        ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+        : new URL(request.url).origin);
+
+    /*
+      A labelled message is a finished post and needs no model. Anything
+      else is a raw idea for the drafter, which costs money and may not be
+      configured — so the free path is checked first.
+    */
+    if (/^\s*HOOK\s*:/im.test(text)) {
+      await notify("🎨 Building the carousel…");
+      after(async () => {
+        await handleQuickPost(text, siteUrlForPost);
+      });
+      return NextResponse.json({ ok: true });
+    }
+
     if (text.length < 20) {
-      await notify("Give me a bit more — a link, or a sentence about the idea.");
+      await notify(
+        "Send <code>help</code> for the post format, or a longer idea to draft from.",
+      );
       return NextResponse.json({ ok: true });
     }
 

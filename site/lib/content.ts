@@ -93,10 +93,35 @@ export const FOUNDER = {
   pull: "If you've ever read a funding headline and thought \"am I stupid, or is this spin?\" — you're the reason this exists.",
 };
 
+/*
+  The research document behind one breakdown. This is the thing the site
+  actually promises — "every number here has a receipt" is only true if the
+  receipts are on a page somebody can open.
+
+  `workings` is the arithmetic, one row per figure, each with where it came
+  from. `notes` is the reasoning in prose. `sources` is every link used.
+*/
+export type Research = {
+  summary: string;
+  period: string;
+  workings: { k: string; v: string; note: string }[];
+  notes: { heading: string; body: string }[];
+  sources: { title: string; url: string }[];
+};
+
 export type Teardown = {
   /* Keys the archive and the React list. Deliberately never rendered. */
   ep: string;
+  /* URL segment for the breakdown's own page */
+  slug: string;
   company: string;
+  /*
+    Finds the matching platter in Supabase so the page can show the carousel
+    that was actually published. Absent for breakdowns that predate the
+    platter system — those pages simply render without a slide preview.
+  */
+  platterMatch?: string;
+  research?: Research;
   /* Sits where the episode number used to — tells the reader what they're
      looking at rather than how many came before it. */
   sector: string;
@@ -121,6 +146,8 @@ export const TEARDOWNS: Teardown[] = [
   */
   {
     ep: "EP.005",
+    slug: "sids-farm",
+    platterMatch: "%Sid's Farm%",
     company: "SID'S FARM",
     sector: "DAIRY · HYDERABAD",
     verdict: "LIVE BET",
@@ -138,9 +165,93 @@ export const TEARDOWNS: Teardown[] = [
       { k: "MILK COST", v: "75% of sales" },
       { k: "LOSS", v: "₹27 Cr" },
     ],
+    research: {
+      period: "FY25 accounts, filed with the Registrar of Companies",
+      summary:
+        "Sid's Farm raised ₹81 Cr this month. Its sales grew 38% last year, which sounds like the raise is working. But its costs grew 47% over the same period, which means it got less efficient while it got bigger. This page shows every figure I used, where each one came from, and the one number I couldn't find.",
+      workings: [
+        {
+          k: "SALES",
+          v: "₹168 Cr",
+          note: "Up 38% from ₹122 Cr the year before.",
+        },
+        {
+          k: "COSTS",
+          v: "₹196 Cr",
+          note: "Up 47% from ₹133.5 Cr. Growing faster than sales — that gap is the whole story.",
+        },
+        {
+          k: "LOSS",
+          v: "₹27 Cr",
+          note: "Up from ₹10.5 Cr. Roughly two and a half times bigger.",
+        },
+        {
+          k: "COST TO EARN ₹1",
+          v: "₹1.17",
+          note: "₹196 Cr of costs ÷ ₹168 Cr of sales. Last year the same sum gave ₹1.09.",
+        },
+        {
+          k: "MILK FROM FARMERS",
+          v: "₹126 Cr",
+          note: "₹126 Cr ÷ ₹168 Cr = 75% of sales. Leaves 25 paise in the rupee for everything else.",
+        },
+        {
+          k: "DELIVERY + COLD STORAGE",
+          v: "₹13 Cr",
+          note: "Distribution ₹8 Cr plus transport ₹5 Cr, or 7.7% of sales.",
+        },
+        {
+          k: "ADVERTISING",
+          v: "₹7 Cr",
+          note: "Up from ₹3.6 Cr. Nearly doubled, while sales grew 38%.",
+        },
+        {
+          k: "CASH IN THE BANK",
+          v: "₹1 Cr",
+          note: "As at March 2025, against ₹45 Cr of current assets.",
+        },
+      ],
+      notes: [
+        {
+          heading: "What ₹1.17 actually means",
+          body: "It cost the company ₹1.17 to bring in one rupee of sales. The year before, the same rupee cost ₹1.09. So the business got bigger and less efficient at the same time. That combination is the one worth watching, because scale makes it worse rather than better — every extra rupee of sales brings a slightly larger loss with it.",
+        },
+        {
+          heading: "Why 25 paise is the real constraint",
+          body: "Three quarters of every rupee that comes in goes straight back out to buy milk from farmers, before anything is delivered to anybody. That leaves 25 paise to cover delivery, cold storage, salaries, advertising and everything else. It is a hard ceiling: no amount of growth lifts it, because buying more milk costs proportionally more. The only ways up are paying farmers less, charging customers more, or selling things with more margin in them than plain milk.",
+        },
+        {
+          heading: "The part that is genuinely good",
+          body: "Delivery and cold storage together come to 7.7% of sales. For a business that puts fresh milk at your door every morning, that is better than the 8–15% range you would normally expect from home delivery. Whatever else is going on, the logistics are being run well — and that is the part most people assume is the problem.",
+        },
+        {
+          heading: "The number I could not find",
+          body: "A subscription business can be funded by its own customers. If people pay for the month upfront and the farmers get paid on a later cycle, the company is holding other people's money the whole time — the same arrangement that makes Zomato and Swiggy work, and it would make a loss on paper mean something very different. The accounts show ₹1 Cr of cash against ₹45 Cr of current assets, but they don't say who pays first. That is the first thing I would ask.",
+        },
+        {
+          heading: "What I am not saying",
+          body: "This is not a claim that the business is failing, and it is not advice about anything. It is one year of numbers read carefully. A single year cannot separate a company investing deliberately ahead of growth from one losing control of its costs — that takes three, and there are only two here.",
+        },
+      ],
+      sources: [
+        {
+          title: "Sid's Farm FY25 accounts — Entrackr",
+          url: "https://entrackr.com/fintrackr/sids-farm-posts-rs-168-cr-revenue-in-fy25-losses-surge-26x-10983599",
+        },
+        {
+          title: "Sid's Farm raises ₹81 Cr pre-Series B — YourStory",
+          url: "https://yourstory.com/2026/07/sids-farm-raises-over-rs-81-cr-pre-series-b-round",
+        },
+        {
+          title: "Sid's Farm — product range and pack imagery",
+          url: "https://sidsfarm.com/collections/all",
+        },
+      ],
+    },
   },
   {
     ep: "EP.001",
+    slug: "byjus",
     company: "BYJU'S",
     sector: "EDTECH",
     verdict: "POST-MORTEM",
@@ -161,6 +272,7 @@ export const TEARDOWNS: Teardown[] = [
   },
   {
     ep: "EP.002",
+    slug: "paytm",
     company: "PAYTM",
     sector: "FINTECH",
     verdict: "REPRICED",
@@ -181,6 +293,7 @@ export const TEARDOWNS: Teardown[] = [
   },
   {
     ep: "EP.003",
+    slug: "quibi",
     company: "QUIBI",
     sector: "STREAMING",
     verdict: "POST-MORTEM",
@@ -201,6 +314,7 @@ export const TEARDOWNS: Teardown[] = [
   },
   {
     ep: "EP.004",
+    slug: "zepto",
     company: "ZEPTO",
     sector: "QUICK COMMERCE",
     verdict: "LIVE BET",

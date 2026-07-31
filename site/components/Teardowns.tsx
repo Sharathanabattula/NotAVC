@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRef, useState } from "react";
 import {
   LazyMotion,
@@ -105,6 +106,19 @@ function TeardownCard({ teardown, delay }: { teardown: Teardown; delay: number }
           </span>
         ))}
       </div>
+
+      {/*
+        Stretched link: the whole card is the hit area, but the accessible
+        name stays on one real anchor rather than wrapping the article and
+        swallowing its content into the link text.
+      */}
+      <Link
+        href={`/breakdowns/${teardown.slug}`}
+        className="voice-data zone mt-6 inline-flex items-center gap-2 text-[11px] tracking-[0.2em] text-accent before:absolute before:inset-0 before:content-['']"
+      >
+        READ THE WORKING
+        <span aria-hidden>→</span>
+      </Link>
     </m.article>
   );
 }
@@ -144,8 +158,9 @@ export default function Teardowns() {
               </h2>
             </div>
             <p className="voice-data zone max-w-xs text-xs leading-loose text-muted">
-              FOUR COMPANIES. FOUR HEADLINES EVERYONE BELIEVED. FOUR NUMBERS
-              THAT SAID OTHERWISE.
+              {TEARDOWNS.length} COMPANIES. {TEARDOWNS.length} HEADLINES
+              EVERYONE BELIEVED. {TEARDOWNS.length} NUMBERS THAT SAID
+              OTHERWISE. OPEN ANY ONE FOR THE FULL WORKING.
             </p>
           </div>
 
@@ -168,7 +183,7 @@ export default function Teardowns() {
           </div>
 
           <p className="voice-data zone mt-16 text-center text-xs tracking-[0.2em] text-muted">
-            FULL TEARDOWNS DROP ON THE FEED —{" "}
+            NEW BREAKDOWNS DROP ON THE FEED —{" "}
             <a href="#signal" className="zone text-accent underline-offset-4 hover:underline">
               FOLLOW THE SIGNAL ↓
             </a>

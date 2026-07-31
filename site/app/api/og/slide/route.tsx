@@ -298,8 +298,8 @@ function Body({ slide, dark }: { slide: Slide; dark: boolean }) {
             {slide.title}
           </div>
           {slide.sub ? (
-            <div style={{ display: "flex", marginTop: 36, fontSize: 34, color: muted }}>
-              {slide.sub}
+            <div style={{ display: "flex", flexWrap: "wrap", marginTop: 36, fontSize: 34, color: muted }}>
+              {money(slide.sub)}
             </div>
           ) : null}
         </div>
@@ -401,8 +401,8 @@ function Body({ slide, dark }: { slide: Slide; dark: boolean }) {
             <Underline colour={accent} width={620} />
           </div>
           {slide.note ? (
-            <div style={{ display: "flex", marginTop: 30, fontSize: 34, lineHeight: 1.45, color: ink, maxWidth: 820 }}>
-              {slide.note}
+            <div style={{ display: "flex", flexWrap: "wrap", marginTop: 30, fontSize: 34, lineHeight: 1.45, color: ink, maxWidth: 820 }}>
+              {money(slide.note)}
             </div>
           ) : null}
         </div>
@@ -481,8 +481,8 @@ function Body({ slide, dark }: { slide: Slide; dark: boolean }) {
               >
                 {(slide.rightLabel ?? "WHAT THE NUMBERS SAID").toUpperCase()}
               </div>
-              <div style={{ display: "flex", fontSize: 38, lineHeight: 1.4, color: ink }}>
-                {slide.right}
+              <div style={{ display: "flex", flexWrap: "wrap", fontSize: 38, lineHeight: 1.4, color: ink }}>
+                {money(slide.right)}
               </div>
             </Card>
           </div>
@@ -509,8 +509,8 @@ function Body({ slide, dark }: { slide: Slide; dark: boolean }) {
                 >
                   {item.k}
                 </div>
-                <div style={{ display: "flex", fontSize: 32, lineHeight: 1.35, color: ink }}>
-                  {item.v}
+                <div style={{ display: "flex", flexWrap: "wrap", fontSize: 32, lineHeight: 1.35, color: ink }}>
+                  {money(item.v)}
                 </div>
               </Card>
             ))}
@@ -832,13 +832,14 @@ function Body({ slide, dark }: { slide: Slide; dark: boolean }) {
                 key={i}
                 style={{
                   display: "flex",
+                  flexWrap: "wrap",
                   fontSize: 36,
                   lineHeight: 1.45,
                   color: ink,
                   marginTop: i ? 26 : 0,
                 }}
               >
-                {para}
+                {money(para)}
               </div>
             ))}
           </div>
@@ -865,23 +866,32 @@ function Body({ slide, dark }: { slide: Slide; dark: boolean }) {
 
 /*
   Outfit ships no ₹ glyph — not even in the full variable build — so Satori
-  falls back to Jakarta for any word containing one. That reads fine (the
-  figure ends up emphasised, which suits it) but the plain space that follows
-  the amount sits on the font-run boundary and gets trimmed away, printing
-  "₹126Cr". A non-breaking space survives the split, and it is the correct
-  character here anyway: an amount should never wrap away from its unit.
+  falls back to Jakarta for any body-copy word containing one, and it measures
+  the space either side of that font run unreliably: the same paragraph came
+  back with "₹126 Cr.That" in one place and a double gap in another.
+
+  So the amount is emitted as its own span with explicit margins rather than
+  depending on whitespace at a run boundary. The fallback itself is left
+  alone — Jakarta on a figure reads as deliberate emphasis, which suits it.
+
+  Only body copy needs this. Headlines, photo captions and the strike lines
+  are already set in Jakarta and the rails in Space Mono; both carry ₹, so
+  there is no run to break.
 */
-function bindRupees<T>(value: T): T {
-  if (typeof value === "string") {
-    return value.replace(/(₹[\d.,]+)[ \t]+(?=\S)/g, "$1\u00A0") as unknown as T;
-  }
-  if (Array.isArray(value)) return value.map(bindRupees) as unknown as T;
-  if (value && typeof value === "object") {
-    return Object.fromEntries(
-      Object.entries(value).map(([k, v]) => [k, bindRupees(v)]),
-    ) as T;
-  }
-  return value;
+const MONEY = /(₹[\d.,]+)/g;
+
+function money(text: string): React.ReactNode {
+  if (!text.includes("₹")) return text;
+  return text.split(MONEY).map((part, i) =>
+    i % 2 ? (
+      <span key={i} style={{ fontFamily: FONT.display, marginLeft: 4, marginRight: 10 }}>
+        {part}
+      </span>
+    ) : (
+      /* Trim the spaces the margins now stand in for, or they double up. */
+      <span key={i}>{part.replace(/(^ +| +$)/g, "")}</span>
+    ),
+  );
 }
 
 async function deckFromPost(postId: string): Promise<Deck | null> {
@@ -914,7 +924,7 @@ export async function GET(request: Request) {
     : deckBySlug(url.searchParams.get("deck") ?? "");
   if (!deck) return new Response("Unknown deck", { status: 404 });
 
-  const slide = bindRupees(deck.slides[index]);
+  const slide = deck.slides[index];
   if (!slide) {
     return new Response(`Slide ${index} out of range (deck has ${deck.slides.length})`, {
       status: 404,

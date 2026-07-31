@@ -39,7 +39,22 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
   if (!due?.length) {
-    return NextResponse.json({ published: 0, message: "nothing due" });
+    /*
+      Nothing to do, so report whether this deployment could publish if
+      something were due. Without this, a credential missing in production
+      only surfaces as a failed attempt at the scheduled minute.
+
+      Booleans only — never the values, and never their length. This runs
+      behind the same CRON_SECRET as the rest of the route.
+    */
+    return NextResponse.json({
+      published: 0,
+      message: "nothing due",
+      ready: {
+        instagram: Boolean(process.env.IG_TOKEN && process.env.IG_USER_ID),
+        linkedin: Boolean(process.env.LI_TOKEN && process.env.LI_PERSON_ID),
+      },
+    });
   }
 
   const results: Array<{ id: string; ok: boolean; detail: string }> = [];

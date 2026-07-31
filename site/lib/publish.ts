@@ -29,11 +29,16 @@ function linkedInVersion(): string {
   a PDF document post, so the slides have to be stitched into one PDF and
   uploaded before the post can reference it.
 
-  Pages are sized to the image rather than to A4: LinkedIn renders each page
-  edge to edge, so a 1080x1350 page keeps the artwork full-bleed instead of
+  Pages match the image's aspect so the artwork stays full-bleed rather than
   sitting on white margins.
+
+  The page is drawn at half the pixel dimensions on purpose. PDF pages are
+  measured in points at 72 per inch, so a 1080x1350 page holding a 1080x1350
+  image is exactly 72 DPI and looks soft everywhere except a phone. Halving
+  the page while embedding the image at full resolution makes it 144 DPI —
+  same file, same bytes, twice the effective density.
 */
-async function slidesToPdf(urls: string[]): Promise<Uint8Array> {
+export async function slidesToPdf(urls: string[]): Promise<Uint8Array> {
   const { PDFDocument } = await import("pdf-lib");
   const pdf = await PDFDocument.create();
 
@@ -41,8 +46,10 @@ async function slidesToPdf(urls: string[]): Promise<Uint8Array> {
     const res = await fetch(url);
     if (!res.ok) throw new Error(`Slide fetch ${res.status} for ${url}`);
     const png = await pdf.embedPng(new Uint8Array(await res.arrayBuffer()));
-    const page = pdf.addPage([png.width, png.height]);
-    page.drawImage(png, { x: 0, y: 0, width: png.width, height: png.height });
+    const w = png.width / 2;
+    const h = png.height / 2;
+    const page = pdf.addPage([w, h]);
+    page.drawImage(png, { x: 0, y: 0, width: w, height: h });
   }
 
   return pdf.save();

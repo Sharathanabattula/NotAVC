@@ -307,7 +307,14 @@ function Kicker({ text, dark }: { text: string; dark: boolean }) {
   );
 }
 
-function Body({ slide, dark }: { slide: Slide; dark: boolean }) {
+/*
+   exists for the 9:16 story frame. Type sized for the 4:5 feed reads
+  as lost in space at story height, and a story is glanced at rather than
+  read — the number has to dominate. Only the kinds actually used for
+  stories apply it; the rest are unaffected at scale 1.
+*/
+function Body({ slide, dark, scale = 1 }: { slide: Slide; dark: boolean; scale?: number }) {
+  const S = (n: number) => Math.round(n * scale);
   const ink = dark ? "#FFFFFF" : BRAND.ink;
   const muted = dark ? BRAND.white45 : BRAND.muted;
   const accent = dark ? BRAND.accentOnDark : BRAND.signal;
@@ -434,13 +441,13 @@ function Body({ slide, dark }: { slide: Slide; dark: boolean }) {
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
             <Kicker text={slide.label} dark={dark} />
-            <Icon size={150} accent={accent} ink={dark ? "#FFFFFF" : BRAND.ink} />
+            <Icon size={S(150)} accent={accent} ink={dark ? "#FFFFFF" : BRAND.ink} />
           </div>
           <div
             style={{
               display: "flex",
               fontFamily: FONT.display,
-              fontSize: 78,
+              fontSize: S(78),
               lineHeight: 1.1,
               letterSpacing: -2.5,
               color: accent,
@@ -453,7 +460,7 @@ function Body({ slide, dark }: { slide: Slide; dark: boolean }) {
             <Underline colour={accent} width={620} />
           </div>
           {slide.note ? (
-            <div style={{ display: "flex", marginTop: 30, fontSize: 34, lineHeight: 1.45, color: ink, maxWidth: 820 }}>
+            <div style={{ display: "flex", marginTop: 30, fontSize: S(34), lineHeight: 1.45, color: ink, maxWidth: 820 }}>
               {money(slide.note)}
             </div>
           ) : null}
@@ -959,7 +966,7 @@ function Body({ slide, dark }: { slide: Slide; dark: boolean }) {
             style={{
               display: "flex",
               fontFamily: FONT.display,
-              fontSize: 118,
+              fontSize: S(118),
               letterSpacing: -4,
               lineHeight: 1,
               color: ink,
@@ -978,7 +985,7 @@ function Body({ slide, dark }: { slide: Slide; dark: boolean }) {
                 key={i}
                 style={{
                   display: "flex",
-                  fontSize: 36,
+                  fontSize: S(36),
                   lineHeight: 1.45,
                   color: ink,
                   marginTop: i ? 26 : 0,
@@ -993,7 +1000,7 @@ function Body({ slide, dark }: { slide: Slide; dark: boolean }) {
               style={{
                 display: "flex",
                 fontFamily: FONT.data,
-                fontSize: 26,
+                fontSize: S(26),
                 letterSpacing: 3,
                 padding: "16px 30px",
                 borderRadius: RADIUS.pill,
@@ -1081,7 +1088,7 @@ export async function GET(request: Request) {
         dark={dark}
         size={SIZES[size]}
       >
-        <Body slide={slide} dark={dark} />
+        <Body slide={slide} dark={dark} scale={size === "story" ? 1.45 : 1} />
       </Frame>
     ),
     { ...SIZES[size], fonts: await fonts() },

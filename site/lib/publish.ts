@@ -10,6 +10,18 @@ const GRAPH = "https://graph.facebook.com/v23.0";
 
 export type PublishResult = { externalId: string; url: string | null };
 
+
+/*
+  Two months back, in LinkedIn's YYYYMM format. Not the current month: their
+  versions are announced ahead of being servable, and asking for one that
+  hasn't gone live fails exactly like asking for one that has expired.
+*/
+function linkedInVersion(): string {
+  const d = new Date();
+  d.setUTCMonth(d.getUTCMonth() - 2);
+  return `${d.getUTCFullYear()}${String(d.getUTCMonth() + 1).padStart(2, "0")}`;
+}
+
 /* ── LinkedIn ─────────────────────────────────────────────── */
 
 export async function publishToLinkedIn(post: Post): Promise<PublishResult> {
@@ -36,8 +48,14 @@ export async function publishToLinkedIn(post: Post): Promise<PublishResult> {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
       "X-Restli-Protocol-Version": "2.0.0",
-      // LinkedIn versions by month and rejects anything unversioned
-      "LinkedIn-Version": "202506",
+      /*
+        LinkedIn versions by month (YYYYMM) and retires anything older than
+        about a year, so a hardcoded value silently rots — 202506 started
+        returning NONEXISTENT_VERSION once it aged out. Defaults to the
+        month before last, which is always released and always inside the
+        window, and can be pinned via env without touching the code.
+      */
+      "LinkedIn-Version": process.env.LI_VERSION || linkedInVersion(),
     },
     body: JSON.stringify(body),
   });

@@ -673,15 +673,21 @@ function Body({ slide, dark }: { slide: Slide; dark: boolean }) {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                width: 150,
-                height: 150,
+                /*
+                  Wide, not square. Most company marks are horizontal
+                  wordmarks, and a square plate contains them down to a
+                  fraction of the plate's height — the logo ends up the
+                  smallest thing on a slide that exists to show it.
+                */
+                width: 300,
+                height: 160,
                 borderRadius: RADIUS.lg,
                 background: BRAND.paper,
                 border: `1px solid ${BRAND.borderDefault}`,
               }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={slide.src} alt="" width={110} height={110} style={{ objectFit: "contain" }} />
+              <img src={slide.src} alt="" width={244} height={120} style={{ objectFit: "contain" }} />
             </div>
             <div style={{ display: "flex", flexDirection: "column" }}>
               <div
@@ -815,8 +821,26 @@ function Body({ slide, dark }: { slide: Slide; dark: boolean }) {
           >
             {slide.heading}
           </div>
-          <div style={{ display: "flex", marginTop: 36, fontSize: 34, lineHeight: 1.45, color: muted, maxWidth: 760 }}>
-            {slide.sub}
+          {/*
+            Ink, not muted. This is the closing argument — the one slide a
+            reader is most likely to screenshot — and grey-on-canvas was
+            making the most important paragraph in the deck the faintest.
+          */}
+          <div style={{ display: "flex", flexDirection: "column", marginTop: 36, maxWidth: 880 }}>
+            {slide.sub.split("\n\n").map((para, i) => (
+              <div
+                key={i}
+                style={{
+                  display: "flex",
+                  fontSize: 36,
+                  lineHeight: 1.45,
+                  color: ink,
+                  marginTop: i ? 26 : 0,
+                }}
+              >
+                {para}
+              </div>
+            ))}
           </div>
           <div style={{ display: "flex", marginTop: 44 }}>
             <div
@@ -837,6 +861,27 @@ function Body({ slide, dark }: { slide: Slide; dark: boolean }) {
         </div>
       );
   }
+}
+
+/*
+  Outfit ships no ₹ glyph — not even in the full variable build — so Satori
+  falls back to Jakarta for any word containing one. That reads fine (the
+  figure ends up emphasised, which suits it) but the plain space that follows
+  the amount sits on the font-run boundary and gets trimmed away, printing
+  "₹126Cr". A non-breaking space survives the split, and it is the correct
+  character here anyway: an amount should never wrap away from its unit.
+*/
+function bindRupees<T>(value: T): T {
+  if (typeof value === "string") {
+    return value.replace(/(₹[\d.,]+)[ \t]+(?=\S)/g, "$1\u00A0") as unknown as T;
+  }
+  if (Array.isArray(value)) return value.map(bindRupees) as unknown as T;
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value).map(([k, v]) => [k, bindRupees(v)]),
+    ) as T;
+  }
+  return value;
 }
 
 async function deckFromPost(postId: string): Promise<Deck | null> {
@@ -869,7 +914,7 @@ export async function GET(request: Request) {
     : deckBySlug(url.searchParams.get("deck") ?? "");
   if (!deck) return new Response("Unknown deck", { status: 404 });
 
-  const slide = deck.slides[index];
+  const slide = bindRupees(deck.slides[index]);
   if (!slide) {
     return new Response(`Slide ${index} out of range (deck has ${deck.slides.length})`, {
       status: 404,

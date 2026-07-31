@@ -1,0 +1,27 @@
+name: Morning shortlist
+
+# 02:30 UTC is 08:00 IST. GitHub delays scheduled runs under load — often by
+# an hour or more — which is fine for a digest but is why the publisher
+# cannot rely on this mechanism for timing.
+on:
+  schedule:
+    - cron: "30 2 * * *"
+  workflow_dispatch:
+
+jobs:
+  scout:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Collect today's topics and send the digest
+        run: |
+          code=$(curl -s -o /tmp/out.json -w '%{http_code}' \
+            -H "authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            "${{ secrets.SITE_URL }}/api/cron/scout")
+          cat /tmp/out.json
+          echo
+          # A non-2xx here means the digest silently didn't send, which is
+          # exactly the failure that goes unnoticed for a week.
+          if [ "$code" -lt 200 ] || [ "$code" -ge 300 ]; then
+            echo "scout endpoint returned $code"
+            exit 1
+          fi

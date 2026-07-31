@@ -77,6 +77,76 @@ export async function POST(request: Request) {
       return NextResponse.json({ ok: true });
     }
 
+    /*
+      Picking from the morning digest. Numbers refer to that message's
+      ordering, which is the newest unpicked topics — so the same list is
+      reconstructed here rather than storing positions, and a stale reply
+      to yesterday's digest simply picks from today's list instead of
+      silently choosing the wrong story.
+    */
+    const pick = text.match(/^\s*pick\s+(\d{1,2})\s*$/i);
+    if (pick) {
+      const n = Number(pick[1]);
+      const supabase = db();
+      const { data: rows } = await supabase
+        .from("topics")
+        .select("id, channel, title, url")
+        .is("picked_at", null)
+        .is("built_at", null)
+        .order("found_at", { ascending: false })
+        .limit(12);
+
+      const chosen = rows?.[n - 1];
+      if (!chosen) {
+        await notify(
+          `No number ${n} on the current shortlist. Send <code>topics</code> to see it again.`,
+        );
+        return NextResponse.json({ ok: true });
+      }
+
+      await supabase
+        .from("topics")
+        .update({ picked_at: new Date().toISOString() })
+        .eq("id", chosen.id);
+
+      await notify(
+        `✅ Picked <b>${chosen.title}</b>\n<i>${chosen.channel}</i>\n\n` +
+          `I'll research it and send back the deck and the PDF.`,
+      );
+      return NextResponse.json({ ok: true });
+    }
+
+    /* Re-send the shortlist without waiting for tomorrow's digest. */
+    if (/^\s*topics\s*$/i.test(text)) {
+      const supabase = db();
+      const { data: rows } = await supabase
+        .from("topics")
+        .select("channel, title, url, source")
+        .is("picked_at", null)
+        .is("built_at", null)
+        .order("found_at", { ascending: false })
+        .limit(12);
+
+      if (!rows?.length) {
+        await notify("Nothing on the shortlist right now.");
+        return NextResponse.json({ ok: true });
+      }
+
+      const esc = (s: string) =>
+        s.replace(/[<>&]/g, (c) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;" })[c]!);
+      await notify(
+        `<b>Shortlist</b>\n\n` +
+          rows
+            .map(
+              (r, i) =>
+                `<b>${i + 1}.</b> ${r.source === "youtube" ? "▶" : "■"} <i>${esc(r.channel)}</i>\n<a href="${r.url}">${esc(r.title)}</a>`,
+            )
+            .join("\n\n") +
+          `\n\n<i>Reply</i> <code>pick 3</code>`,
+      );
+      return NextResponse.json({ ok: true });
+    }
+
     const siteUrlForPost =
       process.env.SITE_URL ??
       (process.env.VERCEL_PROJECT_PRODUCTION_URL

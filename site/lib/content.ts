@@ -80,9 +80,9 @@ export const FOUNDER = {
   kicker: "Who's writing this",
   heading: "I'm a student. I'm learning this properly, out loud.",
   paragraphs: [
-    "MBA at SR University — finance and derivatives — and part of the Bower School of Entrepreneurship's VC/PE programme. Deal simulations, negotiations, Indian case studies. We took the Zomato and Paytm listings apart line by line.",
-    "The first real investment contract I read wasn't about the money at all. It was about who gets to say no. Twelve clauses of control, and the big valuation number everyone quotes barely mattered next to them. That's the sort of thing nobody tells you until you're already in the room.",
-    "I'm not an investor or an advisor, and I'm not going to pretend to be either. What I can do is take a company apart properly, explain it in words that don't need a finance degree, and leave every source on the page so you can check me — and tell me when I'm wrong.",
+    "MBA at SR University — finance and derivatives — and part of the Bower School of Entrepreneurship's VC/PE programme. That's where I'm picking this up: sessions, case studies, and a lot more reading than I expected to enjoy.",
+    "What keeps pulling me in is how different the same company looks depending on where you're standing. The announcement picks one angle. The numbers underneath pick another. Usually nobody is lying — they're just describing different things, and only one of them tells you whether the business actually works.",
+    "I'm not an investor or an advisor, and I'm not going to pretend to be either. I'm outside all of it, looking at the same companies from a different angle. What I can do is take one apart properly, say what I find in words that don't need a finance degree, and leave every source on the page so you can check me — and tell me when I'm wrong.",
   ],
   credentials: [
     { k: "PROGRAMME", v: "Bower School — LEAD VC/PE" },
@@ -260,15 +260,15 @@ export const METHOD = {
 export const FIELD_NOTES = [
   {
     date: "JUL 21, 2026",
-    note: "A liquidation preference isn't a term. It's the entire deal wearing a disguise.",
+    note: "\"Who gets paid first when the company sells\" isn't a detail. It's most of the deal, wearing a disguise.",
   },
   {
     date: "JUL 17, 2026",
-    note: "Asked a founder what their burn multiple was. The pause answered before they did.",
+    note: "A company can be growing and getting weaker at the same time. That combination is the one worth watching.",
   },
   {
     date: "JUL 12, 2026",
-    note: "IRR flatters early exits. MOIC flatters patience. A fund quoting only one is telling you which flatters them.",
+    note: "Two funds can describe the same deal and both come out looking good. One is measuring speed, the other size. Neither is lying.",
   },
 ];
 

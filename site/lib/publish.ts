@@ -24,10 +24,101 @@ function linkedInVersion(): string {
 
 /* ── LinkedIn ─────────────────────────────────────────────── */
 
+/*
+  LinkedIn has no carousel type. What everyone calls a LinkedIn carousel is
+  a PDF document post, so the slides have to be stitched into one PDF and
+  uploaded before the post can reference it.
+
+  Pages are sized to the image rather than to A4: LinkedIn renders each page
+  edge to edge, so a 1080x1350 page keeps the artwork full-bleed instead of
+  sitting on white margins.
+*/
+async function slidesToPdf(urls: string[]): Promise<Uint8Array> {
+  const { PDFDocument } = await import("pdf-lib");
+  const pdf = await PDFDocument.create();
+
+  for (const url of urls) {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`Slide fetch ${res.status} for ${url}`);
+    const png = await pdf.embedPng(new Uint8Array(await res.arrayBuffer()));
+    const page = pdf.addPage([png.width, png.height]);
+    page.drawImage(png, { x: 0, y: 0, width: png.width, height: png.height });
+  }
+
+  return pdf.save();
+}
+
+/*
+  Three steps, all required: register the upload, PUT the bytes to the URL
+  they hand back, then reference the returned document URN in the post.
+*/
+async function uploadDocument(
+  pdf: Uint8Array,
+  token: string,
+  person: string,
+  version: string,
+): Promise<string> {
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
+    "X-Restli-Protocol-Version": "2.0.0",
+    "LinkedIn-Version": version,
+  };
+
+  const init = await fetch(
+    "https://api.linkedin.com/rest/documents?action=initializeUpload",
+    {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        initializeUploadRequest: { owner: `urn:li:person:${person}` },
+      }),
+    },
+  );
+  if (!init.ok) {
+    throw new Error(`LinkedIn document init ${init.status}: ${await init.text()}`);
+  }
+
+  const { value } = (await init.json()) as {
+    value: { uploadUrl: string; document: string };
+  };
+
+  const put = await fetch(value.uploadUrl, {
+    method: "PUT",
+    headers: { Authorization: `Bearer ${token}` },
+    body: pdf as unknown as BodyInit,
+  });
+  if (!put.ok) {
+    throw new Error(`LinkedIn document upload ${put.status}: ${await put.text()}`);
+  }
+
+  return value.document;
+}
+
 export async function publishToLinkedIn(post: Post): Promise<PublishResult> {
   const token = process.env.LI_TOKEN;
   const person = process.env.LI_PERSON_ID;
   if (!token || !person) throw new Error("Missing LI_TOKEN or LI_PERSON_ID");
+
+  const version = process.env.LI_VERSION || linkedInVersion();
+
+  /*
+    Attach the deck when there is one. A text-only post of a breakdown
+    throws away the artwork that makes it worth reading, and LinkedIn's
+    document posts are what carry a carousel there.
+  */
+  let media: { id: string; title: string } | undefined;
+  if (post.media_urls?.length) {
+    const pdf = await slidesToPdf(post.media_urls);
+    const id = await uploadDocument(pdf, token, person, version);
+    /*
+      LinkedIn shows this above the document. The Post row doesn't carry the
+      platter title, and the first line of the caption is already written to
+      be the hook, so it makes a better label than anything generic.
+    */
+    const firstLine = post.caption.split("\n").find((l) => l.trim().length) ?? "";
+    media = { id, title: firstLine.slice(0, 90) || "NotAVC — the numbers" };
+  }
 
   const body = {
     author: `urn:li:person:${person}`,
@@ -38,6 +129,7 @@ export async function publishToLinkedIn(post: Post): Promise<PublishResult> {
       targetEntities: [],
       thirdPartyDistributionChannels: [],
     },
+    ...(media ? { content: { media } } : {}),
     lifecycleState: "PUBLISHED",
     isReshareDisabledByAuthor: false,
   };
@@ -55,7 +147,7 @@ export async function publishToLinkedIn(post: Post): Promise<PublishResult> {
         month before last, which is always released and always inside the
         window, and can be pinned via env without touching the code.
       */
-      "LinkedIn-Version": process.env.LI_VERSION || linkedInVersion(),
+      "LinkedIn-Version": version,
     },
     body: JSON.stringify(body),
   });
@@ -84,6 +176,34 @@ export async function publishToInstagram(post: Post): Promise<PublishResult> {
 
   const caption = composeCaption(post);
   let creationId: string;
+
+  /*
+    Stories are not a carousel. Each frame is its own media object, and the
+    API takes no caption for them — text has to be burned into the artwork,
+    which is why story frames render at 1080x1920 through the slide route
+    rather than being cropped from the feed deck.
+
+    Frames publish in order and the last id is returned, since a story has
+    no single canonical permalink.
+  */
+  if (post.format === "story") {
+    let lastId = "";
+    for (const url of post.media_urls) {
+      const id = await createContainer(userId, token, {
+        image_url: url,
+        media_type: "STORIES",
+      });
+      const res = await fetch(`${GRAPH}/${userId}/media_publish`, {
+        method: "POST",
+        body: new URLSearchParams({ creation_id: id, access_token: token }),
+      });
+      if (!res.ok) {
+        throw new Error(`Instagram story ${res.status}: ${await res.text()}`);
+      }
+      lastId = ((await res.json()) as { id: string }).id;
+    }
+    return { externalId: lastId, url: "https://www.instagram.com/stories/notavc.co/" };
+  }
 
   if (post.format === "carousel") {
     // Children first, then a CAROUSEL parent that references them

@@ -98,7 +98,7 @@ export default function Newsletter() {
               </p>
               <p>
                 <b>Rule</b>
-                One teardown per issue
+                One breakdown per issue
               </p>
             </div>
 

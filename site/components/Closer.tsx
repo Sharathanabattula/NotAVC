@@ -26,7 +26,7 @@ export default function Closer() {
           rel="noopener noreferrer"
           className="press voice-data zone bg-accent px-7 py-3.5 text-sm font-semibold text-bg transition-opacity hover:opacity-85"
         >
-          TEARDOWNS → LINKEDIN
+          BREAKDOWNS → LINKEDIN
         </a>
         <a
           href={SOCIAL.instagram}
@@ -40,7 +40,7 @@ export default function Closer() {
           href={SOCIAL.email}
           className="press voice-data zone rounded-full border border-rule px-7 py-3.5 text-sm text-ink transition-colors hover:border-accent hover:text-accent"
         >
-          PITCH ME A TEARDOWN
+          PITCH ME A COMPANY
         </a>
       </div>
 

@@ -298,7 +298,7 @@ function Body({ slide, dark }: { slide: Slide; dark: boolean }) {
             {slide.title}
           </div>
           {slide.sub ? (
-            <div style={{ display: "flex", flexWrap: "wrap", marginTop: 36, fontSize: 34, color: muted }}>
+            <div style={{ display: "flex", marginTop: 36, fontSize: 34, color: muted }}>
               {money(slide.sub)}
             </div>
           ) : null}
@@ -401,7 +401,7 @@ function Body({ slide, dark }: { slide: Slide; dark: boolean }) {
             <Underline colour={accent} width={620} />
           </div>
           {slide.note ? (
-            <div style={{ display: "flex", flexWrap: "wrap", marginTop: 30, fontSize: 34, lineHeight: 1.45, color: ink, maxWidth: 820 }}>
+            <div style={{ display: "flex", marginTop: 30, fontSize: 34, lineHeight: 1.45, color: ink, maxWidth: 820 }}>
               {money(slide.note)}
             </div>
           ) : null}
@@ -481,7 +481,7 @@ function Body({ slide, dark }: { slide: Slide; dark: boolean }) {
               >
                 {(slide.rightLabel ?? "WHAT THE NUMBERS SAID").toUpperCase()}
               </div>
-              <div style={{ display: "flex", flexWrap: "wrap", fontSize: 38, lineHeight: 1.4, color: ink }}>
+              <div style={{ display: "flex", fontSize: 38, lineHeight: 1.4, color: ink }}>
                 {money(slide.right)}
               </div>
             </Card>
@@ -509,7 +509,7 @@ function Body({ slide, dark }: { slide: Slide; dark: boolean }) {
                 >
                   {item.k}
                 </div>
-                <div style={{ display: "flex", flexWrap: "wrap", fontSize: 32, lineHeight: 1.35, color: ink }}>
+                <div style={{ display: "flex", fontSize: 32, lineHeight: 1.35, color: ink }}>
                   {money(item.v)}
                 </div>
               </Card>
@@ -832,7 +832,6 @@ function Body({ slide, dark }: { slide: Slide; dark: boolean }) {
                 key={i}
                 style={{
                   display: "flex",
-                  flexWrap: "wrap",
                   fontSize: 36,
                   lineHeight: 1.45,
                   color: ink,
@@ -865,33 +864,23 @@ function Body({ slide, dark }: { slide: Slide; dark: boolean }) {
 }
 
 /*
-  Outfit ships no ₹ glyph — not even in the full variable build — so Satori
-  falls back to Jakarta for any body-copy word containing one, and it measures
-  the space either side of that font run unreliably: the same paragraph came
-  back with "₹126 Cr.That" in one place and a double gap in another.
+  Outfit carries no ₹ glyph — not even in the full variable build — so any
+  body-copy word containing one splits into a Jakarta fallback run, and
+  Satori measures the space either side of that boundary unreliably: the
+  same paragraph came back with "₹126 Cr.That" in one place and a double gap
+  in another. Emitting the amount as its own span fixes the spacing but makes
+  it a flex item, which forces a line break after every figure.
 
-  So the amount is emitted as its own span with explicit margins rather than
-  depending on whitespace at a run boundary. The fallback itself is left
-  alone — Jakarta on a figure reads as deliberate emphasis, which suits it.
+  So body copy simply avoids the glyph. "Rs" is one uninterrupted Outfit run,
+  it is how the filings and the trade press write it anyway, and it is the
+  more readable of the two for anyone outside finance.
 
-  Only body copy needs this. Headlines, photo captions and the strike lines
-  are already set in Jakarta and the rails in Space Mono; both carry ₹, so
+  Headlines, photo captions and the strike lines keep ₹ — they are set in
+  Jakarta, and the rails in Space Mono. Both carry the glyph natively, so
   there is no run to break.
 */
-const MONEY = /(₹[\d.,]+)/g;
-
-function money(text: string): React.ReactNode {
-  if (!text.includes("₹")) return text;
-  return text.split(MONEY).map((part, i) =>
-    i % 2 ? (
-      <span key={i} style={{ fontFamily: FONT.display, marginLeft: 4, marginRight: 10 }}>
-        {part}
-      </span>
-    ) : (
-      /* Trim the spaces the margins now stand in for, or they double up. */
-      <span key={i}>{part.replace(/(^ +| +$)/g, "")}</span>
-    ),
-  );
+function money(text: string): string {
+  return text.replace(/₹ ?/g, "Rs ");
 }
 
 async function deckFromPost(postId: string): Promise<Deck | null> {

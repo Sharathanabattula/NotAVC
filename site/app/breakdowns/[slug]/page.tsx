@@ -6,6 +6,8 @@ import PaletteObserver from "@/components/PaletteObserver";
 import { TEARDOWNS, type Teardown } from "@/lib/content";
 import { db } from "@/lib/supabase";
 import SlideDeck from "@/components/SlideDeck";
+import { WorkingRow } from "@/components/WorkingRow";
+import { Morph } from "@/components/Morph";
 
 /*
   One breakdown, one page.
@@ -115,17 +117,22 @@ export default async function BreakdownPage({
             </span>
           </div>
 
-          <h1 className="voice-display zone mt-6 text-6xl text-ink sm:text-7xl">
-            {t.company}
-          </h1>
+          {/* Same names as the card, so the browser carries them across. */}
+          <Morph name={`co-${t.slug}`}>
+            <h1 className="voice-display zone mt-6 text-6xl text-ink sm:text-7xl">
+              {t.company}
+            </h1>
+          </Morph>
           <p className="zone mt-5 max-w-2xl text-xl font-light leading-relaxed text-muted">
             {t.hook}
           </p>
 
           <div className="zone mt-12 border-y border-rule py-10">
-            <p className="voice-data zone text-6xl font-bold tracking-tight text-accent sm:text-7xl">
-              {t.number}
-            </p>
+            <Morph name={`num-${t.slug}`}>
+              <p className="voice-data zone text-6xl font-bold tracking-tight text-accent sm:text-7xl">
+                {t.number}
+              </p>
+            </Morph>
             <p className="voice-kicker zone mt-4 text-muted">{t.numberLabel}</p>
           </div>
 
@@ -164,21 +171,8 @@ export default async function BreakdownPage({
                 </p>
 
                 <div className="zone mt-12 border-t border-rule">
-                  {r.workings.map((w) => (
-                    <div
-                      key={w.k}
-                      className="zone grid gap-2 border-b border-rule py-6 sm:grid-cols-[14rem_9rem_1fr] sm:gap-6"
-                    >
-                      <span className="voice-data zone text-[11px] tracking-[0.18em] text-muted">
-                        {w.k}
-                      </span>
-                      <span className="voice-data zone text-xl font-bold text-accent">
-                        {w.v}
-                      </span>
-                      <span className="zone font-light leading-relaxed text-muted">
-                        {w.note}
-                      </span>
-                    </div>
+                  {r.workings.map((w, i) => (
+                    <WorkingRow key={w.k} {...w} index={i} />
                   ))}
                 </div>
               </section>

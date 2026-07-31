@@ -104,7 +104,14 @@ export const FOUNDER = {
 export type Research = {
   summary: string;
   period: string;
-  workings: { k: string; v: string; note: string }[];
+  /*
+    `share` is the figure as a percentage of sales, and drives the bar that
+    fills as the row enters. Optional because not every figure is a slice of
+    revenue — a cash balance isn't, and drawing a bar for one would invent a
+    comparison that doesn't exist. Values above 100 are the point, not a bug:
+    total costs at 117% is the whole finding.
+  */
+  workings: { k: string; v: string; note: string; share?: number }[];
   notes: { heading: string; body: string }[];
   sources: { title: string; url: string }[];
 };
@@ -174,16 +181,19 @@ export const TEARDOWNS: Teardown[] = [
           k: "SALES",
           v: "₹168 Cr",
           note: "Up 38% from ₹122 Cr the year before.",
+          share: 100,
         },
         {
           k: "COSTS",
           v: "₹196 Cr",
           note: "Up 47% from ₹133.5 Cr. Growing faster than sales — that gap is the whole story.",
+          share: 117,
         },
         {
           k: "LOSS",
           v: "₹27 Cr",
           note: "Up from ₹10.5 Cr. Roughly two and a half times bigger.",
+          share: 16,
         },
         {
           k: "COST TO EARN ₹1",
@@ -194,16 +204,19 @@ export const TEARDOWNS: Teardown[] = [
           k: "MILK FROM FARMERS",
           v: "₹126 Cr",
           note: "₹126 Cr ÷ ₹168 Cr = 75% of sales. Leaves 25 paise in the rupee for everything else.",
+          share: 75,
         },
         {
           k: "DELIVERY + COLD STORAGE",
           v: "₹13 Cr",
           note: "Distribution ₹8 Cr plus transport ₹5 Cr, or 7.7% of sales.",
+          share: 7.7,
         },
         {
           k: "ADVERTISING",
           v: "₹7 Cr",
           note: "Up from ₹3.6 Cr. Nearly doubled, while sales grew 38%.",
+          share: 4.2,
         },
         {
           k: "CASH IN THE BANK",

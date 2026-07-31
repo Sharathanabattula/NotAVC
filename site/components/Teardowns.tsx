@@ -10,6 +10,7 @@ import {
   useTransform,
 } from "framer-motion";
 import { TEARDOWNS, type Teardown } from "@/lib/content";
+import { Morph } from "./Morph";
 
 const TONE: Record<Teardown["verdictTone"], string> = {
   coral: "text-coral border-coral/40",
@@ -75,12 +76,21 @@ function TeardownCard({ teardown, delay }: { teardown: Teardown; delay: number }
         </span>
       </div>
 
-      <h3 className="voice-heading zone text-3xl text-ink">{teardown.company}</h3>
+      {/*
+        Named so the browser can carry these two straight through to the
+        breakdown page instead of cutting to a new view. The name has to be
+        unique per document, hence the slug.
+      */}
+      <Morph name={`co-${teardown.slug}`}>
+        <h3 className="voice-heading zone text-3xl text-ink">{teardown.company}</h3>
+      </Morph>
       <p className="zone mt-2 font-light text-muted">{teardown.hook}</p>
 
-      <p className="voice-data zone mt-10 text-5xl font-bold tracking-tight text-accent sm:text-6xl">
-        {teardown.number}
-      </p>
+      <Morph name={`num-${teardown.slug}`}>
+        <p className="voice-data zone mt-10 text-5xl font-bold tracking-tight text-accent sm:text-6xl">
+          {teardown.number}
+        </p>
+      </Morph>
       <p className="voice-kicker zone mt-3 text-muted">{teardown.numberLabel}</p>
 
       {/* Correction layer */}

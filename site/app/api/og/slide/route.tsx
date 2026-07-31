@@ -232,6 +232,38 @@ function Frame({
   );
 }
 
+/*
+  Source credit. Deliberately small and set in the data face — it is a
+  citation, not a headline, and the whole point of printing it is that the
+  reader can check the claim rather than that they admire the typography.
+*/
+function SourceLine({ text, dark }: { text: string; dark: boolean }) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 10,
+        marginTop: 26,
+        fontFamily: FONT.data,
+        fontSize: 16,
+        letterSpacing: 2,
+        color: dark ? BRAND.white45 : BRAND.muted,
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          width: 22,
+          height: 2,
+          background: dark ? BRAND.accentOnDark : BRAND.signal,
+        }}
+      />
+      {text.toUpperCase()}
+    </div>
+  );
+}
+
 /* Card — hairline border, 12px radius, white surface. Never heavy strokes. */
 function Card({
   children,
@@ -298,10 +330,30 @@ function Body({ slide, dark }: { slide: Slide; dark: boolean }) {
             {slide.title}
           </div>
           {slide.sub ? (
-            <div style={{ display: "flex", marginTop: 36, fontSize: 34, color: muted }}>
+            <div style={{ display: "flex", marginTop: 30, fontSize: 34, color: muted }}>
               {money(slide.sub)}
             </div>
           ) : null}
+
+          {/* Image band. Sits under the type so the hook still reads first. */}
+          {slide.src ? (
+            <div
+              style={{
+                display: "flex",
+                marginTop: 40,
+                width: "100%",
+                height: 300,
+                borderRadius: RADIUS.lg,
+                overflow: "hidden",
+                border: `1px solid ${BRAND.borderDefault}`,
+              }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={slide.src} alt="" width={952} height={300} style={{ objectFit: "cover" }} />
+            </div>
+          ) : null}
+
+          {slide.source ? <SourceLine text={slide.source} dark={dark} /> : null}
         </div>
       );
 
@@ -515,6 +567,100 @@ function Body({ slide, dark }: { slide: Slide; dark: boolean }) {
               </Card>
             ))}
           </div>
+        </div>
+      );
+
+    /*
+      A week's deals. Each row is a white logo plate, the company, and the
+      amount — the plate matters because most marks are drawn for white and
+      several of these vanish on the canvas colour.
+    */
+    case "deals":
+      return (
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <Kicker text={slide.label} dark={dark} />
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            {slide.items.map((item) => (
+              <div
+                key={item.name}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 22,
+                  padding: "14px 20px",
+                  borderRadius: RADIUS.lg,
+                  background: dark ? BRAND.white10 : BRAND.paper,
+                  border: `1px solid ${BRAND.borderDefault}`,
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: 168,
+                    height: 74,
+                    flexShrink: 0,
+                    borderRadius: RADIUS.sm,
+                    background: BRAND.paper,
+                  }}
+                >
+                  {item.logo ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={item.logo}
+                      alt=""
+                      width={150}
+                      height={58}
+                      style={{ objectFit: "contain" }}
+                    />
+                  ) : (
+                    /* No usable mark — the initial keeps the row rhythm. */
+                    <div
+                      style={{
+                        display: "flex",
+                        fontFamily: FONT.display,
+                        fontSize: 42,
+                        color: BRAND.signal,
+                      }}
+                    >
+                      {item.name.slice(0, 1)}
+                    </div>
+                  )}
+                </div>
+
+                <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      fontFamily: FONT.display,
+                      fontSize: 30,
+                      letterSpacing: -0.5,
+                      color: BRAND.ink,
+                    }}
+                  >
+                    {item.name}
+                  </div>
+                  <div style={{ display: "flex", marginTop: 4, fontSize: 22, color: BRAND.muted }}>
+                    {money(item.note)}
+                  </div>
+                </div>
+
+                <div
+                  style={{
+                    display: "flex",
+                    fontFamily: FONT.display,
+                    fontSize: 36,
+                    letterSpacing: -1,
+                    color: accent,
+                  }}
+                >
+                  {item.amount}
+                </div>
+              </div>
+            ))}
+          </div>
+          {slide.source ? <SourceLine text={slide.source} dark={dark} /> : null}
         </div>
       );
 

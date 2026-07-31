@@ -13,7 +13,21 @@ import type { IconName } from "./icons";
 
 export type Slide =
   /* `ep` is optional and no longer rendered — kept for ordering only */
-  | { kind: "cover"; ep?: string; desk: string; title: string; sub?: string }
+  /*
+    `src` puts an image band under the title — the cover is the slide that
+    has to stop a scroll, and type alone was doing all the work. `source`
+    prints a small credit line, because a page that claims every number has
+    a receipt should name the receipt on the artwork too.
+  */
+  | {
+      kind: "cover";
+      ep?: string;
+      desk: string;
+      title: string;
+      sub?: string;
+      src?: string;
+      source?: string;
+    }
   | { kind: "statement"; label?: string; body: string; icon?: IconName }
   | {
       kind: "number";
@@ -39,6 +53,17 @@ export type Slide =
     }
   | { kind: "list"; label: string; items: { k: string; v: string }[]; icon?: IconName }
   | { kind: "cta"; heading: string; sub: string; handle: string }
+  /*
+    A week's deals, each on its own logo plate. `logo` is optional: not every
+    company publishes a mark that survives on a light background, and a
+    missing one falls back to the initial rather than blocking the slide.
+  */
+  | {
+      kind: "deals";
+      label: string;
+      items: { name: string; amount: string; note: string; logo?: string }[];
+      source?: string;
+    }
   /* Single-post kinds — these have to work with no slides either side */
   | {
       kind: "quote";

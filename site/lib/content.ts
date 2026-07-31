@@ -432,6 +432,108 @@ export const FIELD_NOTES = [
   },
 ];
 
+/*
+  Where one rupee goes.
+
+  The site's whole argument is that a business is easier to judge from what
+  it spends than from what it announces, and this is that argument as a
+  picture rather than a sentence. Figures are the Sid's Farm FY25 accounts,
+  the same ones on its breakdown page.
+
+  The segments total 117 against an income of 100 on purpose — the overflow
+  past the rupee mark is the finding, and a chart that normalised it to fit
+  would be showing something that didn't happen.
+*/
+export const RUPEE = {
+  kicker: "Where one rupee goes",
+  company: "Sid's Farm, FY25",
+  heading: "They spend ₹1.17 to earn ₹1.",
+  sub: "Every rupee this dairy takes in, and every paisa it pays out to earn it. The bar runs past the rupee mark because the spending does.",
+  segments: [
+    {
+      label: "Milk from farmers",
+      paise: 75,
+      note: "Gone before a single bottle is delivered",
+    },
+    {
+      label: "Delivery + cold storage",
+      paise: 8,
+      note: "Genuinely good for home delivery",
+    },
+    { label: "Advertising", paise: 4, note: "Nearly double last year" },
+    {
+      label: "Everything else",
+      paise: 30,
+      note: "Salaries, packaging, rent, the rest",
+    },
+  ],
+  /* What comes in, against which the bar is measured. */
+  income: 100,
+  shortfall: "17 paise short on every rupee of sales",
+  href: "/breakdowns/sids-farm",
+};
+
+/*
+  Plain English for the words that keep people out.
+
+  Sharath's position is that this stuff is understandable and the vocabulary
+  is most of what makes it feel otherwise. A glossary is the cheapest
+  possible proof of that: no jargon defined with more jargon, and every
+  entry ends in a consequence rather than a definition.
+*/
+export const GLOSSARY = [
+  {
+    term: "Gross margin",
+    plain:
+      "What's left after paying for the thing you sold. Milk sells for ₹50, the milk in it cost ₹37, so ₹13 is left — and delivery, salaries and ads all have to come out of that ₹13. It's a ceiling, not a target.",
+  },
+  {
+    term: "Unit economics",
+    plain:
+      "Whether one single sale makes money on its own. A company can grow enormously fast and lose a little more with every sale it makes. Growth hides this; it doesn't fix it.",
+  },
+  {
+    term: "Burn and runway",
+    plain:
+      "Burn is how much a company loses each month. Runway is how many months of that it can survive before the account hits zero. A company with 4 months of runway is having a very different year to one with 30.",
+  },
+  {
+    term: "Convertible debt",
+    plain:
+      "A loan that turns into shares later. It gets announced the same way a fresh investment does, but until it converts it is borrowed money that has to be paid back.",
+  },
+  {
+    term: "Down round",
+    plain:
+      "Raising money at a lower price than last time. Usually it means the earlier price was too high rather than that the business broke — 2021 priced a lot of things optimistically.",
+  },
+  {
+    term: "Liquidation preference",
+    plain:
+      "Who gets paid first when a company is sold. Investors typically get their money back before founders and staff see anything, which is how a ₹500 Cr sale can leave the person who built it with nothing.",
+  },
+  {
+    term: "Cash conversion cycle",
+    plain:
+      "Whether you get paid before or after you pay your suppliers. Collect first and you're running the business on your customers' money, which costs nothing. This is most of why Zomato and Swiggy work.",
+  },
+  {
+    term: "Take rate",
+    plain:
+      "The slice a platform keeps from each transaction it handles. Under 1% and you're a payment pipe rather than a platform — and the stock market will price you like a pipe no matter what the pitch deck says.",
+  },
+  {
+    term: "ESOP",
+    plain:
+      "Shares promised to staff instead of a bigger salary. Worth exactly nothing unless the company eventually sells for more than the investors are owed first.",
+  },
+  {
+    term: "EBITDA",
+    plain:
+      "Profit before counting interest, tax, and things wearing out. Useful for comparing two companies, but it is a chosen view of the numbers rather than the cash that actually moved.",
+  },
+];
+
 export const NEWSLETTER = {
   kicker: "The wire — sundays",
   heading: "One company, one number, every Sunday",

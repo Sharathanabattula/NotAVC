@@ -5,7 +5,9 @@ import Manifesto from "@/components/Manifesto";
 import Founder from "@/components/Founder";
 import Method from "@/components/Method";
 import Series from "@/components/Series";
+import RupeeSplit from "@/components/RupeeSplit";
 import Teardowns from "@/components/Teardowns";
+import Glossary from "@/components/Glossary";
 import Newsletter from "@/components/Newsletter";
 import Closer from "@/components/Closer";
 import PaletteObserver from "@/components/PaletteObserver";
@@ -47,12 +49,27 @@ export default function Home() {
             <Series />
           </section>
         </div>
+        {/*
+          The rupee split opens the plate zone. It is the argument the whole
+          site makes, drawn rather than stated, so it earns the elevation
+          change and sets up the cards that follow it.
+        */}
         <div data-zone="plate">
+          <section id="rupee">
+            <RupeeSplit />
+          </section>
           <section id="teardowns">
             <Teardowns />
           </section>
         </div>
         <div data-zone="deck">
+          {/*
+            Glossary after the breakdowns, not before: someone who has just
+            read "gross margin" in a card is the person who wants it defined.
+          */}
+          <section id="glossary">
+            <Glossary />
+          </section>
           <section id="wire">
             <Newsletter />
           </section>

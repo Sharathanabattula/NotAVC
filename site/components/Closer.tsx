@@ -50,7 +50,7 @@ export default function Closer() {
           <div>
             <Wordmark className="text-lg" />
             <p className="voice-kicker zone mt-1 text-[9px] text-muted">
-              I read the filings, not the press release
+              The numbers, not the headline
             </p>
           </div>
         </div>

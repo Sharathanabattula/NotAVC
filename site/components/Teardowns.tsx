@@ -132,7 +132,7 @@ export default function Teardowns() {
           <div className="mb-6 flex flex-wrap items-end justify-between gap-6">
             <div>
               <p className="voice-kicker zone mb-6 text-accent">
-                What the filings said
+                What the numbers said
               </p>
               <h2 className="voice-display zone text-6xl text-ink sm:text-7xl">
                 The receipts<span className="zone text-accent">.</span>

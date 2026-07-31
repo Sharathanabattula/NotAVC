@@ -3,6 +3,7 @@ import Hero from "@/components/Hero";
 import Ticker from "@/components/Ticker";
 import Manifesto from "@/components/Manifesto";
 import Founder from "@/components/Founder";
+import Method from "@/components/Method";
 import Series from "@/components/Series";
 import Teardowns from "@/components/Teardowns";
 import Newsletter from "@/components/Newsletter";
@@ -33,6 +34,14 @@ export default function Home() {
           </section>
           <section id="analyst">
             <Founder />
+          </section>
+          {/*
+            Method sits between who is writing and what gets published: it is
+            the answer to "why should I believe you", and it has to land
+            before the desks rather than after them.
+          */}
+          <section id="method">
+            <Method />
           </section>
           <section id="desks">
             <Series />

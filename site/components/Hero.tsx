@@ -85,7 +85,7 @@ export default function Hero() {
               <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
             </span>
             <Decode
-              text="EP.000 — I READ THE FILINGS, NOT THE PRESS RELEASE"
+              text="EP.000 — THE NUMBERS, NOT THE HEADLINE"
               className="voice-kicker text-accent"
               delay={280}
             />
@@ -134,9 +134,9 @@ export default function Hero() {
               className="flex flex-col justify-between gap-10 sm:flex-row sm:items-end"
             >
               <p className="max-w-md text-lg font-light leading-relaxed text-ink/80">
-                Startup headlines are written by PR firms. I&rsquo;m an MBA
-                student who reads the filings instead. When the math stops
-                matching the announcement, I show you both.
+                Startup headlines are written to land well. I&rsquo;m an MBA
+                student who goes and reads the actual numbers instead. When
+                the two stop matching, I show you both.
               </p>
 
               {/* HUD readout */}

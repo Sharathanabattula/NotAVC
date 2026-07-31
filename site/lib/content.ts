@@ -1,6 +1,18 @@
 /*
   All site copy lives here. Voice rules from DESIGN-SYSTEM.md apply:
   raw, first person, one number per claim, no banned words.
+
+  Plain language is a hard rule, not a preference. The reader is not assumed
+  to know what a filing, a term sheet or a take rate is — trade words either
+  get said in normal English or get explained the first time they appear.
+  "Filing" in particular is out: it is the single word that made the old copy
+  read like someone claiming insider access rather than a student working
+  something out.
+
+  The position is a student learning this properly in public. Not an
+  advisor, not an investor, and never implied to be either. What is claimed
+  instead is the work: take a company apart, say it in normal words, leave
+  every source on the page.
 */
 
 export const SOCIAL = {
@@ -9,31 +21,37 @@ export const SOCIAL = {
   email: "mailto:sharathanabattula@gmail.com",
 };
 
+/*
+  Questions, not vocabulary. The old ticker was twelve pieces of trade
+  jargon with nothing attached — impressive to people who already knew the
+  words and useless to everyone else. These are the questions the breakdowns
+  actually answer, which is the same signal without the gatekeeping.
+*/
 export const TICKER_TERMS = [
-  "CAP TABLES",
-  "LIQ PREFS",
-  "MOIC ≠ IRR",
-  "DRY POWDER",
-  "TERM SHEETS",
-  "PRO-RATA",
-  "DOWN ROUNDS",
-  "BURN MULTIPLE",
-  "ESOP POOLS",
-  "DPI OR IT DIDN'T HAPPEN",
-  "UNIT ECONOMICS",
-  "ANTI-DILUTION",
+  "WHO PAYS FIRST",
+  "WHAT IT COSTS TO EARN ₹1",
+  "WHERE THE MONEY WENT",
+  "BORROWED, OR RAISED",
+  "GROWING BUT LOSING MORE",
+  "WHO GETS PAID WHEN IT SELLS",
+  "THE NUMBER NOBODY PRINTED",
+  "WHO GETS TO SAY NO",
+  "PROFIT ON PAPER",
+  "STILL HIRING, STOPPED GROWING",
+  "PAID FOR, OR EARNED",
+  "THE BIT LEFT OUT",
 ];
 
 export const MANIFESTO = {
   kicker: "EP.000 — Why this exists",
-  heading: "The headline said ₹800Cr raised. The filing said convertible debt.",
+  heading: "The headline said ₹800 Cr raised. Most of it was old debt.",
   paragraphs: [
-    "I'm Sharath. MBA student, SR University, finance and derivatives. Nobody pays me to have an opinion about startups, which is most of the reason you should read this.",
-    "This started because a funding announcement made me feel stupid. Everyone was congratulating a company on a raise. I read it three times and still couldn't tell what had actually happened. So I found the filing. Most of the money was debt converting, not new capital. Not a lie. Just a story told the way the people telling it wanted it to land.",
-    "Now I check. Every teardown here is me pulling the actual numbers and writing down the exact point where the press release and the arithmetic stop agreeing. When I get it wrong — and I have — the wrong version stays on the page with a line through it.",
+    "I'm Sharath. MBA student at SR University, studying finance. Nobody pays me to have an opinion about startups, which is most of the reason you should read this.",
+    "This started because a funding announcement made me feel stupid. Everyone was congratulating a company on the money it had raised. I read it three times and still couldn't work out what had actually happened. So I went and found the company's own accounts — every company in India has to publish them, and almost nobody reads them. Most of that money wasn't new. It was money the company already owed, turning into shares. Nobody lied. The story was just told the way the people telling it wanted it to land.",
+    "So now I check, and I write down what I find in normal words. Every breakdown here is me working through the real numbers and marking the exact point where the announcement and the arithmetic stop agreeing. When I get it wrong — and I have — the wrong version stays on the page with a line through it.",
   ],
   pullQuote:
-    "You don't need a Sand Hill Road address to read a balance sheet. You need an afternoon and no reason to flatter anyone.",
+    "You don't need to work at a fund to read a set of accounts. You need an afternoon and no reason to flatter anyone.",
   /* Margin annotations — the notes in the left gutter */
   margin: [
     { label: "Filed", note: "EP.000" },
@@ -49,9 +67,9 @@ export const MANIFESTO = {
 };
 
 export const BOOT_LINES = [
-  "NOTAVC // READING THE FILINGS SO YOU DON'T HAVE TO",
-  "> press releases ignored .......... OK",
-  "> filings pulled [04] ............. OK",
+  "NOTAVC // THE NUMBERS, NOT THE HEADLINE",
+  "> announcements set aside ......... OK",
+  "> accounts read [04] .............. OK",
   "> corrections logged .............. OK",
   "> written by ....... SHARATH C. ANABATTULA",
   "> paid by .......... NOBODY",
@@ -60,11 +78,11 @@ export const BOOT_LINES = [
 
 export const FOUNDER = {
   kicker: "Who's writing this",
-  heading: "I read the filings that the headlines skip.",
+  heading: "I'm a student. I'm learning this properly, out loud.",
   paragraphs: [
-    "MBA at SR University — finance and derivatives — and part of the Bower School of Entrepreneurship's VC/PE programme. Deal simulations, term-sheet negotiations, Indian case studies. The Zomato and Paytm IPOs, taken apart line by line.",
-    "The first real term sheet I read wasn't about valuation at all. It was about who gets to say no. Twelve clauses of control, and the number everyone quotes — the valuation — barely mattered next to them. That's the kind of thing nobody tells you until you're in the room.",
-    "I'm not an investor and I'm not pretending to be. I'm the guy in the back of the class who looked up the filing while everyone else was reading the press release.",
+    "MBA at SR University — finance and derivatives — and part of the Bower School of Entrepreneurship's VC/PE programme. Deal simulations, negotiations, Indian case studies. We took the Zomato and Paytm listings apart line by line.",
+    "The first real investment contract I read wasn't about the money at all. It was about who gets to say no. Twelve clauses of control, and the big valuation number everyone quotes barely mattered next to them. That's the sort of thing nobody tells you until you're already in the room.",
+    "I'm not an investor or an advisor, and I'm not going to pretend to be either. What I can do is take a company apart properly, explain it in words that don't need a finance degree, and leave every source on the page so you can check me — and tell me when I'm wrong.",
   ],
   credentials: [
     { k: "PROGRAMME", v: "Bower School — LEAD VC/PE" },
@@ -185,13 +203,13 @@ export const PILLARS = [
   {
     index: "02",
     name: "Concepts, explained",
-    desc: "Burn multiple, liquidation preferences, MOIC vs IRR — one concept at a time, always with an Indian company attached. Never a definition without a consequence.",
+    desc: "How fast the money is going. Who gets paid first when a company sells. Why two funds can quote different returns on the same deal. One idea at a time, in normal words, always with an Indian company attached — never a definition without a consequence.",
     format: "SINGLE POST · THU",
   },
   {
     index: "03",
     name: "The uncomfortable",
-    desc: "The ₹800Cr \"raise\" that was converted debt. The unicorn that stopped growing but never stopped hiring. What the press release left out.",
+    desc: "The ₹800 Cr \"raise\" that was mostly old debt. The unicorn that stopped growing but never stopped hiring. The bit the announcement left out — usually because it was boring, occasionally because it wasn't.",
     format: "CAROUSEL",
   },
   {
@@ -201,6 +219,43 @@ export const PILLARS = [
     format: "CAROUSEL · REEL",
   },
 ];
+
+/*
+  The method section. This is the honest version of a "proof of work" block:
+  it claims a process, not a track record. No counters of things read, no
+  advisory case studies, no client results — none of that has happened yet,
+  and inventing it is the one thing that would make everything else here
+  unreadable.
+
+  What it does claim is checkable on any breakdown on the site.
+*/
+export const METHOD = {
+  kicker: "How a breakdown gets made",
+  heading: "Every number here has a receipt.",
+  sub: "This isn't insider access. It's a public document, an afternoon, and the willingness to write down the boring part.",
+  steps: [
+    {
+      index: "01",
+      name: "Start where everyone else starts",
+      desc: "A funding announcement, a launch, a shutdown. Whatever the timeline is repeating that week, and whatever everyone seems to agree about.",
+    },
+    {
+      index: "02",
+      name: "Go to the company's own numbers",
+      desc: "Every company in India has to publish its accounts. That is the version with no adjectives in it, and it is free to read.",
+    },
+    {
+      index: "03",
+      name: "Find where the two stop agreeing",
+      desc: "Not to catch anyone out. Most of the time the gap is just the part that got left out for being boring — and the boring part is usually the part that decides whether the business works.",
+    },
+    {
+      index: "04",
+      name: "Write it plainly, and show the sources",
+      desc: "One number per claim. A link for every number. If you think I've got it wrong, you already have everything you need to prove it — and the wrong version stays up with a line through it.",
+    },
+  ],
+};
 
 export const FIELD_NOTES = [
   {
@@ -220,13 +275,13 @@ export const FIELD_NOTES = [
 export const NEWSLETTER = {
   kicker: "The wire — sundays",
   heading: "One company, one number, every Sunday",
-  sub: "Not a news roundup. One company whose filing says something different from its press release, the number that gives it away, and the sources so you can check my work.",
+  sub: "Not a news roundup. One company whose own numbers say something different from its announcement, the number that gives it away, and every source I used so you can check my work.",
   cadence: "Sundays, 08:00 IST",
 };
 
 export const CLOSER = {
   kicker: "Argue with me",
   heading: "Still not a VC.",
-  sub: "If I've got a number wrong, tell me — I'd rather be corrected here than be confidently wrong in front of a fund later. Got a company whose press release doesn't match its filings? Send it.",
+  sub: "If I've got a number wrong, tell me — I'd rather be corrected here than be confidently wrong in front of a fund later. Know a company whose announcement doesn't match its numbers? Send it.",
   legal: "© 2026 NOTAVC — NOT INVESTMENT ADVICE. OBVIOUSLY.",
 };

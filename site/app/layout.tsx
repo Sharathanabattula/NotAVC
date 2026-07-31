@@ -20,9 +20,9 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "NotAVC — I read the filings, not the press release",
+  title: "NotAVC — the numbers, not the headline",
   description:
-    "Startup headlines are written by PR firms. An MBA student reads the filings instead, and shows where the math stops matching the announcement.",
+    "Startup headlines are written to land well. An MBA student goes and reads the actual numbers instead, explains them in plain words, and shows every source.",
 };
 
 export const viewport: Viewport = {

@@ -58,9 +58,14 @@ function TeardownCard({ teardown, delay }: { teardown: Teardown; delay: number }
         }}
       />
 
+      {/*
+        No episode number. It still keys the archive and the React list, but
+        showing it turns a breakdown into an instalment — the reader doesn't
+        need to know this was the fifth one.
+      */}
       <div className="mb-8 flex items-center justify-between">
         <span className="voice-data zone text-xs tracking-[0.2em] text-muted">
-          {teardown.ep}
+          {teardown.sector}
         </span>
         <span
           className={`voice-data rounded-full border px-3 py-1 text-[10px] tracking-[0.18em] ${TONE[teardown.verdictTone]}`}

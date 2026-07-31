@@ -17,7 +17,7 @@ import { ICON_NAMES } from "@/lib/icons";
 */
 
 const DESKS = [
-  "Company teardowns",
+  "Company breakdowns",
   "Concepts, explained",
   "The uncomfortable",
   "Founder stories",

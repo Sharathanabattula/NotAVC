@@ -44,11 +44,11 @@ export const TICKER_TERMS = [
 
 export const MANIFESTO = {
   kicker: "EP.000 — Why this exists",
-  heading: "The headline said ₹800 Cr raised. Most of it was old debt.",
+  heading: "Everyone reads the announcement. Almost nobody reads the accounts.",
   paragraphs: [
     "I'm Sharath. MBA student at SR University, studying finance. Nobody pays me to have an opinion about startups, which is most of the reason you should read this.",
-    "This started because a funding announcement made me feel stupid. Everyone was congratulating a company on the money it had raised. I read it three times and still couldn't work out what had actually happened. So I went and found the company's own accounts — every company in India has to publish them, and almost nobody reads them. Most of that money wasn't new. It was money the company already owed, turning into shares. Nobody lied. The story was just told the way the people telling it wanted it to land.",
-    "So now I check, and I write down what I find in normal words. Every breakdown here is me working through the real numbers and marking the exact point where the announcement and the arithmetic stop agreeing. When I get it wrong — and I have — the wrong version stays on the page with a line through it.",
+    "This started because funding announcements kept making me feel stupid. Everyone would be congratulating a company on the money it had raised, and I'd read it three times and still not be able to say what had actually happened. Then I found out that every company in India has to publish its accounts, and that almost nobody bothers to look at them. That's the version with no adjectives in it, and it's free.",
+    "So that's what this is. Pick a company, go through the numbers, and write down what's there in normal words — including the point where the announcement and the arithmetic stop agreeing. Usually nobody is lying. The story just gets told the way the people telling it want it to land. When I get something wrong, the wrong version stays on the page with a line through it.",
   ],
   pullQuote:
     "You don't need to work at a fund to read a set of accounts. You need an afternoon and no reason to flatter anyone.",
@@ -94,8 +94,12 @@ export const FOUNDER = {
 };
 
 export type Teardown = {
+  /* Keys the archive and the React list. Deliberately never rendered. */
   ep: string;
   company: string;
+  /* Sits where the episode number used to — tells the reader what they're
+     looking at rather than how many came before it. */
+  sector: string;
   verdict: "POST-MORTEM" | "REPRICED" | "LIVE BET";
   verdictTone: "coral" | "amber" | "info";
   hook: string;
@@ -110,9 +114,35 @@ export type Teardown = {
 };
 
 export const TEARDOWNS: Teardown[] = [
+  /*
+    Newest first. This one is the current carousel, so the page and the feed
+    say the same thing — every figure is from the FY25 accounts as reported
+    by Entrackr, and re-checked against that source.
+  */
+  {
+    ep: "EP.005",
+    company: "SID'S FARM",
+    sector: "DAIRY · HYDERABAD",
+    verdict: "LIVE BET",
+    verdictTone: "info",
+    hook: "He left Intel and bought 20 cows. Ten years on, that's a ₹168 Cr business losing ₹27 Cr.",
+    number: "₹1.17",
+    numberLabel: "Spent to earn one rupee of sales in FY25, up from ₹1.09",
+    take:
+      "The brand is real and so is the product. But 75 paise of every rupee goes straight back out to buy the milk, which leaves 25 paise to cover everything else — and no amount of growth lifts that ceiling on its own. The number I actually want isn't public: whether customers pay for the month before the farmers do.",
+    wrongTake: "A ₹81 Cr raise means the model is working.",
+    corrected:
+      "A big loss is fine if the business gets more efficient as it grows. Sales growing while efficiency drops is the harder problem.",
+    metrics: [
+      { k: "FY25 SALES", v: "₹168 Cr" },
+      { k: "MILK COST", v: "75% of sales" },
+      { k: "LOSS", v: "₹27 Cr" },
+    ],
+  },
   {
     ep: "EP.001",
     company: "BYJU'S",
+    sector: "EDTECH",
     verdict: "POST-MORTEM",
     verdictTone: "coral",
     hook: "The $22B lesson in believing your own pitch deck.",
@@ -132,6 +162,7 @@ export const TEARDOWNS: Teardown[] = [
   {
     ep: "EP.002",
     company: "PAYTM",
+    sector: "FINTECH",
     verdict: "REPRICED",
     verdictTone: "amber",
     hook: "India's biggest IPO met India's most patient sellers.",
@@ -151,6 +182,7 @@ export const TEARDOWNS: Teardown[] = [
   {
     ep: "EP.003",
     company: "QUIBI",
+    sector: "STREAMING",
     verdict: "POST-MORTEM",
     verdictTone: "coral",
     hook: "$1.75B raised. 180 days lived. Zero questions asked.",
@@ -170,6 +202,7 @@ export const TEARDOWNS: Teardown[] = [
   {
     ep: "EP.004",
     company: "ZEPTO",
+    sector: "QUICK COMMERCE",
     verdict: "LIVE BET",
     verdictTone: "info",
     hook: "Two 19-year-olds versus every kirana store in India.",
@@ -196,7 +229,7 @@ export const TEARDOWNS: Teardown[] = [
 export const PILLARS = [
   {
     index: "01",
-    name: "Company teardowns",
+    name: "Company breakdowns",
     desc: "Pick a company, pull the numbers, find the moat. Every teardown has ONE number that tells the real story.",
     format: "CAROUSEL · TUE",
   },

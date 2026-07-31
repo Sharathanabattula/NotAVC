@@ -38,7 +38,8 @@ export async function POST(request: Request) {
 
   const update = (await request.json()) as {
     callback_query?: CallbackQuery;
-    message?: { chat?: { id: number }; text?: string };
+    /* message_id keys inbox rows that carry no link of their own. */
+    message?: { chat?: { id: number }; text?: string; message_id?: number };
   };
 
   const allowedChat = process.env.TELEGRAM_CHAT_ID;
@@ -116,6 +117,40 @@ export async function POST(request: Request) {
       return NextResponse.json({ ok: true });
     }
 
+    /* Everything sent in by hand and not yet turned into a deck. */
+    if (/^\s*inbox\s*$/i.test(text)) {
+      const supabase = db();
+      const { data: rows } = await supabase
+        .from("topics")
+        .select("title, url, notes, found_at")
+        .eq("source", "inbox")
+        .is("built_at", null)
+        .order("found_at", { ascending: false })
+        .limit(15);
+
+      if (!rows?.length) {
+        await notify("Inbox is empty. Send me a link or an idea and it lands here.");
+        return NextResponse.json({ ok: true });
+      }
+
+      const esc = (s: string) =>
+        s.replace(/[<>&]/g, (c) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;" })[c]!);
+
+      await notify(
+        `<b>Inbox</b> — ${rows.length} waiting\n\n` +
+          rows
+            .map((r, i) => {
+              const extra = (r.notes ?? "").split("\n").length - 1;
+              return (
+                `<b>${i + 1}.</b> ${esc(r.title)}` +
+                (extra > 0 ? `\n<i>+ ${extra} more line${extra > 1 ? "s" : ""} of brief</i>` : "")
+              );
+            })
+            .join("\n\n"),
+      );
+      return NextResponse.json({ ok: true });
+    }
+
     /* Re-send the shortlist without waiting for tomorrow's digest. */
     if (/^\s*topics\s*$/i.test(text)) {
       const supabase = db();
@@ -166,30 +201,83 @@ export async function POST(request: Request) {
       return NextResponse.json({ ok: true });
     }
 
-    if (text.length < 20) {
-      await notify(
-        "Send <code>help</code> for the post format, or a longer idea to draft from.",
-      );
+    /*
+      The inbox.
+
+      Anything that isn't a command is a brief: a link, a video, a story,
+      the angle he wants taken, how he wants it read. It is stored verbatim
+      — the whole message is the instruction, and summarising it here would
+      throw away the part that matters.
+
+      This used to fall through to the model drafter. With no API key
+      configured that path throws, so a pasted link produced a failure
+      notice and the brief was lost. Drafting is only attempted when a key
+      is actually present.
+    */
+    const links = [...text.matchAll(/https?:\/\/[^\s<>"]+/g)].map((m) => m[0]);
+
+    /*
+      Titles are just a label for the shortlist. First non-empty line that
+      isn't purely a URL reads better than the URL itself; falling back to
+      the link keeps a bare-link message identifiable.
+    */
+    const firstLine =
+      text
+        .split("\n")
+        .map((l) => l.trim())
+        .find((l) => l && !/^https?:\/\/\S+$/.test(l)) ?? links[0] ?? text.slice(0, 60);
+
+    const supabase = db();
+    /* Keyed by message id so two link-less briefs can't collide. */
+    const key = links[0] ?? `tg:${update.message.message_id ?? Date.now()}`;
+
+    const { error: inboxErr } = await supabase.from("topics").upsert(
+      {
+        source: "inbox",
+        channel: "Sent by Sharath",
+        title: firstLine.slice(0, 180),
+        url: key,
+        notes: text,
+        published_at: new Date().toISOString(),
+      },
+      { onConflict: "url" },
+    );
+
+    if (inboxErr) {
+      await notify(`⚠️ Couldn't save that: ${inboxErr.message}`);
       return NextResponse.json({ ok: true });
     }
 
-    await notify("📝 Drafting… the card lands here in about 20 seconds.");
-
-    const siteUrl =
-      process.env.SITE_URL ??
-      (process.env.VERCEL_PROJECT_PRODUCTION_URL
-        ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-        : new URL(request.url).origin);
+    await notify(
+      `📥 <b>Saved to the inbox.</b>\n` +
+        (links.length
+          ? `${links.length} link${links.length > 1 ? "s" : ""} picked up.\n`
+          : "") +
+        `\nI'll read the whole thing, research it, and send back the deck and the PDF.\n\n` +
+        `<i>Send</i> <code>inbox</code> <i>to see what's waiting.</i>`,
+    );
 
     /*
-      `after` rather than a floating promise. A serverless function is
-      frozen the moment it responds, so `void processIdea(...)` ran fine
-      locally and silently never executed in production — the drafting
-      simply vanished, with Telegram seeing a clean 200.
+      Only draft automatically when a key exists. Without one the brief is
+      still safely stored above, which is the behaviour that matters.
     */
-    after(async () => {
-      await processIdea(text, allowedChat, siteUrl);
-    });
+    const key_ = process.env.ANTHROPIC_API_KEY;
+    if (key_ && !key_.startsWith("PASTE_")) {
+      const siteUrl =
+        process.env.SITE_URL ??
+        (process.env.VERCEL_PROJECT_PRODUCTION_URL
+          ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+          : new URL(request.url).origin);
+
+      /*
+        `after` rather than a floating promise. A serverless function is
+        frozen the moment it responds, so `void processIdea(...)` ran fine
+        locally and silently never executed in production.
+      */
+      after(async () => {
+        await processIdea(text, allowedChat, siteUrl);
+      });
+    }
 
     return NextResponse.json({ ok: true });
   }

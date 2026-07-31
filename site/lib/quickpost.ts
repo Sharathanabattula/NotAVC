@@ -212,4 +212,10 @@ SOURCE: https://tracxn.com/... Tracxn profile
 COMPANY: Blume
 LOGO: https://img.logo.dev/blume.vc?token=pk_X-1ZO13GSgeOoUrIuJ6GMQ&amp;size=200&amp;format=png</code>
 
-I'll build the carousel, render it, and send it back for approval.`;
+I'll build the carousel, render it, and send it back for approval.
+<b>Other commands</b>
+<code>topics</code> — today's shortlist
+<code>pick 3</code> — choose one from it
+<code>inbox</code> — what you've sent me that isn't built yet
+
+Anything else you send — a link, a video, a story, the angle you want — is saved to the inbox verbatim and I work from it.`;

@@ -28,11 +28,15 @@ export type QuickPost = {
   hook: string;
   desk: string;
   sources: { url: string; title: string }[];
+  /* Instagram format. "post" is a single image, "carousel" is the deck. */
+  format: "carousel" | "post";
 };
 
 const LABELS = [
   "hook", "sub", "desk", "setup", "number", "label", "note", "icon",
   "wrong", "right", "found", "list", "source", "logo", "company",
+  /* "single" collapses the deck to one image — see below */
+  "format",
 ] as const;
 
 type Label = (typeof LABELS)[number];
@@ -162,9 +166,28 @@ export function quickPost(text: string): { ok: false; error: string } | { ok: tr
   slides.push({
     kind: "cta",
     heading: "Still not a VC.",
-    sub: "Teardowns, term sheets, and the one number everyone skips.",
+    sub: "Breakdowns, and the one number everyone skips.",
     handle: "@notavc.co",
   });
+
+  /*
+    FORMAT: single — one image instead of a deck.
+
+    A single post has one job, so it keeps the strongest frame rather than
+    the first. A number given explicitly is the strongest thing available;
+    without one, the correction is the signature and stands alone. The
+    cover is the last resort, because a cover with nothing after it is a
+    headline promising a swipe that doesn't exist.
+  */
+  const single = /^single$/i.test(one("format") ?? "");
+  if (single) {
+    const best =
+      slides.find((s) => s.kind === "number") ??
+      slides.find((s) => s.kind === "correction") ??
+      slides[0];
+    slides.length = 0;
+    slides.push(best);
+  }
 
   /* A caption assembled from the same parts — editable before publishing */
   const caption = [
@@ -191,7 +214,10 @@ export function quickPost(text: string): { ok: false; error: string } | { ok: tr
       : { url: s.slice(0, i).trim(), title: s.slice(i + 1).trim() };
   });
 
-  return { ok: true, post: { slides, caption, hook, desk, sources } };
+  return {
+    ok: true,
+    post: { slides, caption, hook, desk, sources, format: single ? "post" : "carousel" },
+  };
 }
 
 export const QUICK_HELP = `Send me a post like this — only HOOK, WRONG and RIGHT are required:
@@ -203,6 +229,9 @@ LABEL: Seed to listing
 WRONG: Seed investing is about spotting the fast winners.
 RIGHT: Three of four Blume listings took 10-11 years from the first cheque.
 FOUND: Unacademy took the same shape. Ten years, three months.</code>
+
+For a <b>single image</b> instead of a carousel, add:
+<code>FORMAT: single</code>
 
 Optional extras:
 <code>DESK: Company teardowns

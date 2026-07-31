@@ -14,7 +14,7 @@ export async function handleQuickPost(text: string, siteUrl: string) {
     return;
   }
 
-  const { slides, caption, hook, desk, sources } = parsed.post;
+  const { slides, caption, hook, desk, sources, format } = parsed.post;
   const supabase = db();
 
   /*
@@ -77,7 +77,7 @@ export async function handleQuickPost(text: string, siteUrl: string) {
       {
         platter_id: platter.id,
         channel: "instagram",
-        format: "carousel",
+        format,
         caption,
         slides,
         scheduled_for: at(18, 30),

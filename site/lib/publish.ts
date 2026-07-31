@@ -102,6 +102,57 @@ async function uploadDocument(
   return value.document;
 }
 
+/*
+  Same three-step shape as documents, against the images endpoint. Kept
+  separate rather than parameterised because the two differ in the request
+  body key as well as the path, and collapsing them hid that.
+*/
+async function uploadImage(
+  url: string,
+  token: string,
+  person: string,
+  version: string,
+): Promise<string> {
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
+    "X-Restli-Protocol-Version": "2.0.0",
+    "LinkedIn-Version": version,
+  };
+
+  const init = await fetch(
+    "https://api.linkedin.com/rest/images?action=initializeUpload",
+    {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        initializeUploadRequest: { owner: `urn:li:person:${person}` },
+      }),
+    },
+  );
+  if (!init.ok) {
+    throw new Error(`LinkedIn image init ${init.status}: ${await init.text()}`);
+  }
+
+  const { value } = (await init.json()) as {
+    value: { uploadUrl: string; image: string };
+  };
+
+  const src = await fetch(url);
+  if (!src.ok) throw new Error(`Image fetch ${src.status} for ${url}`);
+
+  const put = await fetch(value.uploadUrl, {
+    method: "PUT",
+    headers: { Authorization: `Bearer ${token}` },
+    body: new Uint8Array(await src.arrayBuffer()) as unknown as BodyInit,
+  });
+  if (!put.ok) {
+    throw new Error(`LinkedIn image upload ${put.status}: ${await put.text()}`);
+  }
+
+  return value.image;
+}
+
 export async function publishToLinkedIn(post: Post): Promise<PublishResult> {
   const token = process.env.LI_TOKEN;
   const person = process.env.LI_PERSON_ID;
@@ -116,8 +167,20 @@ export async function publishToLinkedIn(post: Post): Promise<PublishResult> {
   */
   let media: { id: string; title: string } | undefined;
   if (post.media_urls?.length) {
-    const pdf = await slidesToPdf(post.media_urls);
-    const id = await uploadDocument(pdf, token, person, version);
+    /*
+      A single image goes up as an image, not a one-page PDF. LinkedIn
+      renders a document as a swipeable card with a page counter, which on
+      one page reads as a carousel someone forgot to finish.
+    */
+    const id =
+      post.media_urls.length === 1
+        ? await uploadImage(post.media_urls[0], token, person, version)
+        : await uploadDocument(
+            await slidesToPdf(post.media_urls),
+            token,
+            person,
+            version,
+          );
     /*
       LinkedIn shows this above the document. The Post row doesn't carry the
       platter title, and the first line of the caption is already written to

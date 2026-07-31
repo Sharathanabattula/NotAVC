@@ -426,7 +426,7 @@ function Body({ slide, dark }: { slide: Slide; dark: boolean }) {
               marginBottom: 26,
             }}
           >
-            THE TAKE EVERYONE HAD
+            {(slide.wrongLabel ?? "THE TAKE EVERYONE HAD").toUpperCase()}
           </div>
 
           {/*
@@ -479,7 +479,7 @@ function Body({ slide, dark }: { slide: Slide; dark: boolean }) {
                   marginBottom: 20,
                 }}
               >
-                WHAT THE NUMBERS SAID
+                {(slide.rightLabel ?? "WHAT THE NUMBERS SAID").toUpperCase()}
               </div>
               <div style={{ display: "flex", fontSize: 38, lineHeight: 1.4, color: ink }}>
                 {slide.right}

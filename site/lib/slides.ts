@@ -28,7 +28,15 @@ export type Slide =
     a single bar over a wrapped block crosses only the first line and
     dangles past the last one. The author controls the break.
   */
-  | { kind: "correction"; wrong: string[]; right: string }
+  | {
+      kind: "correction";
+      wrong: string[];
+      right: string;
+      /* Rail labels. Default to the teardown voice; override to change whose
+         claim is being struck out and who is answering. */
+      wrongLabel?: string;
+      rightLabel?: string;
+    }
   | { kind: "list"; label: string; items: { k: string; v: string }[]; icon?: IconName }
   | { kind: "cta"; heading: string; sub: string; handle: string }
   /* Single-post kinds — these have to work with no slides either side */

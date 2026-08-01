@@ -39,65 +39,79 @@ if (drop) {
   console.log(`Deleted superseded platter ${drop}`);
 }
 
-const TITLE = "Hyderabad's biggest cheque this year did not go to a startup";
+const TITLE = "You have never heard of Hyderabad's best companies";
 const DESK = "Cities, in numbers";
+
+const mark = (domain) =>
+  `https://img.logo.dev/${domain}?token=pk_X-1ZO13GSgeOoUrIuJ6GMQ&size=300&format=png`;
 
 const SLIDES = [
   {
     kind: "cover",
     desk: DESK,
-    title: "Hyderabad's biggest cheque this year didn't go to a startup.",
-    sub: "It went to a company most people in the ecosystem can't name.",
-    source: "Business Standard · Inc42 · ICRA · 2026",
+    title: "You've never heard of Hyderabad's best companies.",
+    sub: "Five of them. What they make, and what they earn.",
+    src: `${SITE}/img/hyderabad/logos.png`,
+    source: "Business Standard · Inc42 · Screener · 2026",
   },
   {
-    kind: "number",
-    value: "₹44,914 Cr",
-    label: "What CtrlS was valued at in June 2026",
-    icon: "chart",
-    note: "Canada's pension fund put in ₹4,000 Cr for 8.2%, plus up to ₹3,000 Cr more into a joint venture. Hyderabad's entire reported startup funding for the first half of 2026 was $226 Mn.",
+    kind: "logo",
+    src: mark("ctrls.com"),
+    company: "CTRLS",
+    verdict: "THE BIGGEST CHEQUE OF THE YEAR",
+    number: "₹44,914 Cr",
+    numberLabel:
+      "What it is worth. It runs data centres. In June, Canada's pension fund paid ₹4,000 Cr for 8.2% of it.",
   },
   {
-    kind: "number",
-    value: "Top 3 in the world",
-    label: "Where Divi's Labs ranks among API makers",
-    icon: "scale",
-    note: "₹11,067 Cr of income in FY26. Ships the ingredients inside your medicines to over 100 countries. Started in Hyderabad in 1990 — and almost nobody who talks about this city's startups has said the name.",
+    kind: "logo",
+    src: mark("divislabs.com"),
+    company: "DIVI'S LABS",
+    verdict: "TOP 3 IN THE WORLD",
+    number: "₹11,067 Cr",
+    numberLabel:
+      "A year's income. It makes the chemicals that go inside medicines, and sells them to over 100 countries. Started here in 1990.",
   },
   {
-    kind: "list",
-    label: "Three more that don't trend",
-    icon: "store",
+    kind: "deals",
+    label: "Three more you don't hear about",
     items: [
       {
-        k: "ZENOTI",
-        v: "Software for salons and spas. The world's first unicorn in that category, valued at $1.5 Bn.",
+        name: "Zenoti",
+        amount: "$1.5 Bn",
+        note: "Software that runs salons and spas",
+        logo: mark("zenoti.com"),
       },
       {
-        k: "RECYKAL",
-        v: "Scrap, run as a marketplace. ₹1,498 Cr of gross revenue in FY26, up 53% in a year.",
+        name: "Recykal",
+        amount: "₹1,498 Cr",
+        note: "Buys and sells scrap online. Up 53% in a year",
+        logo: mark("recykal.com"),
       },
       {
-        k: "OZONETEL",
-        v: "Cloud call centres since 2007. Roughly 2,000 business customers, built without a headline round.",
+        name: "Ozonetel",
+        amount: "2,000",
+        note: "Businesses using its call centre software, sold since 2007",
+        logo: mark("ozonetel.com"),
       },
     ],
+    source: "Inc42 · Tracxn · company sites",
   },
   {
     kind: "correction",
-    wrong: ["Hyderabad's startup story", "is T-Hub and rockets."],
+    wrong: ["Hyderabad startups mean", "T-Hub and rockets."],
     right:
-      "The city's biggest companies sell to other businesses — data centres, drug ingredients, salon software, scrap. Not one of them is a consumer app. Not one of them trends. And the largest cheque of the year came from a Canadian pension fund, not a VC.",
+      "The big ones here sell to other companies, not to you. Data centres, medicine chemicals, salon software, scrap. None of them is an app. None of them goes viral. And the biggest cheque of the year came from a pension fund, not a VC.",
   },
   {
     kind: "statement",
-    label: "What I keep thinking about",
+    label: "What I think",
     /*
       The statement kind renders at a fixed 58px with no autoscaling, so the
       whole body has to fit in roughly nine lines. Longer copy silently runs
       off the bottom of the frame.
     */
-    body: "Divi's 1990. CtrlS 2007. Zenoti 2010.\n\nThe winners here are 15 to 35 years old.\n\nThe question isn't which startup is hot. It's which boring B2B company is eight years in with no press.",
+    body: "Divi's began in 1990. CtrlS in 2007.\n\nThe winners here are old.\n\nSo the question isn't which startup is hot. It's who has been quietly paid for years.",
   },
 ];
 
@@ -124,54 +138,27 @@ const SOURCES = [
   },
 ];
 
-const LI_CAPTION = `Hyderabad's biggest funding event of 2026 was not a startup round.
+/*
+  Short on purpose. The deck carries the numbers; a caption that repeats
+  them is a story dump nobody finishes.
+*/
+const LI_CAPTION = `Name a big Hyderabad company. Most people say T-Hub. Or rockets.
 
-In June, Canada's pension fund committed up to ₹7,000 crore to CtrlS — ₹4,000 crore for 8.2%, the rest into a joint venture — at a valuation of ₹44,914 crore.
+Here are five you can't name — and one of them took a bigger cheque this year than every startup in the city put together.
 
-For scale: every startup in Hyderabad raised $226 million between January and June.
+They sell to businesses, not to you. They started in 1990 and 2007.
 
-One data centre company, founded in 2007, out-raised the entire city's startup ecosystem several times over. And I would guess most people reading this have never said its name out loud.
+Funding reports show who raised. Not who's winning.
 
-That is the pattern I keep running into with Hyderabad.
+Numbers on the slides.`;
 
-Divi's Labs is a top three API maker in the world. ₹11,067 crore of income in FY26, shipping to over 100 countries. It has been in Hyderabad since 1990.
+const IG_CAPTION = `Name a big Hyderabad company.
 
-Zenoti built the world's first salon and spa software unicorn.
+Most people say T-Hub. Or rockets.
 
-Recykal did ₹1,498 crore of gross revenue in FY26 selling scrap as a marketplace, up 53%.
+Here are five you can't name.
 
-Ozonetel has run cloud call centres since 2007 without a headline round.
-
-None of them are consumer apps. None of them trend. All of them sell to other businesses.
-
-The founding years are the part that stayed with me. 1990. 2007. 2007. 2010. The companies doing best here have been at it for fifteen to thirty-five years.
-
-A funding table tells you how much money went in this half. It does not tell you who is winning.
-
-I am a student, not an investor. But if I were writing cheques, I would stop asking which Hyderabad startup is hot and start asking which unglamorous B2B company here is eight years in, has real customers, and has never been written about.
-
-Numbers: Business Standard, ICRA, Inc42, Screener.`;
-
-const IG_CAPTION = `Hyderabad's biggest cheque of 2026 wasn't a startup round.
-
-₹7,000 Cr from Canada's pension fund into CtrlS. A data centre company founded in 2007.
-
-Every startup in the city raised $226 Mn in the same six months.
-
-One company you can't name beat the whole ecosystem.
-
-Same story everywhere here:
-
-Divi's Labs — top 3 API maker on earth, ₹11,067 Cr income.
-Zenoti — the world's first salon software unicorn.
-Recykal — ₹1,498 Cr from scrap, up 53%.
-Ozonetel — cloud call centres since 2007, no headline round.
-
-Not one consumer app. Not one that trends.
-
-Founded 1990. 2007. 2007. 2010.
-
-The funding table shows who raised. It doesn't show who's winning.
+One of them out-raised the entire city's startup scene this year.
 
 Still not a VC. Just reading the boring column.`;
 

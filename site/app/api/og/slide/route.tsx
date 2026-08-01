@@ -771,7 +771,7 @@ function Body({ slide, dark, scale = 1 }: { slide: Slide; dark: boolean; scale?:
                   color: muted,
                 }}
               >
-                {slide.numberLabel.toUpperCase()}
+                {money(slide.numberLabel).toUpperCase()}
               </div>
             </Card>
           </div>
@@ -900,7 +900,7 @@ function Body({ slide, dark, scale = 1 }: { slide: Slide; dark: boolean; scale?:
               color: muted,
             }}
           >
-            {slide.numberLabel.toUpperCase()}
+            {money(slide.numberLabel).toUpperCase()}
           </div>
         </div>
       );

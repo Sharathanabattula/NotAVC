@@ -152,6 +152,41 @@ mobile browser for the queue, GitHub mobile for edits.
 
 ---
 
+## Building a deck without a laptop
+
+Image-heavy posts used to be the exception: a logo strip had to be
+composited with `sharp`, committed, and deployed before the artwork could
+see it, and the deck itself came from a one-off script reading `.env.local`.
+That is gone. Three things replaced it.
+
+**`/api/og/strip?d=ctrls.com,divislabs.com,zenoti.com`** — renders a row of
+company marks as one image. Give it domains, it fetches the logos. This is
+what goes in the cover's image band.
+
+**Telegram lines for the picture-bearing slides.** Alongside `HOOK:` and
+`WRONG:`/`RIGHT:`:
+
+```
+STRIP: ctrls.com, divislabs.com, zenoti.com
+CARD: ctrls.com | CtrlS | BIGGEST CHEQUE | ₹44,914 Cr | What it's worth
+DEAL: zenoti.com | Zenoti | $1.5 Bn | Software for salons
+```
+
+`STRIP` puts marks on the cover. Each `CARD` is its own logo slide. All the
+`DEAL` lines land on one slide together. Fields split on `|`, so commas
+inside the copy are safe.
+
+**The 📄 button** on every approval card rebuilds the print-quality PDF and
+sends it back, so a post can go out by hand without waiting for the
+scheduler.
+
+For a deck assembled by research rather than typed — the whole spec at once
+— there is `POST /api/deck/build`, same shared secret as the crons. It
+writes the platter and both posts, renders the slides, stitches the PDF, and
+delivers everything to Telegram. Nothing in that path touches a checkout.
+
+---
+
 ## Who is allowed to do what
 
 Worth knowing, because this posts to your real accounts:

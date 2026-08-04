@@ -37,6 +37,13 @@ const LABELS = [
   "wrong", "right", "found", "list", "source", "logo", "company",
   /* "single" collapses the deck to one image — see below */
   "format",
+  /*
+    Image-bearing lines. These are what made a deck like the Hyderabad one
+    need a laptop: logo cards, a deals table and a cover strip could only be
+    authored in a script. All three take company domains and resolve to
+    marks at render time.
+  */
+  "card", "deal", "strip",
 ] as const;
 
 type Label = (typeof LABELS)[number];
@@ -89,10 +96,30 @@ function breakLines(text: string, max = 26): string[] {
   return lines.slice(0, 3);
 }
 
-export function quickPost(text: string): { ok: false; error: string } | { ok: true; post: QuickPost } {
+/*
+  Company marks are resolved from a domain rather than pasted as a URL. A
+  logo.dev URL is 90 characters of token and query string, which is not
+  something anyone is typing into Telegram on a phone.
+*/
+const LOGO_TOKEN = "pk_X-1ZO13GSgeOoUrIuJ6GMQ";
+
+function markFor(domain: string): string {
+  return `https://img.logo.dev/${domain.trim()}?token=${LOGO_TOKEN}&size=300&format=png`;
+}
+
+/* Pipe-separated so a comma inside the copy doesn't split a field */
+function fields(row: string): string[] {
+  return row.split("|").map((p) => p.trim());
+}
+
+export function quickPost(
+  text: string,
+  siteUrl?: string,
+): { ok: false; error: string } | { ok: true; post: QuickPost } {
   const f = parse(text);
   const one = (k: Label) => f[k]?.join(" ").trim() ?? "";
   const all = (k: Label) => f[k] ?? [];
+  const site = (siteUrl ?? "").replace(/\/$/, "");
 
   const hook = one("hook");
   const wrong = one("wrong");
@@ -110,15 +137,74 @@ export function quickPost(text: string): { ok: false; error: string } | { ok: tr
   const numberValue = one("number");
   const numberLabel = one("label") || "The number";
 
-  const slides: Slide[] = [
-    {
-      kind: "cover",
-      desk,
-      title: hook,
-      sub: one("sub") || undefined,
-    },
-  ];
+  const sources = all("source").map((s) => {
+    const i = s.indexOf(" ");
+    return i === -1
+      ? { url: s, title: s }
+      : { url: s.slice(0, i).trim(), title: s.slice(i + 1).trim() };
+  });
 
+  /*
+    A page that claims every number has a receipt should name the receipt on
+    the artwork too. Host names read better than titles at 18px.
+  */
+  const sourceLine = sources
+    .map((s) => {
+      try {
+        return new URL(s.url).hostname.replace(/^www\./, "").split(".")[0];
+      } catch {
+        return "";
+      }
+    })
+    .filter(Boolean)
+    .slice(0, 4)
+    .join(" · ");
+
+  const slides: Slide[] = [];
+
+  /*
+    STRIP: a row of company marks under the cover title. Without a site URL
+    to build the render path against, the strip is dropped rather than
+    written as a broken image reference.
+  */
+  const stripDomains = all("strip")
+    .join(",")
+    .split(",")
+    .map((d) => d.trim())
+    .filter(Boolean);
+
+  slides.push({
+    kind: "cover",
+    desk,
+    title: hook,
+    sub: one("sub") || undefined,
+    ...(stripDomains.length && site
+      ? { src: `${site}/api/og/strip?d=${stripDomains.join(",")}` }
+      : {}),
+    ...(sourceLine ? { source: sourceLine } : {}),
+  });
+
+  /*
+    CARD: domain | COMPANY | verdict | number | label
+
+    One full-bleed logo card per line. Only the domain and company are
+    required; a card with no number still reads, a card with no company does
+    not.
+  */
+  for (const row of all("card")) {
+    const [domain, company, verdict, value, label] = fields(row);
+    if (!domain || !company) continue;
+    slides.push({
+      kind: "logo",
+      src: markFor(domain),
+      company: company.toUpperCase(),
+      ...(verdict ? { verdict: verdict.toUpperCase() } : {}),
+      number: value || "—",
+      numberLabel: label || numberLabel,
+    });
+  }
+
+  /* Back-compat: the original single-logo form */
   const logo = one("logo");
   const company = one("company");
   if (logo && company) {
@@ -142,6 +228,34 @@ export function quickPost(text: string): { ok: false; error: string } | { ok: tr
       value: numberValue,
       note: one("note") || undefined,
       icon: (one("icon") || "chart") as IconName,
+    });
+  }
+
+  /*
+    DEAL: domain | Name | amount | note
+
+    Every DEAL line collapses into one slide of logo plates. Missing marks
+    fall back to the company's initial rather than blocking the row.
+  */
+  const dealItems = all("deal")
+    .map((row) => {
+      const [domain, name, amount, note] = fields(row);
+      if (!name || !amount) return null;
+      return {
+        name,
+        amount,
+        note: note ?? "",
+        ...(domain ? { logo: markFor(domain) } : {}),
+      };
+    })
+    .filter((x): x is { name: string; amount: string; note: string; logo?: string } => !!x);
+
+  if (dealItems.length) {
+    slides.push({
+      kind: "deals",
+      label: one("label") && !numberValue ? numberLabel : "The ones nobody names",
+      items: dealItems,
+      ...(sourceLine ? { source: sourceLine } : {}),
     });
   }
 
@@ -207,13 +321,6 @@ export function quickPost(text: string): { ok: false; error: string } | { ok: tr
     .replace(/\n{3,}/g, "\n\n")
     .trim();
 
-  const sources = all("source").map((s) => {
-    const i = s.indexOf(" ");
-    return i === -1
-      ? { url: s, title: s }
-      : { url: s.slice(0, i).trim(), title: s.slice(i + 1).trim() };
-  });
-
   return {
     ok: true,
     post: { slides, caption, hook, desk, sources, format: single ? "post" : "carousel" },
@@ -233,15 +340,20 @@ FOUND: Unacademy took the same shape. Ten years, three months.</code>
 For a <b>single image</b> instead of a carousel, add:
 <code>FORMAT: single</code>
 
+<b>Logos and pictures</b> — give me domains, I fetch the marks:
+<code>STRIP: ctrls.com, divislabs.com, zenoti.com
+CARD: ctrls.com | CtrlS | BIGGEST CHEQUE | ₹44,914 Cr | What it's worth
+DEAL: zenoti.com | Zenoti | $1.5 Bn | Software for salons</code>
+
+STRIP puts a row of marks on the cover. Each CARD is its own logo slide. All the DEAL lines land on one slide together. Fields are split on <code>|</code> so commas are safe.
+
 Optional extras:
 <code>DESK: Company teardowns
 ICON: clock
 LIST: UNDER 1.5 = Efficient
-SOURCE: https://tracxn.com/... Tracxn profile
-COMPANY: Blume
-LOGO: https://img.logo.dev/blume.vc?token=pk_X-1ZO13GSgeOoUrIuJ6GMQ&amp;size=200&amp;format=png</code>
+SOURCE: https://tracxn.com/... Tracxn profile</code>
 
-I'll build the carousel, render it, and send it back for approval.
+I'll build the carousel, render it, and send it back for approval with a 📄 PDF button.
 <b>Other commands</b>
 <code>topics</code> — today's shortlist
 <code>pick 3</code> — choose one from it

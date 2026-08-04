@@ -105,7 +105,12 @@ export async function sendApprovalCard(card: ApprovalCard): Promise<boolean> {
               { text: "✅ Approve", callback_data: `approve:${card.postId}` },
               { text: "✏️ Changes", callback_data: `changes:${card.postId}` },
             ],
-            [{ text: "🚫 Reject", callback_data: `reject:${card.postId}` }],
+            [
+              /* Re-sends the print-quality PDF so the post can go out by
+                 hand without waiting on the scheduler. */
+              { text: "📄 PDF", callback_data: `pdf:${card.postId}` },
+              { text: "🚫 Reject", callback_data: `reject:${card.postId}` },
+            ],
           ],
         },
       }),
@@ -147,6 +152,66 @@ export async function sendCarousel(
   }
 
   return sendApprovalCard(card);
+}
+
+/*
+  Sends the deck as a file rather than a photo. sendPhoto re-encodes and
+  would undo the point of a 144 DPI PDF, so a deck meant for uploading to
+  LinkedIn by hand has to go as a document.
+*/
+export async function sendDocument(
+  bytes: Uint8Array,
+  filename: string,
+  caption: string,
+): Promise<boolean> {
+  const cfg = config();
+  if (!cfg) return false;
+
+  try {
+    const form = new FormData();
+    form.append("chat_id", cfg.chatId);
+    form.append(
+      "document",
+      new Blob([bytes as unknown as BlobPart], { type: "application/pdf" }),
+      filename,
+    );
+    form.append("caption", caption);
+    const res = await fetch(`${API}${cfg.token}/sendDocument`, { method: "POST", body: form });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
+/*
+  Telegram renders <pre> with a copy button, which is the whole point: the
+  caption has to land in the Instagram app with one tap and no reformatting.
+*/
+export async function sendCopyable(label: string, body: string): Promise<boolean> {
+  return notify(`<b>${escapeHtml(label)}</b> — tap to copy\n\n<pre>${escapeHtml(body)}</pre>`);
+}
+
+/* Album of the rendered slides. IG needs individual images, not the PDF. */
+export async function sendAlbum(urls: string[], caption?: string): Promise<boolean> {
+  const cfg = config();
+  if (!cfg || !urls.length) return false;
+  try {
+    const res = await fetch(`${API}${cfg.token}/sendMediaGroup`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chat_id: cfg.chatId,
+        media: urls.slice(0, 10).map((url, i) => ({
+          type: "photo",
+          media: url,
+          ...(i === 0 && caption ? { caption } : {}),
+        })),
+      }),
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
 }
 
 export async function answerCallback(callbackId: string, text: string) {

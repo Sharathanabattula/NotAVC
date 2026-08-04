@@ -8,7 +8,8 @@ import { sendCarousel, notify } from "./telegram";
 */
 
 export async function handleQuickPost(text: string, siteUrl: string) {
-  const parsed = quickPost(text);
+  /* siteUrl reaches the parser because STRIP: builds a render path with it */
+  const parsed = quickPost(text, siteUrl);
   if (!parsed.ok) {
     await notify(`⚠️ ${parsed.error}\n\nSend <code>help</code> for the format.`);
     return;

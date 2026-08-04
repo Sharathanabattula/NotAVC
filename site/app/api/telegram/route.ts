@@ -292,6 +292,21 @@ export async function POST(request: Request) {
   const [action, postId] = cb.data.split(":");
   if (!postId) return NextResponse.json({ ok: true });
 
+  /*
+    The PDF button changes nothing about the post, so it is handled before
+    the status machinery. Stitching six slides takes longer than Telegram
+    will wait for a callback answer, so acknowledge first and build in
+    `after` — a retried callback would otherwise send the deck twice.
+  */
+  if (action === "pdf") {
+    await answerCallback(cb.id, "Building the PDF…");
+    after(async () => {
+      const { resendPdf } = await import("@/lib/deck-build");
+      await resendPdf(postId);
+    });
+    return NextResponse.json({ ok: true });
+  }
+
   const supabase = db();
 
   const nextStatus =

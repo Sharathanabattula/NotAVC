@@ -1,11 +1,26 @@
-import { db } from "./supabase";
 import { quickPost } from "./quickpost";
+import { buildDeck } from "./deck-build";
 import { sendCarousel, notify } from "./telegram";
 
 /*
   Takes a labelled Telegram message all the way to an approval card:
   parse → persist → render URLs → send back. No model, no form, no laptop.
+
+  The persisting is buildDeck's job, not this file's. It used to be
+  duplicated here, and the copy drifted: it wrote media_urls onto the
+  Instagram row only, so every deck written from Telegram produced a
+  LinkedIn post with no artwork and a PDF button with nothing to build.
+  One builder, one place that can be wrong.
 */
+
+/* Tomorrow 09:30 and 18:30 IST, stored as UTC */
+function at(hour: number, minute: number): string {
+  const d = new Date();
+  d.setUTCDate(d.getUTCDate() + 1);
+  d.setUTCHours(hour - 5, minute - 30 < 0 ? minute + 30 : minute - 30, 0, 0);
+  if (minute - 30 < 0) d.setUTCHours(hour - 6);
+  return d.toISOString();
+}
 
 export async function handleQuickPost(text: string, siteUrl: string) {
   /* siteUrl reaches the parser because STRIP: builds a render path with it */
@@ -16,108 +31,47 @@ export async function handleQuickPost(text: string, siteUrl: string) {
   }
 
   const { slides, caption, hook, desk, sources, format } = parsed.post;
-  const supabase = db();
 
-  /*
-    EP numbers are no longer shown on the artwork but still order the
-    archive, so they are generated here rather than asked for.
-  */
-  const { data: last } = await supabase
-    .from("platters")
-    .select("ep")
-    .order("ep", { ascending: false })
-    .limit(1)
-    .maybeSingle();
-  const ep = `EP.${String(Number(last?.ep?.replace(/\D/g, "") ?? 0) + 1).padStart(3, "0")}`;
-
-  const { data: platter, error: pErr } = await supabase
-    .from("platters")
-    .insert({
-      ep,
-      title: hook,
-      desk,
-      publish_date: new Date().toISOString().slice(0, 10),
-      status: "pending_approval",
-      brief: "Written from Telegram.",
-    })
-    .select("id")
-    .single();
-
-  if (pErr || !platter) {
-    await notify(`⚠️ Could not save that: ${pErr?.message ?? "unknown"}`);
-    return;
-  }
-
-  if (sources.length) {
-    await supabase
-      .from("sources")
-      .insert(sources.map((s) => ({ platter_id: platter.id, ...s })));
-  }
-
-  /* Tomorrow 09:30 and 18:30 IST, stored as UTC */
-  const at = (h: number, m: number) => {
-    const d = new Date();
-    d.setUTCDate(d.getUTCDate() + 1);
-    d.setUTCHours(h - 5, m - 30 < 0 ? m + 30 : m - 30, 0, 0);
-    if (m - 30 < 0) d.setUTCHours(h - 6);
-    return d.toISOString();
-  };
-
-  const { data: posts, error: postErr } = await supabase
-    .from("posts")
-    .insert([
+  let built;
+  try {
+    built = await buildDeck(
       {
-        platter_id: platter.id,
-        channel: "linkedin",
-        format: "post",
-        caption,
-        slides: [],
-        scheduled_for: at(9, 30),
-        status: "pending_approval",
-      },
-      {
-        platter_id: platter.id,
-        channel: "instagram",
-        format,
-        caption,
+        title: hook,
+        desk,
         slides,
-        scheduled_for: at(18, 30),
-        status: "pending_approval",
+        captions: { linkedin: caption, instagram: caption },
+        sources,
+        format,
+        brief: "Written from Telegram.",
+        scheduledFor: { linkedin: at(9, 30), instagram: at(18, 30) },
       },
-    ])
-    .select("id, channel, format, caption, scheduled_for");
-
-  if (postErr || !posts) {
-    await notify(`⚠️ Could not save the posts: ${postErr?.message ?? "unknown"}`);
+      siteUrl,
+    );
+  } catch (err) {
+    await notify(`⚠️ Could not save that: ${err instanceof Error ? err.message : String(err)}`);
     return;
   }
-
-  const ig = posts.find((p) => p.channel === "instagram")!;
-  const urls = slides.map(
-    (_, i) => `${siteUrl.replace(/\/$/, "")}/api/og/slide?post=${ig.id}&i=${i}`,
-  );
-  await supabase.from("posts").update({ media_urls: urls }).eq("id", ig.id);
 
   await sendCarousel({
-    postId: ig.id,
-    ep,
+    postId: built.instagramId,
+    ep: built.ep,
     channel: "instagram",
-    format: "carousel",
+    format,
     caption,
-    scheduledFor: ig.scheduled_for,
+    scheduledFor: built.scheduled.instagram,
     sources,
-    imageUrls: urls,
+    imageUrls: built.urls,
   });
 
-  const li = posts.find((p) => p.channel === "linkedin")!;
   await sendCarousel({
-    postId: li.id,
-    ep,
+    postId: built.linkedinId,
+    ep: built.ep,
     channel: "linkedin",
     format: "post",
     caption,
-    scheduledFor: li.scheduled_for,
+    scheduledFor: built.scheduled.linkedin,
     sources,
+    /* The album already went out above; a second copy is noise */
     imageUrls: [],
   });
 }

@@ -25,6 +25,8 @@ export type DeckSpec = {
   /* Instagram format. LinkedIn always posts as one document or image. */
   format?: "carousel" | "post";
   brief?: string;
+  /* ISO timestamps. Omitted leaves the post unscheduled. */
+  scheduledFor?: { linkedin?: string; instagram?: string };
   /*
     Platter id of a draft this replaces. Redrafting a deck is the normal
     case — three attempts at the same post shouldn't leave three platters in
@@ -39,6 +41,7 @@ export type BuiltDeck = {
   instagramId: string;
   linkedinId: string;
   urls: string[];
+  scheduled: { linkedin: string | null; instagram: string | null };
 };
 
 export async function buildDeck(spec: DeckSpec, siteUrl: string): Promise<BuiltDeck> {
@@ -91,6 +94,7 @@ export async function buildDeck(spec: DeckSpec, siteUrl: string): Promise<BuiltD
         caption: spec.captions.linkedin,
         hashtags: spec.hashtags ?? [],
         slides: spec.slides,
+        scheduled_for: spec.scheduledFor?.linkedin ?? null,
         status: "pending_approval",
       },
       {
@@ -100,10 +104,11 @@ export async function buildDeck(spec: DeckSpec, siteUrl: string): Promise<BuiltD
         caption: spec.captions.instagram,
         hashtags: spec.hashtags ?? [],
         slides: spec.slides,
+        scheduled_for: spec.scheduledFor?.instagram ?? null,
         status: "pending_approval",
       },
     ])
-    .select("id, channel");
+    .select("id, channel, scheduled_for");
 
   if (postErr || !posts) throw new Error(`posts: ${postErr?.message ?? "insert failed"}`);
 
@@ -121,7 +126,14 @@ export async function buildDeck(spec: DeckSpec, siteUrl: string): Promise<BuiltD
   await supabase.from("posts").update({ media_urls: urls }).eq("id", ig.id);
   await supabase.from("posts").update({ media_urls: urlsFor(li.id) }).eq("id", li.id);
 
-  return { ep, platterId: platter.id, instagramId: ig.id, linkedinId: li.id, urls };
+  return {
+    ep,
+    platterId: platter.id,
+    instagramId: ig.id,
+    linkedinId: li.id,
+    urls,
+    scheduled: { linkedin: li.scheduled_for, instagram: ig.scheduled_for },
+  };
 }
 
 function slugify(s: string) {

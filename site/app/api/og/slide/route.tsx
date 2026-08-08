@@ -58,12 +58,20 @@ async function fonts() {
 }
 
 /* Wordmark: "Not" at 35% opacity, "AVC" full weight. */
-function Wordmark({ dark }: { dark: boolean }) {
+/*
+  `text` re-letters the frame for something that isn't NotAVC — a personal
+  post, a talk, a one-off. It splits on the first space so a two-part name
+  keeps the same muted-then-solid rhythm the NotAVC mark has at its own seam.
+*/
+function Wordmark({ dark, text }: { dark: boolean; text?: string }) {
   const colour = dark ? "#FFFFFF" : BRAND.ink;
+  const space = text ? text.indexOf(" ") : -1;
+  const lead = text ? (space > 0 ? text.slice(0, space + 1) : "") : "Not";
+  const rest = text ? (space > 0 ? text.slice(space + 1) : text) : "AVC";
   return (
     <div style={{ display: "flex", alignItems: "baseline", fontFamily: FONT.display, fontSize: 30 }}>
-      <span style={{ color: colour, opacity: 0.35 }}>Not</span>
-      <span style={{ color: colour }}>AVC</span>
+      {lead ? <span style={{ color: colour, opacity: 0.35 }}>{lead}</span> : null}
+      <span style={{ color: colour }}>{rest}</span>
       <span style={{ color: dark ? BRAND.accentOnDark : BRAND.signal }}>.</span>
     </div>
   );
@@ -102,12 +110,16 @@ function Frame({
   total,
   dark,
   size,
+  brand,
+  handle,
 }: {
   children: React.ReactNode;
   index: number;
   total: number;
   dark: boolean;
   size: { width: number; height: number };
+  brand?: string;
+  handle?: string;
 }) {
   return (
     <div
@@ -146,7 +158,7 @@ function Frame({
             paddingBottom: 16,
           }}
         >
-          <Wordmark dark={dark} />
+          <Wordmark dark={dark} text={brand} />
           {/*
             No episode number. Kept in the database for ordering and
             uniqueness, deliberately not shown — the archive is numbered
@@ -204,28 +216,34 @@ function Frame({
                 color: dark ? BRAND.white45 : BRAND.muted,
               }}
             >
-              @notavc.co
+              {handle ?? "@notavc.co"}
             </div>
           )}
 
-          {/* Page number in a filled signal disc */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              width: 56,
-              height: 56,
-              borderRadius: RADIUS.pill,
-              background: dark ? BRAND.accentOnDark : BRAND.signal,
-              color: dark ? BRAND.surfaceDark : "#FFFFFF",
-              fontFamily: FONT.data,
-              fontSize: 26,
-              fontWeight: 700,
-            }}
-          >
-            {index + 1}
-          </div>
+          {/*
+            Page number in a filled signal disc. A single-frame post has no
+            page to number, and a lone "1" reads as a carousel that failed to
+            load the rest.
+          */}
+          {total > 1 ? (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: 56,
+                height: 56,
+                borderRadius: RADIUS.pill,
+                background: dark ? BRAND.accentOnDark : BRAND.signal,
+                color: dark ? BRAND.surfaceDark : "#FFFFFF",
+                fontFamily: FONT.data,
+                fontSize: 26,
+                fontWeight: 700,
+              }}
+            >
+              {index + 1}
+            </div>
+          ) : null}
         </div>
       </div>
     </div>
@@ -1087,6 +1105,9 @@ export async function GET(request: Request) {
         total={deck.slides.length}
         dark={dark}
         size={SIZES[size]}
+        /* Re-letters the frame for a post that isn't NotAVC's */
+        brand={url.searchParams.get("brand") ?? undefined}
+        handle={url.searchParams.get("handle") ?? undefined}
       >
         <Body slide={slide} dark={dark} scale={size === "story" ? 1.45 : 1} />
       </Frame>

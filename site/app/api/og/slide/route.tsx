@@ -66,11 +66,17 @@ async function fonts() {
 function Wordmark({ dark, text }: { dark: boolean; text?: string }) {
   const colour = dark ? "#FFFFFF" : BRAND.ink;
   const space = text ? text.indexOf(" ") : -1;
-  const lead = text ? (space > 0 ? text.slice(0, space + 1) : "") : "Not";
+  const lead = text ? (space > 0 ? text.slice(0, space) : "") : "Not";
   const rest = text ? (space > 0 ? text.slice(space + 1) : text) : "AVC";
   return (
     <div style={{ display: "flex", alignItems: "baseline", fontFamily: FONT.display, fontSize: 30 }}>
-      {lead ? <span style={{ color: colour, opacity: 0.35 }}>{lead}</span> : null}
+      {/*
+        The word gap is a margin, not a trailing space — Satori collapses
+        whitespace at the edge of a text node and the two words run together.
+      */}
+      {lead ? (
+        <span style={{ color: colour, opacity: 0.35, marginRight: text ? 9 : 0 }}>{lead}</span>
+      ) : null}
       <span style={{ color: colour }}>{rest}</span>
       <span style={{ color: dark ? BRAND.accentOnDark : BRAND.signal }}>.</span>
     </div>

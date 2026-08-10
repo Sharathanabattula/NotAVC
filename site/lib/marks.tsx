@@ -346,16 +346,31 @@ export function TrolleyScene({ colour = BRAND.signal, width = 940, height = 430 
   const W = 940;
   const H = 430;
   const ink = BRAND.ink;
-  const railY = 310;
-  const forkX = 372;
-  const endX = 924;
-  const endY = 118;
+  const railY = 316;
+  const forkX = 306;
+  const endX = 926;
+  const endY = 132;
 
   /* The branch, eased so it leaves the switch shallow and climbs after */
   const branchAt = (t: number) => ({
     x: forkX + (endX - forkX) * t,
     y: railY + (endY - railY) * t * t,
   });
+
+  /*
+    A sleeper laid across the branch rather than beside it. Angling each one
+    to the local normal is the whole difference between a second track and a
+    field of hatching floating above a trend line.
+  */
+  const branchSleeper = (t: number, half: number) => {
+    const p = branchAt(t);
+    const dx = endX - forkX;
+    const dy = 2 * (endY - railY) * t;
+    const len = Math.hypot(dx, dy);
+    const nx = (-dy / len) * half;
+    const ny = (dx / len) * half;
+    return `M${p.x - nx} ${p.y - ny} L${p.x + nx} ${p.y + ny}`;
+  };
 
   /*
     Returns elements rather than being a component. Satori walks the <svg>
@@ -413,19 +428,16 @@ export function TrolleyScene({ colour = BRAND.signal, width = 940, height = 430 
       })}
 
       {/* Sleepers, branch */}
-      {Array.from({ length: 8 }, (_, i) => {
-        const p = branchAt(0.18 + i * 0.115);
-        return (
-          <path
-            key={`b${i}`}
-            d={`M${p.x + 8} ${p.y - 17} L${p.x - 10} ${p.y + 17}`}
-            stroke={colour}
-            strokeWidth={4}
-            strokeLinecap="round"
-            opacity={0.3}
-          />
-        );
-      })}
+      {Array.from({ length: 9 }, (_, i) => (
+        <path
+          key={`b${i}`}
+          d={branchSleeper(0.2 + i * 0.1, 17)}
+          stroke={colour}
+          strokeWidth={4}
+          strokeLinecap="round"
+          opacity={0.3}
+        />
+      ))}
 
       {/* Straight route — two passes that do not agree */}
       <path
@@ -459,36 +471,50 @@ export function TrolleyScene({ colour = BRAND.signal, width = 940, height = 430 
       />
       <rect x={forkX - 7 - 15} y={railY + 60} width={30} height={30} rx={15} fill={colour} />
 
-      {/* Speed, behind the train */}
-      {[228, 252, 276].map((y, i) => (
+      {/* Speed, above and behind */}
+      {[196, 214].map((y, i) => (
         <path
           key={`v${i}`}
-          d={`M${6 + i * 10} ${y} L${52 + i * 10} ${y}`}
+          d={`M${10 + i * 16} ${y} L${58 + i * 16} ${y}`}
           stroke={ink}
           strokeWidth={4}
           strokeLinecap="round"
-          opacity={0.35}
+          opacity={0.3}
         />
       ))}
 
-      {/* Train, nose forward, sitting on the straight route */}
+      {/*
+        A locomotive, not a van. The proportion is the whole trick: roughly
+        three and a half long to one high, with the nose raking hard over the
+        leading wheel. A squarer box reads as a delivery truck no matter what
+        is drawn on it.
+      */}
       <path
-        d={`M78 ${railY - 12} L78 210 L228 210 L252 244 L252 ${railY - 12} Z`}
+        d={`M26 ${railY - 12} L26 246 C26 236, 34 232, 46 232 L226 232 L278 288 L278 ${railY - 12} Z`}
         stroke={ink}
         strokeWidth={7}
         strokeLinejoin="round"
       />
-      <path d={`M196 224 L236 224 L246 248 L196 248 Z`} stroke={ink} strokeWidth={5} strokeLinejoin="round" />
-      <path d={`M100 250 L166 250`} stroke={ink} strokeWidth={5} strokeLinecap="round" opacity={0.5} />
-      <rect x={104} y={railY - 22} width={26} height={26} rx={13} fill={ink} />
-      <rect x={196} y={railY - 22} width={26} height={26} rx={13} fill={ink} />
+      {/* Cab glass, set into the rake */}
+      <path
+        d={`M224 246 L238 246 L268 278 L224 278 Z`}
+        stroke={ink}
+        strokeWidth={5}
+        strokeLinejoin="round"
+      />
+      {/* Window band */}
+      <path d={`M50 256 L200 256`} stroke={ink} strokeWidth={5} strokeLinecap="round" opacity={0.45} />
+      <path d={`M50 278 L172 278`} stroke={ink} strokeWidth={4} strokeLinecap="round" opacity={0.3} />
+      <rect x={56} y={railY - 24} width={28} height={28} rx={14} fill={ink} />
+      <rect x={130} y={railY - 24} width={28} height={28} rx={14} fill={ink} />
+      <rect x={218} y={railY - 24} width={28} height={28} rx={14} fill={ink} />
 
       {/* Two on the route it is already taking */}
-      {figure("p1", 690, railY, 40)}
-      {figure("p2", 748, railY, 30)}
+      {figure("p1", 812, railY, 40)}
+      {figure("p2", 868, railY, 30)}
 
       {/* One on the route the lever would choose */}
-      {figure("p3", 834, branchAt(0.845).y, 36)}
+      {figure("p3", 862, branchAt(0.9).y, 36)}
     </svg>
   );
 }

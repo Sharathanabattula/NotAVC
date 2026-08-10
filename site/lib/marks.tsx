@@ -357,20 +357,43 @@ export function TrolleyScene({ colour = BRAND.signal, width = 940, height = 430 
     y: railY + (endY - railY) * t * t,
   });
 
-  const Figure = ({ x, y, flip = false }: { x: number; y: number; flip?: boolean }) => (
-    <>
-      <rect x={x - 9} y={y - 62} width={18} height={18} rx={9} fill={ink} />
-      <path d={`M${x} ${y - 43} L${x} ${y - 20}`} stroke={ink} strokeWidth={5} strokeLinecap="round" />
-      <path
-        d={`M${x - 14} ${y - 36} L${x + 14} ${y - ((flip ? 30 : 40) as number)}`}
-        stroke={ink}
-        strokeWidth={5}
-        strokeLinecap="round"
-      />
-      <path d={`M${x} ${y - 20} L${x - 11} ${y}`} stroke={ink} strokeWidth={5} strokeLinecap="round" />
-      <path d={`M${x} ${y - 20} L${x + 11} ${y}`} stroke={ink} strokeWidth={5} strokeLinecap="round" />
-    </>
-  );
+  /*
+    Returns elements rather than being a component. Satori walks the <svg>
+    subtree looking for shapes, and a nested component or a fragment inside it
+    renders nothing at all — silently, which is how the first version of this
+    drawing shipped as an empty box.
+  */
+  const figure = (key: string, x: number, y: number, armDrop: number) => [
+    <rect key={`${key}h`} x={x - 9} y={y - 62} width={18} height={18} rx={9} fill={ink} />,
+    <path
+      key={`${key}t`}
+      d={`M${x} ${y - 43} L${x} ${y - 20}`}
+      stroke={ink}
+      strokeWidth={5}
+      strokeLinecap="round"
+    />,
+    <path
+      key={`${key}a`}
+      d={`M${x - 14} ${y - 36} L${x + 14} ${y - armDrop}`}
+      stroke={ink}
+      strokeWidth={5}
+      strokeLinecap="round"
+    />,
+    <path
+      key={`${key}l1`}
+      d={`M${x} ${y - 20} L${x - 11} ${y}`}
+      stroke={ink}
+      strokeWidth={5}
+      strokeLinecap="round"
+    />,
+    <path
+      key={`${key}l2`}
+      d={`M${x} ${y - 20} L${x + 11} ${y}`}
+      stroke={ink}
+      strokeWidth={5}
+      strokeLinecap="round"
+    />,
+  ];
 
   return (
     <svg width={width} height={height} viewBox={`0 0 ${W} ${H}`} fill="none">
@@ -461,11 +484,11 @@ export function TrolleyScene({ colour = BRAND.signal, width = 940, height = 430 
       <rect x={196} y={railY - 22} width={26} height={26} rx={13} fill={ink} />
 
       {/* Two on the route it is already taking */}
-      <Figure x={690} y={railY} />
-      <Figure x={748} y={railY} flip />
+      {figure("p1", 690, railY, 40)}
+      {figure("p2", 748, railY, 30)}
 
       {/* One on the route the lever would choose */}
-      <Figure x={834} y={branchAt(0.845).y} />
+      {figure("p3", 834, branchAt(0.845).y, 36)}
     </svg>
   );
 }

@@ -249,56 +249,85 @@ export function GridBlocks({
   rails so the rails sit on top, and the straight route is two passes that do
   not agree — a single clean stroke reads as a diagram, not a drawing.
 */
-export function Switchpoint({ colour = BRAND.signal, width = 620, height = 200 }: MarkProps) {
+export function Switchpoint({ colour = BRAND.signal, width = 820, height = 300 }: MarkProps) {
   const w = width;
   const h = height;
-  const y = h * 0.62;
+  /* The straight route sits low so the branch has room to climb away from it */
+  const y = h * 0.72;
+  const sx = w * 0.34;
+  /* Where the branch ends, and the slope it holds while getting there */
+  const bx = w - 10;
+  const by = y - h * 0.5;
+  const sleeper = 20;
+
   return (
     <svg width={w} height={h} viewBox={`0 0 ${w} ${h}`} fill="none">
-      {Array.from({ length: 9 }, (_, i) => {
-        const x = w * 0.04 + i * w * 0.105;
+      {/* Sleepers under the straight route */}
+      {Array.from({ length: 12 }, (_, i) => {
+        const x = w * 0.03 + i * w * 0.085;
         return (
           <path
-            key={i}
-            d={`M${x} ${y - 13} L${x - 3} ${y + 13}`}
+            key={`s${i}`}
+            d={`M${x} ${y - sleeper} L${x - 5} ${y + sleeper}`}
             stroke={colour}
-            strokeWidth={3}
+            strokeWidth={4}
             strokeLinecap="round"
-            opacity={0.4}
+            opacity={0.35}
           />
         );
       })}
 
+      {/*
+        Sleepers under the branch, angled to it. Without these the branch
+        reads as a trend line on a chart rather than a second track.
+      */}
+      {Array.from({ length: 6 }, (_, i) => {
+        const t = 0.2 + i * 0.16;
+        const x = sx + (bx - sx) * t;
+        const yy = y + (by - y) * t * t;
+        return (
+          <path
+            key={`b${i}`}
+            d={`M${x + 7} ${yy - sleeper} L${x - 9} ${yy + sleeper}`}
+            stroke={colour}
+            strokeWidth={4}
+            strokeLinecap="round"
+            opacity={0.35}
+          />
+        );
+      })}
+
+      {/* Straight route — two passes that do not agree */}
       <path
-        d={`M2 ${y} C ${w * 0.3} ${y - 4}, ${w * 0.7} ${y + 3}, ${w - 4} ${y - 1}`}
+        d={`M4 ${y} C ${w * 0.3} ${y - 5}, ${w * 0.7} ${y + 4}, ${w - 6} ${y - 2}`}
         stroke={colour}
-        strokeWidth={6}
+        strokeWidth={10}
         strokeLinecap="round"
       />
       <path
-        d={`M12 ${y + 6} C ${w * 0.35} ${y + 3}, ${w * 0.72} ${y + 9}, ${w - 14} ${y + 5}`}
+        d={`M18 ${y + 9} C ${w * 0.35} ${y + 5}, ${w * 0.72} ${y + 13}, ${w - 20} ${y + 8}`}
         stroke={colour}
-        strokeWidth={3}
+        strokeWidth={5}
         strokeLinecap="round"
-        opacity={0.45}
+        opacity={0.4}
       />
 
       {/* The branch, leaving at the switch */}
       <path
-        d={`M${w * 0.42} ${y} C ${w * 0.6} ${y - 8}, ${w * 0.74} ${y - 48}, ${w - 8} ${y - 76}`}
+        d={`M${sx} ${y + 2} C ${sx + (bx - sx) * 0.35} ${y - 6}, ${sx + (bx - sx) * 0.6} ${by + 54}, ${bx} ${by}`}
         stroke={colour}
-        strokeWidth={6}
+        strokeWidth={10}
         strokeLinecap="round"
       />
 
-      {/* The lever itself */}
+      {/* The lever — the whole point of the drawing, so it is not subtle */}
       <path
-        d={`M${w * 0.42} ${y} L${w * 0.4} ${y + 42}`}
+        d={`M${sx} ${y} L${sx - 6} ${y + 60}`}
         stroke={colour}
-        strokeWidth={5}
+        strokeWidth={8}
         strokeLinecap="round"
       />
-      <rect x={w * 0.4 - 9} y={y + 42} width={18} height={18} rx={9} fill={colour} />
+      <rect x={sx - 6 - 15} y={y + 58} width={30} height={30} rx={15} fill={colour} />
     </svg>
   );
 }

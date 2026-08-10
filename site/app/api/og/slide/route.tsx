@@ -735,8 +735,8 @@ function Body({ slide, dark, scale = 1 }: { slide: Slide; dark: boolean; scale?:
           </div>
 
           {slide.figure === "switch" ? (
-            <div style={{ display: "flex", marginTop: 52 }}>
-              <Switchpoint colour={accent} width={620} height={200} />
+            <div style={{ display: "flex", marginTop: 44 }}>
+              <Switchpoint colour={accent} width={820} height={300} />
             </div>
           ) : slide.figure === "underline" ? (
             <div style={{ display: "flex", marginTop: 28 }}>

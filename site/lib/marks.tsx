@@ -342,9 +342,16 @@ export function Switchpoint({ colour = BRAND.signal, width = 820, height = 300 }
   the reader to make: two against one is legible at a glance, and labelling it
   would explain a joke nobody asked to have explained.
 */
-export function TrolleyScene({ colour = BRAND.signal, width = 940, height = 430 }: MarkProps) {
+export function TrolleyScene({ colour = BRAND.signal, width = 940, height = 348 }: MarkProps) {
   const W = 940;
-  const H = 430;
+  /*
+    The drawing is authored on a 430-tall grid but the top 82 rows are empty
+    sky above the branch. Cropping them in the viewBox rather than moving every
+    coordinate keeps the geometry readable and stops the figure opening with a
+    band of nothing under the headline.
+  */
+  const TOP = 82;
+  const H = 430 - TOP;
   const ink = BRAND.ink;
   const railY = 316;
   const forkX = 306;
@@ -411,7 +418,7 @@ export function TrolleyScene({ colour = BRAND.signal, width = 940, height = 430 
   ];
 
   return (
-    <svg width={width} height={height} viewBox={`0 0 ${W} ${H}`} fill="none">
+    <svg width={width} height={height} viewBox={`0 ${TOP} ${W} ${H}`} fill="none">
       {/* Sleepers, straight route */}
       {Array.from({ length: 15 }, (_, i) => {
         const x = 250 + i * 47;

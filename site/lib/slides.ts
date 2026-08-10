@@ -77,6 +77,22 @@ export type Slide =
       */
       figure?: "switch" | "underline" | "trolley";
     }
+  /*
+    The loud one. Everything else in this file is a flat editorial frame; this
+    builds depth instead — a paper card lifted off the canvas, tape holding it
+    down, a circled callout and a sticky note pinned over the corner. Reach for
+    it when a post has to compete in a feed rather than sit in an archive.
+  */
+  | {
+      kind: "poster";
+      overline?: string;
+      headline: string;
+      figure?: "trolley";
+      /* Set in the accent and ringed by hand */
+      callout?: string;
+      /* Goes on the sticky note, so keep it to a short question */
+      note?: string;
+    }
   | {
       kind: "teardown";
       company: string;

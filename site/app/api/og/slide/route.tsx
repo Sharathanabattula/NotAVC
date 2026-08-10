@@ -13,6 +13,7 @@ import {
   StrikeMark,
   Switchpoint,
   TrolleyScene,
+  CircleMark,
   ICONS,
   type IconName,
 } from "@/lib/marks";
@@ -82,6 +83,41 @@ function Wordmark({ dark, text }: { dark: boolean; text?: string }) {
       <span style={{ color: colour }}>{rest}</span>
       <span style={{ color: dark ? BRAND.accentOnDark : BRAND.signal }}>.</span>
     </div>
+  );
+}
+
+/*
+  A strip of masking tape. Warm, translucent, and rotated off-square — the
+  rotation is the whole point, since a level strip reads as a coloured bar.
+*/
+function Tape({
+  width = 168,
+  height = 46,
+  rotate = -22,
+  left,
+  top,
+}: {
+  width?: number;
+  height?: number;
+  rotate?: number;
+  left: number;
+  top: number;
+}) {
+  return (
+    <div
+      style={{
+        position: "absolute",
+        left,
+        top,
+        width,
+        height,
+        display: "flex",
+        background: "rgba(242,166,35,0.42)",
+        borderLeft: "3px solid rgba(242,166,35,0.55)",
+        borderRight: "3px solid rgba(242,166,35,0.55)",
+        transform: `rotate(${rotate}deg)`,
+      }}
+    />
   );
 }
 
@@ -696,6 +732,136 @@ function Body({ slide, dark, scale = 1 }: { slide: Slide; dark: boolean; scale?:
           {slide.source ? <SourceLine text={slide.source} dark={dark} /> : null}
         </div>
       );
+
+    case "poster": {
+      /* The card is the stage; everything else is pinned to or over it */
+      const CARD_W = 952;
+      const CARD_H = 940;
+      const hl = slide.headline.length;
+      const headSize = hl <= 44 ? 82 : hl <= 70 ? 70 : hl <= 104 ? 60 : 52;
+
+      return (
+        <div style={{ display: "flex", position: "relative", width: CARD_W, height: 1070 }}>
+          {/* Paper, lifted off the canvas and set a hair off-square */}
+          <div
+            style={{
+              position: "absolute",
+              left: 0,
+              top: 14,
+              width: CARD_W,
+              height: CARD_H,
+              display: "flex",
+              flexDirection: "column",
+              padding: 58,
+              background: BRAND.paper,
+              border: `2px solid ${BRAND.borderLight}`,
+              borderRadius: RADIUS.sm,
+              boxShadow: "0 22px 60px rgba(11,11,11,0.13)",
+              transform: "rotate(-0.7deg)",
+            }}
+          >
+            {slide.overline ? (
+              <div
+                style={{
+                  display: "flex",
+                  fontFamily: FONT.data,
+                  fontSize: 20,
+                  letterSpacing: 3,
+                  color: BRAND.coral,
+                  marginBottom: 26,
+                }}
+              >
+                {slide.overline.toUpperCase()}
+              </div>
+            ) : null}
+
+            <div
+              style={{
+                display: "flex",
+                fontFamily: FONT.display,
+                fontSize: headSize,
+                lineHeight: 1.05,
+                letterSpacing: -3,
+                color: BRAND.ink,
+              }}
+            >
+              {slide.headline}
+            </div>
+
+            {slide.figure === "trolley" ? (
+              <div style={{ display: "flex", marginTop: 34 }}>
+                <TrolleyScene colour={BRAND.signal} width={836} height={310} />
+              </div>
+            ) : null}
+
+            {slide.callout ? (
+              <div
+                style={{
+                  display: "flex",
+                  position: "relative",
+                  width: 520,
+                  height: 168,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginTop: 4,
+                }}
+              >
+                <div style={{ position: "absolute", left: 0, top: 0, display: "flex" }}>
+                  <CircleMark colour={BRAND.coral} width={520} height={168} />
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    fontFamily: FONT.display,
+                    fontSize: 46,
+                    letterSpacing: -1,
+                    color: BRAND.ink,
+                  }}
+                >
+                  {slide.callout}
+                </div>
+              </div>
+            ) : null}
+          </div>
+
+          {/* Tape, holding the card to the page */}
+          <Tape left={-34} top={-16} rotate={-24} />
+          <Tape left={CARD_W - 138} top={-8} rotate={16} width={152} height={44} />
+
+          {/* Sticky note, pinned over the corner and off the card */}
+          {slide.note ? (
+            <div
+              style={{
+                position: "absolute",
+                left: CARD_W - 320,
+                top: CARD_H - 236,
+                width: 296,
+                height: 296,
+                display: "flex",
+                alignItems: "center",
+                padding: 34,
+                background: BRAND.amber,
+                boxShadow: "0 16px 40px rgba(11,11,11,0.18)",
+                transform: "rotate(5deg)",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  fontFamily: FONT.display,
+                  fontSize: 40,
+                  lineHeight: 1.12,
+                  letterSpacing: -1,
+                  color: BRAND.ink,
+                }}
+              >
+                {slide.note}
+              </div>
+            </div>
+          ) : null}
+        </div>
+      );
+    }
 
     case "quote": {
       /*

@@ -240,3 +240,65 @@ export function GridBlocks({
     </svg>
   );
 }
+
+/*
+  A rail that forks, with the lever that forks it.
+
+  Drawn for the trolley problem but the shape is more general: the moment one
+  path becomes two and someone has to own which. Sleepers are laid before the
+  rails so the rails sit on top, and the straight route is two passes that do
+  not agree — a single clean stroke reads as a diagram, not a drawing.
+*/
+export function Switchpoint({ colour = BRAND.signal, width = 620, height = 200 }: MarkProps) {
+  const w = width;
+  const h = height;
+  const y = h * 0.62;
+  return (
+    <svg width={w} height={h} viewBox={`0 0 ${w} ${h}`} fill="none">
+      {Array.from({ length: 9 }, (_, i) => {
+        const x = w * 0.04 + i * w * 0.105;
+        return (
+          <path
+            key={i}
+            d={`M${x} ${y - 13} L${x - 3} ${y + 13}`}
+            stroke={colour}
+            strokeWidth={3}
+            strokeLinecap="round"
+            opacity={0.4}
+          />
+        );
+      })}
+
+      <path
+        d={`M2 ${y} C ${w * 0.3} ${y - 4}, ${w * 0.7} ${y + 3}, ${w - 4} ${y - 1}`}
+        stroke={colour}
+        strokeWidth={6}
+        strokeLinecap="round"
+      />
+      <path
+        d={`M12 ${y + 6} C ${w * 0.35} ${y + 3}, ${w * 0.72} ${y + 9}, ${w - 14} ${y + 5}`}
+        stroke={colour}
+        strokeWidth={3}
+        strokeLinecap="round"
+        opacity={0.45}
+      />
+
+      {/* The branch, leaving at the switch */}
+      <path
+        d={`M${w * 0.42} ${y} C ${w * 0.6} ${y - 8}, ${w * 0.74} ${y - 48}, ${w - 8} ${y - 76}`}
+        stroke={colour}
+        strokeWidth={6}
+        strokeLinecap="round"
+      />
+
+      {/* The lever itself */}
+      <path
+        d={`M${w * 0.42} ${y} L${w * 0.4} ${y + 42}`}
+        stroke={colour}
+        strokeWidth={5}
+        strokeLinecap="round"
+      />
+      <rect x={w * 0.4 - 9} y={y + 42} width={18} height={18} rx={9} fill={colour} />
+    </svg>
+  );
+}

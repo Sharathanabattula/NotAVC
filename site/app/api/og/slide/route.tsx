@@ -11,6 +11,7 @@ import {
   ArrowDownRight,
   Underline,
   StrikeMark,
+  Switchpoint,
   ICONS,
   type IconName,
 } from "@/lib/marks";
@@ -695,17 +696,27 @@ function Body({ slide, dark, scale = 1 }: { slide: Slide; dark: boolean; scale?:
         </div>
       );
 
-    case "quote":
+    case "quote": {
+      /*
+        The quote used to be a flat 66px, which on a 1080 canvas left a short
+        line swimming in empty grid — small type in a big box reads as a
+        placeholder. It now grows to fill the frame and steps down only as far
+        as the words force it to.
+      */
+      const len = slide.quote.length;
+      const quoteSize =
+        len <= 46 ? 116 : len <= 72 ? 100 : len <= 108 ? 84 : len <= 150 ? 70 : len <= 210 ? 58 : 50;
+
       return (
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div
             style={{
               display: "flex",
               fontFamily: FONT.display,
-              fontSize: 110,
+              fontSize: Math.round(quoteSize * 1.5),
               lineHeight: 0.7,
               color: accent,
-              marginBottom: 24,
+              marginBottom: 20,
             }}
           >
             &ldquo;
@@ -714,14 +725,25 @@ function Body({ slide, dark, scale = 1 }: { slide: Slide; dark: boolean; scale?:
             style={{
               display: "flex",
               fontFamily: FONT.display,
-              fontSize: 66,
-              lineHeight: 1.2,
-              letterSpacing: -2,
+              fontSize: quoteSize,
+              lineHeight: 1.06,
+              letterSpacing: -3,
               color: ink,
             }}
           >
             {slide.quote}
           </div>
+
+          {slide.figure === "switch" ? (
+            <div style={{ display: "flex", marginTop: 52 }}>
+              <Switchpoint colour={accent} width={620} height={200} />
+            </div>
+          ) : slide.figure === "underline" ? (
+            <div style={{ display: "flex", marginTop: 28 }}>
+              <Underline colour={accent} width={620} height={40} />
+            </div>
+          ) : null}
+
           <div style={{ display: "flex", alignItems: "center", gap: 28, marginTop: 44 }}>
             {slide.photo ? (
               <CutoutPortrait src={slide.photo} width={130} height={160} accent={accent} offset={12} />
@@ -740,6 +762,7 @@ function Body({ slide, dark, scale = 1 }: { slide: Slide; dark: boolean; scale?:
           </div>
         </div>
       );
+    }
 
     case "teardown":
       return (

@@ -71,6 +71,11 @@ export type Slide =
       attribution?: string;
       /* Absolute URL — Satori fetches it at render time */
       photo?: string;
+      /*
+        A drawn anchor under the quote. Without one a short line floats in a
+        mostly empty frame, which reads as unfinished rather than restrained.
+      */
+      figure?: "switch" | "underline";
     }
   | {
       kind: "teardown";

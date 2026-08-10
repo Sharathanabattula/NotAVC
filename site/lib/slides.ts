@@ -75,7 +75,7 @@ export type Slide =
         A drawn anchor under the quote. Without one a short line floats in a
         mostly empty frame, which reads as unfinished rather than restrained.
       */
-      figure?: "switch" | "underline";
+      figure?: "switch" | "underline" | "trolley";
     }
   | {
       kind: "teardown";

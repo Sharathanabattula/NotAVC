@@ -12,6 +12,7 @@ import {
   Underline,
   StrikeMark,
   Switchpoint,
+  TrolleyScene,
   ICONS,
   type IconName,
 } from "@/lib/marks";
@@ -704,8 +705,10 @@ function Body({ slide, dark, scale = 1 }: { slide: Slide; dark: boolean; scale?:
         as the words force it to.
       */
       const len = slide.quote.length;
-      const quoteSize =
+      const natural =
         len <= 46 ? 116 : len <= 72 ? 100 : len <= 108 ? 84 : len <= 150 ? 70 : len <= 210 ? 58 : 50;
+      /* The drawn scene is 430 tall — the type has to leave it room */
+      const quoteSize = slide.figure === "trolley" ? Math.min(natural, 84) : natural;
 
       return (
         <div style={{ display: "flex", flexDirection: "column" }}>
@@ -734,7 +737,11 @@ function Body({ slide, dark, scale = 1 }: { slide: Slide; dark: boolean; scale?:
             {slide.quote}
           </div>
 
-          {slide.figure === "switch" ? (
+          {slide.figure === "trolley" ? (
+            <div style={{ display: "flex", marginTop: 40 }}>
+              <TrolleyScene colour={accent} width={940} height={430} />
+            </div>
+          ) : slide.figure === "switch" ? (
             <div style={{ display: "flex", marginTop: 44 }}>
               <Switchpoint colour={accent} width={820} height={300} />
             </div>

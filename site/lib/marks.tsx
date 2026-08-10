@@ -331,3 +331,141 @@ export function Switchpoint({ colour = BRAND.signal, width = 820, height = 300 }
     </svg>
   );
 }
+
+/*
+  The whole problem in one drawing: a train, a rail that forks, two people on
+  the route it is already taking, one on the route the lever would send it to.
+
+  Everything is a path or a rounded rect — Satori renders no <text>, no
+  <circle> reliably and no markers, so heads and wheels are rects with a full
+  radius and the figures are drawn rather than typeset. The count is left for
+  the reader to make: two against one is legible at a glance, and labelling it
+  would explain a joke nobody asked to have explained.
+*/
+export function TrolleyScene({ colour = BRAND.signal, width = 940, height = 430 }: MarkProps) {
+  const W = 940;
+  const H = 430;
+  const ink = BRAND.ink;
+  const railY = 310;
+  const forkX = 372;
+  const endX = 924;
+  const endY = 118;
+
+  /* The branch, eased so it leaves the switch shallow and climbs after */
+  const branchAt = (t: number) => ({
+    x: forkX + (endX - forkX) * t,
+    y: railY + (endY - railY) * t * t,
+  });
+
+  const Figure = ({ x, y, flip = false }: { x: number; y: number; flip?: boolean }) => (
+    <>
+      <rect x={x - 9} y={y - 62} width={18} height={18} rx={9} fill={ink} />
+      <path d={`M${x} ${y - 43} L${x} ${y - 20}`} stroke={ink} strokeWidth={5} strokeLinecap="round" />
+      <path
+        d={`M${x - 14} ${y - 36} L${x + 14} ${y - ((flip ? 30 : 40) as number)}`}
+        stroke={ink}
+        strokeWidth={5}
+        strokeLinecap="round"
+      />
+      <path d={`M${x} ${y - 20} L${x - 11} ${y}`} stroke={ink} strokeWidth={5} strokeLinecap="round" />
+      <path d={`M${x} ${y - 20} L${x + 11} ${y}`} stroke={ink} strokeWidth={5} strokeLinecap="round" />
+    </>
+  );
+
+  return (
+    <svg width={width} height={height} viewBox={`0 0 ${W} ${H}`} fill="none">
+      {/* Sleepers, straight route */}
+      {Array.from({ length: 15 }, (_, i) => {
+        const x = 250 + i * 47;
+        return (
+          <path
+            key={`s${i}`}
+            d={`M${x} ${railY - 17} L${x - 5} ${railY + 17}`}
+            stroke={colour}
+            strokeWidth={4}
+            strokeLinecap="round"
+            opacity={0.3}
+          />
+        );
+      })}
+
+      {/* Sleepers, branch */}
+      {Array.from({ length: 8 }, (_, i) => {
+        const p = branchAt(0.18 + i * 0.115);
+        return (
+          <path
+            key={`b${i}`}
+            d={`M${p.x + 8} ${p.y - 17} L${p.x - 10} ${p.y + 17}`}
+            stroke={colour}
+            strokeWidth={4}
+            strokeLinecap="round"
+            opacity={0.3}
+          />
+        );
+      })}
+
+      {/* Straight route — two passes that do not agree */}
+      <path
+        d={`M8 ${railY} C 300 ${railY - 5}, 640 ${railY + 4}, ${W - 8} ${railY - 2}`}
+        stroke={colour}
+        strokeWidth={9}
+        strokeLinecap="round"
+      />
+      <path
+        d={`M24 ${railY + 9} C 320 ${railY + 5}, 660 ${railY + 13}, ${W - 24} ${railY + 8}`}
+        stroke={colour}
+        strokeWidth={4}
+        strokeLinecap="round"
+        opacity={0.4}
+      />
+
+      {/* Branch */}
+      <path
+        d={`M${forkX} ${railY + 2} C ${forkX + 150} ${railY - 8}, ${endX - 190} ${endY + 66}, ${endX} ${endY}`}
+        stroke={colour}
+        strokeWidth={9}
+        strokeLinecap="round"
+      />
+
+      {/* Lever */}
+      <path
+        d={`M${forkX} ${railY} L${forkX - 7} ${railY + 62}`}
+        stroke={colour}
+        strokeWidth={8}
+        strokeLinecap="round"
+      />
+      <rect x={forkX - 7 - 15} y={railY + 60} width={30} height={30} rx={15} fill={colour} />
+
+      {/* Speed, behind the train */}
+      {[228, 252, 276].map((y, i) => (
+        <path
+          key={`v${i}`}
+          d={`M${6 + i * 10} ${y} L${52 + i * 10} ${y}`}
+          stroke={ink}
+          strokeWidth={4}
+          strokeLinecap="round"
+          opacity={0.35}
+        />
+      ))}
+
+      {/* Train, nose forward, sitting on the straight route */}
+      <path
+        d={`M78 ${railY - 12} L78 210 L228 210 L252 244 L252 ${railY - 12} Z`}
+        stroke={ink}
+        strokeWidth={7}
+        strokeLinejoin="round"
+      />
+      <path d={`M196 224 L236 224 L246 248 L196 248 Z`} stroke={ink} strokeWidth={5} strokeLinejoin="round" />
+      <path d={`M100 250 L166 250`} stroke={ink} strokeWidth={5} strokeLinecap="round" opacity={0.5} />
+      <rect x={104} y={railY - 22} width={26} height={26} rx={13} fill={ink} />
+      <rect x={196} y={railY - 22} width={26} height={26} rx={13} fill={ink} />
+
+      {/* Two on the route it is already taking */}
+      <Figure x={690} y={railY} />
+      <Figure x={748} y={railY} flip />
+
+      {/* One on the route the lever would choose */}
+      <Figure x={834} y={branchAt(0.845).y} />
+    </svg>
+  );
+}

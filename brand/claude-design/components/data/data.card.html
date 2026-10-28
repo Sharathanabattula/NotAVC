@@ -1,0 +1,23 @@
+<!-- @dsCard group="Components" viewport="700x260" name="Data" subtitle="DataMetric, Tag, DataCard" -->
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../_ds_bundle.js"></script>
+<div id="root" style="font-family:var(--font-body)"></div>
+<script type="text/babel">
+const { DataMetric, Tag, DataCard } = window.NotAVCDesignSystem_f0b373;
+function App(){
+  return (
+    <div style={{display:'flex',gap:24,padding:20,alignItems:'flex-start'}}>
+      <div style={{display:'flex',flexDirection:'column',gap:10}}>
+        <DataMetric value="$5.2B" />
+        <DataMetric value="-3.1%" sentiment="negative" size="sm" />
+        <DataMetric value="+2.4%" sentiment="positive" size="sm" />
+        <div style={{display:'flex',gap:6}}><Tag>#NotAVC</Tag><Tag>#StartupBreakdown</Tag></div>
+      </div>
+      <div style={{background:'var(--ink)',padding:16,borderRadius:12,width:260}}>
+        <DataCard rows={[{label:'Fund size',value:'$100M'},{label:'Expected failures',value:'14 of 20',sentiment:'negative'},{label:'Need from winners',value:'10-50x each',sentiment:'positive'}]} />
+      </div>
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>

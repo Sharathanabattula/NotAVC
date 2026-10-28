@@ -1,0 +1,26 @@
+<!-- @dsCard group="Components" viewport="700x340" name="Brand" subtitle="Wordmark, EpisodeBadge, BrandPill" -->
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../_ds_bundle.js"></script>
+<div id="root" style="font-family:var(--font-body)"></div>
+<script type="text/babel">
+const { Wordmark, EpisodeBadge, BrandPill } = window.NotAVCDesignSystem_f0b373;
+function App(){
+  return (
+    <div style={{display:'flex',flexDirection:'column',gap:20,padding:20}}>
+      <div style={{display:'flex',gap:12,alignItems:'center'}}>
+        <Wordmark variant="light" />
+        <Wordmark variant="dark" />
+        <Wordmark variant="accent" />
+      </div>
+      <div style={{display:'flex',gap:16,alignItems:'center'}}>
+        <EpisodeBadge number={14} />
+        <EpisodeBadge number={128} dark={false} />
+        <div style={{background:'var(--ink)',padding:'10px 16px',borderRadius:8,display:'flex',gap:10,alignItems:'center'}}>
+          <BrandPill /><BrandPill label="NotAVC · TEARDOWN" />
+        </div>
+      </div>
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>

@@ -1,0 +1,10 @@
+<!-- @dsCard group="Components" viewport="700x180" name="Surfaces" subtitle="Card" -->
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../_ds_bundle.js"></script>
+<div id="root" style="font-family:var(--font-body);padding:20px;background:var(--canvas)"></div>
+<script type="text/babel">
+const { Card } = window.NotAVCDesignSystem_f0b373;
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <Card padding={20}><div style={{font:'700 16px var(--font-display)',color:'var(--ink)'}}>Cap table</div><div style={{font:'400 13px var(--font-body)',color:'var(--muted)',marginTop:6}}>Who owns what percentage of the company.</div></Card>
+);
+</script>

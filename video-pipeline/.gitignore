@@ -1,0 +1,10 @@
+# Rebuilt by scripts/setup-whisper.sh
+whisper.cpp/
+node_modules/
+# Media and generated files stay local
+raw/*
+output/*
+references/*
+logs/*
+public/_work/
+!*/.gitkeep

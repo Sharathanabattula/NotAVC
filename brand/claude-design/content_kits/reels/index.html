@@ -1,0 +1,47 @@
+<!-- @dsCard group="Reels" viewport="1000x680" name="Faceless Reels & Story Polls" subtitle="Storytelling / data-overlay / news / poll — 9:16 dark" -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;background:var(--canvas);font-family:var(--font-body)}</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" src="ReelFrame.jsx"></script>
+<script type="text/babel" src="ReelStory.jsx"></script>
+<script type="text/babel" src="ReelData.jsx"></script>
+<script type="text/babel" src="ReelNews.jsx"></script>
+<script type="text/babel" src="ReelPoll.jsx"></script>
+<script type="text/babel">
+const { DataCard, Tag, Wordmark } = window.NotAVCDesignSystem_f0b373;
+const VARIANTS = ['story', 'data', 'news', 'poll'];
+const LABELS = { story: 'Storytelling (Shankar Unravelled)', data: 'Data overlay (Ahmed\'s Business)', news: 'News format (MrEflow)', poll: 'Story poll' };
+
+function App() {
+  const [active, setActive] = React.useState('story');
+  return (
+    <div style={{ padding: 28, display: 'flex', flexDirection: 'column', gap: 20, alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: 8 }}>
+        {VARIANTS.map(v => (
+          <button key={v} onClick={() => setActive(v)} style={{
+            fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 12, padding: '8px 16px', borderRadius: 'var(--radius-pill)',
+            border: 'var(--border-default-w)', cursor: 'pointer', background: active === v ? 'var(--ink)' : 'var(--paper)', color: active === v ? '#fff' : 'var(--ink)'
+          }}>{LABELS[v]}</button>
+        ))}
+      </div>
+      {active === 'story' && <ReelStory ep={3} hook="This Bangalore boy sold samosas to pay rent. Today his company is worth" highlight="" stat="₹4,200Cr" statLabel="ZERODHA · BOOTSTRAPPED · ZERO VC MONEY" sub="Nithin Kamath never took a rupee from VCs. Here's why that decision made him richer than most of them." />}
+      {active === 'data' && <ReelData ep={8} kicker="VC CONCEPT" headline={<>Why VCs want a <span style={{background:'rgba(179,143,111,.15)',color:'var(--mint)',padding:'0 4px',borderRadius:2}}>10x return</span> on every deal</>} rows={[{ label: 'Fund size', value: '$100M' }, { label: 'Investments', value: '20 startups' }, { label: 'Expected failures', value: '14 of 20', sentiment: 'negative' }, { label: 'Need from winners', value: '10-50x each', sentiment: 'positive' }]} />}
+      {active === 'news' && <ReelNews ep={22} category="SERIES D" headline="Zepto raises $350M at $5.2B valuation" body={<><strong>Lead:</strong> StepStone Group, Glade Brook. <br /><br /><strong>The catch:</strong> Burn is ₹200Cr/quarter — 18 months of runway left.</>} ticker={[{ name: 'NIFTY', change: '1.2%', up: true }, { name: 'ZOMATO', change: '-3.1%', up: false }, { name: 'PAYTM', change: '2.4%', up: true }]} />}
+      {active === 'poll' && <ReelPoll ep={31} question="Would you take VC money if you didn't need it?" options={['Yes — speed matters', 'No — keep control', "Depends on the term sheet"]} highlight={2} />}
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

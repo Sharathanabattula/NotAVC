@@ -1,0 +1,56 @@
+<!-- @dsCard group="Carousels & Cards" viewport="1000x760" name="Carousels, Posts, Quote & Thread Cards" subtitle="Swipeable educational carousel + light-surface post formats" -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;background:var(--canvas);font-family:var(--font-body)}</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" src="CarouselSlide.jsx"></script>
+<script type="text/babel" src="PostCards.jsx"></script>
+<script type="text/babel">
+const { DotIndicator, Card, Tag, Callout } = window.NotAVCDesignSystem_f0b373;
+const SLIDES = [
+  { variant: 'dark', content: (<><div style={{fontFamily:'var(--font-data)',fontSize:10,color:'var(--mint)',letterSpacing:2,marginBottom:16}}>NOTAVC — VC CONCEPTS</div><div style={{fontFamily:'var(--font-display)',fontWeight:800,fontSize:20,color:'#fff',lineHeight:1.2}}>7 VC terms every MBA student should know before graduation</div><div style={{fontFamily:'var(--font-body)',fontSize:12,color:'var(--white-45)',marginTop:16}}>Swipe to learn what your professors won't teach you →</div></>) },
+  { variant: 'white', content: (<><div style={{fontFamily:'var(--font-display)',fontWeight:800,fontSize:17,color:'var(--ink)',letterSpacing:-0.3,marginBottom:14}}>1. Term sheet</div><div style={{fontFamily:'var(--font-body)',fontSize:13,color:'#555',lineHeight:1.6,flex:1}}>A non-binding agreement outlining the key terms of an investment — valuation, equity, board seats.<br/><br/><span style={{fontFamily:'var(--font-data)',color:'var(--signal)'}}>80% of term sheet terms</span> are negotiable. Most first-time founders don't know this.</div></>) },
+  { variant: 'canvas', content: (<><div style={{fontFamily:'var(--font-display)',fontWeight:800,fontSize:16,color:'var(--ink)',marginBottom:12}}>2. Cap table</div><div style={{fontFamily:'var(--font-body)',fontSize:12,color:'#666',lineHeight:1.6,marginBottom:12}}>Who owns what percentage — founders, investors, ESOP pool. Every round <strong>dilutes</strong> existing shareholders.</div><Callout>Model your cap table 3 rounds ahead. 20% today can be 6% after Series C.</Callout></>) },
+  { variant: 'dark', content: (<div style={{display:'flex',flexDirection:'column',justifyContent:'center',height:'100%',textAlign:'center'}}><div style={{fontFamily:'var(--font-data)',fontSize:10,color:'var(--mint)',letterSpacing:2,marginBottom:16}}>DID YOU KNOW?</div><div style={{fontFamily:'var(--font-display)',fontWeight:800,fontSize:48,color:'var(--mint)',letterSpacing:-2}}>70%</div><div style={{fontFamily:'var(--font-body)',fontSize:12,color:'var(--white-45)',marginTop:8}}>of VC-backed startups return zero to investors.</div></div>) },
+  { variant: 'cta', content: (<div style={{display:'flex',flexDirection:'column',justifyContent:'center',height:'100%',textAlign:'center'}}><div style={{fontFamily:'var(--font-display)',fontWeight:800,fontSize:17,color:'#fff',lineHeight:1.25,marginBottom:12}}>Want the full VC terms cheat sheet?</div><div style={{fontFamily:'var(--font-body)',fontSize:12,color:'var(--white-45)',marginBottom:18}}>Follow @notavc for daily teardowns and the raw learning journey.</div><div style={{fontFamily:'var(--font-display)',fontWeight:700,fontSize:12,color:'var(--signal)',background:'#fff',padding:'10px 24px',borderRadius:8,alignSelf:'center'}}>Follow @notavc</div></div>) },
+];
+
+function App() {
+  const [start, setStart] = React.useState(0);
+  const visible = SLIDES.slice(start, start + 3);
+  return (
+    <div style={{ padding: 28, display: 'flex', flexDirection: 'column', gap: 28 }}>
+      <div>
+        <div style={{fontFamily:'var(--font-data)',fontSize:11,color:'var(--muted)',letterSpacing:1,marginBottom:12}}>CAROUSEL — SWIPE-OPTIMIZED (7 SLIDES)</div>
+        <div style={{ display: 'flex', gap: 14, alignItems: 'center' }}>
+          <button onClick={() => setStart(Math.max(0, start - 1))} style={{border:'var(--border-default-w)',borderRadius:'50%',width:32,height:32,cursor:'pointer',background:'var(--paper)'}}>‹</button>
+          <div style={{ display: 'flex', gap: 14, overflow: 'hidden' }}>
+            {visible.map((s, i) => <CarouselSlide key={start+i} variant={s.variant} num={start+i+1} total={SLIDES.length}>{s.content}</CarouselSlide>)}
+          </div>
+          <button onClick={() => setStart(Math.min(SLIDES.length - 3, start + 1))} style={{border:'var(--border-default-w)',borderRadius:'50%',width:32,height:32,cursor:'pointer',background:'var(--paper)'}}>›</button>
+        </div>
+      </div>
+      <div>
+        <div style={{fontFamily:'var(--font-data)',fontSize:11,color:'var(--muted)',letterSpacing:1,marginBottom:12}}>POST · QUOTE CARD · THREAD CARD</div>
+        <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap' }}>
+          <PostCard label="NOTAVC — COMPANY TEARDOWN" stat="$5.2B" statLabel="Zepto's latest valuation. Here's the number nobody's talking about." tags={['#NotAVC', '#StartupBreakdown']} />
+          <QuoteCard quote="VCs don't invest in ideas. They invest in unfair advantages. I learned this the hard way in my Bower classroom last Thursday." name="Sharath Chandra Anabattula" />
+          <ThreadCard text="70% of VC-backed startups return zero. That's why every fund needs one absurd winner." />
+        </div>
+      </div>
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

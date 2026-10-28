@@ -1,0 +1,62 @@
+NotAVC · EP.010 — Make in India begins with ship to India
+1080×1350 (4:5) · 8 slides · works as-is for both Instagram and LinkedIn image carousels
+============================================================
+
+──────────────────────────────
+INSTAGRAM CAPTION
+──────────────────────────────
+"Make in India" still begins with "ship to India." 🇮🇳
+
+India has ~20% of the world's chip-design engineers — and imports almost every input that turns a design into an actual chip: wafers, tools, gases, masks.
+
+Taiwan fixed this with ONE decision: name semiconductors a national priority (1970s), recruit Morris Chang, fund TSMC (1987). India's push was split across ministries, each moving at its own pace.
+
+That's finally changing. Semicon 2.0 → $13.3B to build the whole chain, not just fabs. And Tata × PSMC are building the first commercial fab in Dholera, Gujarat — $11B, 28nm, 50K wafers/month.
+
+It's a start. Not the finish line — the first fab isn't commissioned until 2028, and equipment + materials are still imported.
+
+Swipe through the full breakdown 👉
+
+Dates & figures sourced; arithmetic mine.
+
+.
+.
+.
+#semiconductors #MakeInInIndia #chips #Semicon2 #TataElectronics #TSMC #Dholera #deeptech #indianstartups #manufacturing #geopolitics #NotAVC
+
+──────────────────────────────
+LINKEDIN POST
+──────────────────────────────
+"Make in India" still begins with "ship to India."
+
+That single line explains our semiconductor industry — or the lack of one.
+
+India has roughly 20% of the world's chip-design engineers. Yet almost every physical input that turns a design into a chip — wafers, lithography tools, ultrapure gases, photoresists, masks — is imported.
+
+How did we get here? Compare the playbooks:
+
+→ Taiwan (1970s): named semiconductors a national priority, recruited Morris Chang from the US, gave him the capital, and founded TSMC in 1987. One agenda, one owner.
+
+→ India: the push was spread across multiple ministries, each moving at its own pace. No single throat to choke.
+
+That's slowly changing:
+
+• Semicon 2.0 — a $13.3B (₹1.275 trillion) package approved July 15, 2026, funding the whole chain: design, equipment, materials, fabs, packaging, R&D and talent. The first push chased fabs; this one funds the tools and materials we still import.
+
+• On the ground — Tata and PSMC are building India's first commercial fab in Dholera, Gujarat: an ~$11B facility targeting 28nm, ~50,000 wafers/month.
+
+The honest caveat: it's a start, not the finish line. The first fab is only slated to be commissioned in 2028, launch output is weighted to mature nodes, and equipment + materials remain almost entirely imported. Money committed ≠ a delivered supply chain.
+
+But if Semicon 2.0 delivers, "Make in India" might finally stop beginning with "ship to India."
+
+Sources: India Semiconductor Mission / Semicon 2.0 cabinet approval; Tata Electronics × PSMC announcements. Figures theirs, framing mine.
+
+#Semiconductors #MakeInIndia #Semicon2 #DeepTech #Manufacturing
+
+──────────────────────────────
+HOW TO POST
+──────────────────────────────
+INSTAGRAM  → upload all 8 PNGs (in order 01–08) as a carousel. 4:5 is the tallest IG allows — max feed real estate.
+LINKEDIN   → Option A: upload the 8 PNGs as a single post (native multi-image).
+             Option B (document carousel): drop the 8 PNGs into any slide tool / Google Slides,
+             export one PDF, and use "Add a document" on LinkedIn for the swipeable viewer.

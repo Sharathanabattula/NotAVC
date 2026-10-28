@@ -1,0 +1,59 @@
+{
+  "v": 3,
+  "assetGroups": {
+    "Other": {
+      "files": {},
+      "name": "Other",
+      "order": []
+    },
+    "logos": {
+      "files": {},
+      "name": "logos",
+      "order": []
+    },
+    "notes": {
+      "files": {},
+      "name": "notes",
+      "order": []
+    },
+    "photos": {
+      "files": {},
+      "name": "photos",
+      "order": []
+    }
+  },
+  "blobs": {},
+  "createdOnFiles": {
+    "at": "2026-10-11T04:22:57.421Z",
+    "v": 1
+  },
+  "docs": {
+    "readme": "project/README.md",
+    "sections": [
+      "project/CONTENT_PIPELINE.md",
+      "project/content_kits/LinkedIn Plan - Oct 12-18 Valuation Week 1.md",
+      "project/github.md",
+      "project/uploads/NotAVC - Platter - 2026-09-13 - EP.048 - Rest Day (Story Poll).md"
+    ]
+  },
+  "editing": "off",
+  "groups": [
+    "Other",
+    "logos",
+    "notes",
+    "photos"
+  ],
+  "layout": "files",
+  "libraries": [],
+  "namespace": "NotAVCDesignSystem_f0b373",
+  "sections": {},
+  "source": {
+    "app": "claude-design",
+    "exportedAt": "2026-10-11T04:22:57.421Z",
+    "map": "project/migration-map.json",
+    "projectId": "f0b373bc-c31c-4932-ba7b-e661b37f2210",
+    "url": "https://claude.ai/design/p/f0b373bc-c31c-4932-ba7b-e661b37f2210",
+    "v": 1
+  },
+  "title": "NotAVC Design System"
+}

@@ -1,0 +1,41 @@
+:root{
+  --ink:#0B0B0B;
+  --paper:#FFFFFF;
+  --signal:#710014;
+  --mint:#B38F6F;
+  --canvas:#F2F1ED;
+  --canvas-2:#FAF9F6;
+  --muted:#7E7264;
+  --hairline:#E5E5E5;
+  --coral:#E8593C;
+  --amber:#F2A623;
+  --info:#3B8BD4;
+  --deep:#2a0008;
+  --signal-08:rgba(113,0,20,.08);
+  --signal-12:rgba(113,0,20,.12);
+  --signal-18:rgba(113,0,20,.18);
+  --white-06:rgba(255,255,255,.06);
+  --white-08:rgba(255,255,255,.08);
+  --white-10:rgba(255,255,255,.10);
+  --white-35:rgba(255,255,255,.35);
+  --white-45:rgba(255,255,255,.45);
+
+  /* semantic */
+  --surface-page:var(--paper);
+  --surface-card:var(--paper);
+  --surface-canvas:var(--canvas);
+  --surface-dark:var(--ink);
+  --surface-deep:var(--deep);
+  --text-primary:var(--ink);
+  --text-secondary:var(--muted);
+  --text-on-dark:#FFFFFF;
+  --text-on-dark-dim:var(--white-45);
+  --accent:var(--signal);
+  --accent-on-dark:var(--mint);
+  --border-default:rgba(0,0,0,.12);
+  --border-light:rgba(0,0,0,.08);
+  --border-strong:rgba(0,0,0,.18);
+  --positive:var(--info);
+  --negative:var(--coral);
+  --warning:var(--amber);
+}

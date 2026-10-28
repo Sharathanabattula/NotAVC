@@ -9,7 +9,8 @@ npm install                 # Remotion + fonts
 npm run setup:whisper       # clone/build whisper.cpp + base.en and medium.en models (one-off)
 npm run transcribe -- raw/clip.mp4 --model base     # or --model medium (slower, more accurate)
 npm run short -- raw/clip.mp4 --model base --kicker "EP.075"
-npm run studio              # preview/tweak the FramedShort composition in the browser
+npm run studio              # preview/tweak compositions in the browser
+npm run reel:ranga-reddy    # data reel from the Ranga Reddy infographic -> output/ranga-reddy-reel.mp4
 ```
 
 `short` writes `output/<name>-short.mp4`, plus `<name>.captions.json`, `.srt` and whisper's raw `.json`. Timings are appended to `logs/`.
@@ -23,7 +24,7 @@ npm run studio              # preview/tweak the FramedShort composition in the b
 | `references/` | reference reels (`yt-dlp -o "references/%(title)s.%(ext)s" <url>`) |
 | `docs/formats/` | format specs |
 | `logs/` | build, transcribe and render logs |
-| `src/` | Remotion composition (`FramedShort.tsx`, `brand.ts`) |
+| `src/` | Remotion compositions: `FramedShort.tsx` (captioned short), `reels/` (data reels, shared `kit.tsx`), `data/geo.ts` (Telangana district + India outline paths) |
 | `scripts/` | `transcribe.mjs`, `make-short.mjs`, `setup-whisper.sh` |
 
 Media in `raw/`, `output/`, `references/` and `logs/`, plus `whisper.cpp/` and `node_modules/`, is git-ignored.

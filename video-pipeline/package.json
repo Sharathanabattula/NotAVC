@@ -6,11 +6,14 @@
     "setup:whisper": "bash scripts/setup-whisper.sh",
     "transcribe": "node scripts/transcribe.mjs",
     "short": "node scripts/make-short.mjs",
-    "studio": "remotion studio src/index.ts"
+    "studio": "remotion studio src/index.ts",
+    "reel:ranga-reddy": "remotion render src/index.ts RangaReddy output/ranga-reddy-reel.mp4 --codec=h264 --crf=18",
+    "typecheck": "tsc -p ."
   },
   "private": true,
   "type": "module",
   "dependencies": {
+    "@fontsource/anton": "^5.3.0",
     "@fontsource/outfit": "^5.3.0",
     "@fontsource/plus-jakarta-sans": "^5.3.0",
     "@fontsource/space-mono": "^5.3.0",
@@ -21,5 +24,10 @@
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "remotion": "4.0.539"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "typescript": "^7.0.2"
   }
 }

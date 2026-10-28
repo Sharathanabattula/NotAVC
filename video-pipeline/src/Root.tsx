@@ -1,9 +1,19 @@
 import { Composition } from 'remotion';
 import { FramedShort, FramedShortProps } from './FramedShort';
+import { RangaReddy, RANGA_REDDY_FRAMES } from './reels/RangaReddy';
 
 const FPS = 30;
 
 export const RemotionRoot: React.FC = () => (
+  <>
+  <Composition
+    id="RangaReddy"
+    component={RangaReddy}
+    width={1080}
+    height={1920}
+    fps={FPS}
+    durationInFrames={RANGA_REDDY_FRAMES}
+  />
   <Composition
     id="FramedShort"
     component={FramedShort}
@@ -24,4 +34,5 @@ export const RemotionRoot: React.FC = () => (
       durationInFrames: Math.max(1, Math.round(props.durationInSeconds * FPS)),
     })}
   />
+  </>
 );

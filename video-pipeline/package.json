@@ -8,7 +8,10 @@
     "short": "node scripts/make-short.mjs",
     "studio": "remotion studio src/index.ts",
     "reel:ranga-reddy": "remotion render src/index.ts RangaReddy output/ranga-reddy-reel.mp4 --codec=h264 --crf=18",
-    "typecheck": "tsc -p ."
+    "typecheck": "tsc -p .",
+    "voiceover": "node scripts/voiceover-reel.mjs",
+    "clone-voice": ".venv-tts/bin/python scripts/clone-voice.py",
+    "setup:tts": "python3 -m venv .venv-tts && .venv-tts/bin/pip install --index-url https://download.pytorch.org/whl/cpu torch==2.6.0 torchaudio==2.6.0 && .venv-tts/bin/pip install chatterbox-tts"
   },
   "private": true,
   "type": "module",

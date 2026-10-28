@@ -1,9 +1,11 @@
 // Reel version of the "Once Hyderabad Rural, now India's richest district" infographic.
 // Figures: Telangana Socio-Economic Outlook 2026, Pharmexcil (as on the static post).
-import { AbsoluteFill, Easing, interpolate, Sequence, useCurrentFrame } from 'remotion';
+import { AbsoluteFill, Easing, Html5Audio, interpolate, Sequence, staticFile, useCurrentFrame } from 'remotion';
+import type { Caption } from '@remotion/captions';
 import { INDIA_INSET, TELANGANA } from '../data/geo';
-import { Arrow, C, Chip, CountUp, F, Footer, Kicker, PAD, Paper, Scene, Tag, useIn, usePop, Wordmark } from './kit';
+import { Arrow, C, Chip, CountUp, F, Footer, Kicker, PAD, Paper, Scene, Tag, useIn, usePop, VoiceCaptions, Wordmark } from './kit';
 
+// Default scene lengths in frames (30 fps); a voiceover replaces them via `durations`
 const SCENES: [string, number, React.FC<{ dur: number }>][] = [
   ['hook', 150, Hook],
   ['backstory', 135, Backstory],
@@ -18,14 +20,24 @@ const SCENES: [string, number, React.FC<{ dur: number }>][] = [
   ['cta', 180, CTA],
 ];
 
-export const RANGA_REDDY_FRAMES = SCENES.reduce((s, [, d]) => s + d, 0);
+export const RANGA_REDDY_SCENES = SCENES.map(([name]) => name);
 
-export const RangaReddy: React.FC = () => {
+export type RangaReddyProps = {
+  durations?: Record<string, number>; // frames per scene, from scripts/voiceover-reel.mjs
+  audioSrc?: string | null; // path inside public/
+  captions?: Caption[];
+};
+
+export const rangaReddyFrames = (durations?: Record<string, number>) =>
+  SCENES.reduce((s, [name, d]) => s + (durations?.[name] ?? d), 0);
+
+export const RangaReddy: React.FC<RangaReddyProps> = ({ durations, audioSrc, captions }) => {
   let from = 0;
   return (
     <Paper>
       <Kicker text="NOT A VC · TELANGANA · 2026 DATA" />
-      {SCENES.map(([name, dur, Comp]) => {
+      {SCENES.map(([name, d, Comp]) => {
+        const dur = durations?.[name] ?? d;
         const seq = (
           <Sequence key={name} name={name} from={from} durationInFrames={dur}>
             <Scene dur={dur}><Comp dur={dur} /></Scene>
@@ -34,13 +46,15 @@ export const RangaReddy: React.FC = () => {
         from += dur;
         return seq;
       })}
+      {audioSrc && <Html5Audio src={staticFile(audioSrc)} />}
+      {captions && captions.length > 0 && <VoiceCaptions captions={captions} />}
       <Footer source="SOURCE · TELANGANA SOCIO-ECONOMIC OUTLOOK 2026 · PHARMEXCIL" />
     </Paper>
   );
 };
 
 const Center: React.FC<{ children: React.ReactNode; top?: number; gap?: number }> = ({ children, top = 300, gap = 0 }) => (
-  <div style={{ position: 'absolute', top, left: PAD, right: PAD, bottom: 260, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', gap }}>
+  <div style={{ position: 'absolute', top, left: PAD, right: PAD, bottom: 420, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', gap }}>
     {children}
   </div>
 );
@@ -221,7 +235,7 @@ function ITEngine() {
   ];
   return (
     <AbsoluteFill>
-      <div style={{ position: 'absolute', top: 310, left: PAD, right: PAD, display: 'flex', flexDirection: 'column', gap: 46 }}>
+      <div style={{ position: 'absolute', top: 290, left: PAD, right: PAD, display: 'flex', flexDirection: 'column', gap: 30 }}>
         {rows.map(([label, value, note, color], i) => (
           <StatRow key={label} label={label} value={value} note={note} color={color} delay={i * 30} />
         ))}
@@ -236,9 +250,9 @@ function ITEngine() {
 const StatRow: React.FC<{ label: string; value: React.ReactNode; note: string | null; color: string; delay: number }> = ({ label, value, note, color, delay }) => {
   const o = useIn(delay, 14);
   return (
-    <div style={{ opacity: o, transform: `translateX(${(1 - o) * -60}px)`, borderBottom: `1.5px solid ${C.hairline}`, paddingBottom: 30 }}>
+    <div style={{ opacity: o, transform: `translateX(${(1 - o) * -60}px)`, borderBottom: `1.5px solid ${C.hairline}`, paddingBottom: 24 }}>
       <Label size={46}>{label}</Label>
-      <Big size={180} color={color}>{value}</Big>
+      <Big size={160} color={color}>{value}</Big>
       {note && <div style={{ marginTop: 10 }}><Sub size={38}>{note}</Sub></div>}
     </div>
   );

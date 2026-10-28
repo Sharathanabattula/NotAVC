@@ -15,6 +15,26 @@ npm run reel:ranga-reddy    # data reel from the Ranga Reddy infographic -> outp
 
 `short` writes `output/<name>-short.mp4`, plus `<name>.captions.json`, `.srt` and whisper's raw `.json`. Timings are appended to `logs/`.
 
+## Voiceover
+
+Record yourself (phone voice memo is fine) reading `docs/scripts/<reel>.json`, drop the file in `raw/`, then:
+
+```bash
+npm run voiceover -- raw/my-voice.m4a                 # Ranga Reddy script by default
+npm run voiceover -- raw/my-voice.m4a --script docs/scripts/other.json --out output/other.mp4
+```
+
+whisper.cpp (medium) times every word, each scene starts when its line starts in your recording, and the spoken words show as captions. Read at your own pace; ad-libs and re-takes only shift the scene they're in. Scene start times are written to `output/<name>.timing.json`.
+
+**AI copy of your voice (free, local):** Chatterbox (MIT licence) clones from 10–30 s of you talking.
+
+```bash
+npm run setup:tts                                                  # one-off, ~1 GB
+npm run clone-voice -- --ref raw/my-voice-sample.wav               # writes raw/ranga-reddy-voice.wav
+npm run clone-voice -- --ref raw/my-voice-sample.wav --lang hi     # Hindi / other languages
+npm run voiceover -- raw/ranga-reddy-voice.wav
+```
+
 ## Folders
 
 | | |
@@ -25,7 +45,8 @@ npm run reel:ranga-reddy    # data reel from the Ranga Reddy infographic -> outp
 | `docs/formats/` | format specs |
 | `logs/` | build, transcribe and render logs |
 | `src/` | Remotion compositions: `FramedShort.tsx` (captioned short), `reels/` (data reels, shared `kit.tsx`), `data/geo.ts` (Telangana district + India outline paths) |
-| `scripts/` | `transcribe.mjs`, `make-short.mjs`, `setup-whisper.sh` |
+| `scripts/` | `transcribe.mjs`, `make-short.mjs`, `voiceover-reel.mjs`, `clone-voice.py`, `setup-whisper.sh` |
+| `docs/scripts/` | voiceover scripts, one line per scene |
 
 Media in `raw/`, `output/`, `references/` and `logs/`, plus `whisper.cpp/` and `node_modules/`, is git-ignored.
 

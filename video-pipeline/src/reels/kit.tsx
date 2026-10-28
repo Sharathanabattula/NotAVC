@@ -6,6 +6,7 @@ import '@fontsource/outfit/600.css';
 import '@fontsource/space-mono/400.css';
 import '@fontsource/space-mono/700.css';
 import { AbsoluteFill, Easing, interpolate, spring, useCurrentFrame, useVideoConfig } from 'remotion';
+import { Caption, createTikTokStyleCaptions } from '@remotion/captions';
 
 export const C = {
   paper: '#F2F1ED',
@@ -121,3 +122,23 @@ export const Tag: React.FC<{ children: React.ReactNode; bg?: string; color?: str
     {children}
   </div>
 );
+
+// Spoken-word captions above the footer; the word being said turns crimson
+export const VoiceCaptions: React.FC<{ captions: Caption[] }> = ({ captions }) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const nowMs = (frame / fps) * 1000;
+  const { pages } = createTikTokStyleCaptions({ captions, combineTokensWithinMilliseconds: 1200 });
+  const page = pages.find((p) => nowMs >= p.startMs && nowMs < p.startMs + p.durationMs);
+  if (!page) return null;
+  return (
+    <div style={{ position: 'absolute', left: PAD, right: PAD, bottom: 250, display: 'flex', justifyContent: 'center' }}>
+      <div style={{ background: C.white, border: `1.5px solid ${C.hairline}`, borderRadius: 18, padding: '18px 30px', maxWidth: '100%', textAlign: 'center',
+        fontFamily: F.body, fontWeight: 600, fontSize: 46, lineHeight: 1.25, color: C.ink, whiteSpace: 'pre-wrap' }}>
+        {page.tokens.map((t, i) => (
+          <span key={i} style={{ color: nowMs >= t.fromMs && nowMs < t.toMs ? C.crimson : C.ink }}>{t.text}</span>
+        ))}
+      </div>
+    </div>
+  );
+};

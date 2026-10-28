@@ -1,6 +1,6 @@
 import { Composition } from 'remotion';
 import { FramedShort, FramedShortProps } from './FramedShort';
-import { RangaReddy, RANGA_REDDY_FRAMES } from './reels/RangaReddy';
+import { RangaReddy, RangaReddyProps, rangaReddyFrames } from './reels/RangaReddy';
 
 const FPS = 30;
 
@@ -12,7 +12,9 @@ export const RemotionRoot: React.FC = () => (
     width={1080}
     height={1920}
     fps={FPS}
-    durationInFrames={RANGA_REDDY_FRAMES}
+    durationInFrames={rangaReddyFrames()}
+    defaultProps={{ audioSrc: null, captions: [] } as RangaReddyProps}
+    calculateMetadata={({ props }) => ({ durationInFrames: rangaReddyFrames((props as RangaReddyProps).durations) })}
   />
   <Composition
     id="FramedShort"

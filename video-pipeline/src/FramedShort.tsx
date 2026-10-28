@@ -49,10 +49,10 @@ export const FramedShort: React.FC<FramedShortProps> = ({
       <div style={{ position: 'absolute', top: frameTop + frameH + 72, left: PAD, right: PAD, textAlign: 'center' }}>
         {page && (
           <div style={{ fontFamily: font.display, fontWeight: 800, fontSize: 76, lineHeight: 1.15, letterSpacing: -1.5, color: color.white, whiteSpace: 'pre-wrap' }}>
-            {page.tokens.map((t) => {
+            {page.tokens.map((t, i) => {
               const active = nowMs >= t.fromMs && nowMs < t.toMs;
               return (
-                <span key={t.fromMs} style={{ color: active ? color.bronze : color.white }}>
+                <span key={i} style={{ color: active ? color.bronze : color.white }}>
                   {t.text}
                 </span>
               );

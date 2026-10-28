@@ -1,0 +1,16 @@
+{
+  "composition": "RangaReddy",
+  "scenes": [
+    { "id": "hook", "line": "Twenty years ago, this district was officially \"backward.\" Today it's India's richest." },
+    { "id": "backstory", "line": "In 2006, Ranga Reddy was on India's list of the 250 most backward districts." },
+    { "id": "map", "line": "It's the district right next to Hyderabad. Here's what it looks like now." },
+    { "id": "income", "line": "Income per person: eleven point three lakh. Number one in Telangana." },
+    { "id": "multiple", "line": "That's five times the Indian average of two point two lakh." },
+    { "id": "state", "line": "Telangana as a whole went from 1.24 lakh to 4.19 lakh since 2014." },
+    { "id": "it", "line": "The engine? IT. 3.13 lakh crore in exports, 9.39 lakh people in IT jobs, 1,500-plus companies." },
+    { "id": "pharma", "line": "And pharma: 5.9 billion dollars in exports. Nineteen percent of India's." },
+    { "id": "inside", "line": "ISB, IIIT, the airport, all inside this one district." },
+    { "id": "stamp", "line": "2006: backward. 2026: number one." },
+    { "id": "cta", "line": "So where's Hyderabad's next money spot? Kokapet, Future City, Shamshabad, or your area? Tell me below." }
+  ]
+}

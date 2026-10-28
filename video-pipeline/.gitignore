@@ -1,6 +1,7 @@
 # Rebuilt by scripts/setup-whisper.sh
 whisper.cpp/
 node_modules/
+.venv-tts/
 # Media and generated files stay local
 raw/*
 output/*

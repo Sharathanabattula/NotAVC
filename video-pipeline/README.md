@@ -35,6 +35,14 @@ npm run clone-voice -- --ref raw/my-voice-sample.wav --lang hi     # Hindi / oth
 npm run voiceover -- raw/ranga-reddy-voice.wav
 ```
 
+## Editing long videos (files over the 30 MB upload limit)
+
+1. On your PC, make a small preview copy and upload that:
+   `ffmpeg -i "my-video.mp4" -vf scale=-2:360 -c:v libx264 -crf 32 -preset veryfast -c:a aac -b:a 64k preview.mp4`
+2. Claude transcribes the preview and writes a cut list, `output/<name>.edl.json` (`{"keep": [[start, end], ...]}` in seconds).
+3. On your PC, apply it to the full-quality original (same timeline as the preview):
+   `npm run cut -- "my-video.mp4" output/<name>.edl.json`
+
 ## Folders
 
 | | |
